@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/initializers"
+	"backend/services"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,11 +15,7 @@ func init() {
 func main() {
 	r := gin.Default()
 
-	r.GET("/test", func(c *gin.Context) {
-		c.JSON(200, gin.H{
-			"message": "it works!",
-		})
-	})
+	services.RegisterUserRoutes(r)
 
 	r.Run()
 }
