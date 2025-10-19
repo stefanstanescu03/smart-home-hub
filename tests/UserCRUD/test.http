@@ -1,0 +1,40 @@
+POST http://localhost:5000/user/signup
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "passwrod1234",
+    "email": "test@gmail.com"
+}
+
+###
+
+POST http://localhost:5000/user/login
+Content-Type: application/json
+
+{
+    "username": "testuser",
+    "password": "passwrod1234"
+}
+
+###
+
+GET http://localhost:5000/user/info
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjMzNzE3NjQsInN1YiI6M30.VdLfkl7pFVu2OtALDpMuuT5y3KYDCrHqJK4ons9j780
+
+###
+
+PUT http://localhost:5000/user/update
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjMzNzE3NjQsInN1YiI6M30.VdLfkl7pFVu2OtALDpMuuT5y3KYDCrHqJK4ons9j780
+Content-Type: application/json
+
+{
+    "username": "test",
+    "password": "parola_noua",
+    "email": "user@gmail.com"
+}
+
+###
+
+DELETE http://localhost:5000/user/delete
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjMzNzE3NjQsInN1YiI6M30.VdLfkl7pFVu2OtALDpMuuT5y3KYDCrHqJK4ons9j780

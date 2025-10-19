@@ -111,9 +111,51 @@ func ShowUser(c *gin.Context) {
 }
 
 func ModifyUser(c *gin.Context) {
+	currUser, _ := c.Get("user")
+
+	var body struct {
+		Username string
+		Password string
+		Email    string
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to generate password hash",
+		})
+		return
+	}
+
+	var user models.User
+
+	initializers.DB.First(&user, currUser.(models.User).ID)
+
+	user.Email = body.Email
+	user.Password = string(hash)
+	user.Username = body.Username
+
+	initializers.DB.Save(&user)
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
 
 }
 
 func DeleteUser(c *gin.Context) {
+	currUser, _ := c.Get("user")
 
+	initializers.DB.Delete(&models.User{}, currUser.(models.User).ID)
+
+	c.JSON(http.StatusOK, gin.H{
+		"message": "user deleted",
+	})
 }

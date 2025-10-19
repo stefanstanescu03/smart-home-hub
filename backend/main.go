@@ -16,6 +16,7 @@ func main() {
 	r := gin.Default()
 
 	services.RegisterUserRoutes(r)
+	services.RegisterDeviceRoutes(r)
 
 	r.Run()
 }

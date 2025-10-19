@@ -13,5 +13,7 @@ func RegisterUserRoutes(r *gin.Engine) {
 		userRoutes.POST("/signup", controllers.Signup)
 		userRoutes.POST("/login", controllers.Login)
 		userRoutes.GET("/info", middleware.RequireAuth, controllers.ShowUser)
+		userRoutes.PUT("/update", middleware.RequireAuth, controllers.ModifyUser)
+		userRoutes.DELETE("/delete", middleware.RequireAuth, controllers.DeleteUser)
 	}
 }
