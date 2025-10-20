@@ -17,6 +17,7 @@ func main() {
 
 	services.RegisterUserRoutes(r)
 	services.RegisterDeviceRoutes(r)
+	services.RegisterAutomationRoutes(r)
 
 	r.Run()
 }

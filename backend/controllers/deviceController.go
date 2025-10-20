@@ -67,7 +67,7 @@ func UpdateDevice(c *gin.Context) {
 	}
 
 	var device models.Device
-	initializers.DB.First(&device, "name = ? and user_Id = ?", name, currUser.(models.User).ID)
+	initializers.DB.First(&device, "name = ? and user_id = ?", name, currUser.(models.User).ID)
 
 	if device.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -94,7 +94,7 @@ func GetDevice(c *gin.Context) {
 	name := c.Param("name")
 
 	var device models.Device
-	initializers.DB.First(&device, "name = ? and (user_Id = ? or visibility = true)", name, currUser.(models.User).ID)
+	initializers.DB.First(&device, "name = ? and (user_id = ? or visibility = true)", name, currUser.(models.User).ID)
 
 	if device.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -114,7 +114,7 @@ func GetDevices(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	var devices []models.Device
 
-	initializers.DB.Find(&devices, "user_Id = ?", currUser.(models.User).ID)
+	initializers.DB.Find(&devices, "user_id = ?", currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"devices": devices,
@@ -126,7 +126,7 @@ func DeleteDevice(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	name := c.Param("name")
 
-	initializers.DB.Delete(&models.Device{}, "name = ? and user_Id = ?", name, currUser.(models.User).ID)
+	initializers.DB.Delete(&models.Device{}, "name = ? and user_id = ?", name, currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "device deleted",
