@@ -1,0 +1,31 @@
+POST http://localhost:5000/alert/create
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM1MzgyNjYsInN1YiI6NH0.ASK7MVxg7TvAXmBYFzrjwbN7mTkiWv8hzpNOnrrR1V0
+Content-Type: application/json
+
+{
+    "Subject": "Too hot",
+    "Content": "Temperature is too high",
+    "Condition": "T>25"
+}
+
+###
+
+GET http://localhost:5000/alert
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM1MzgyNjYsInN1YiI6NH0.ASK7MVxg7TvAXmBYFzrjwbN7mTkiWv8hzpNOnrrR1V0
+
+###
+
+PUT http://localhost:5000/alert/update/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM1MzgyNjYsInN1YiI6NH0.ASK7MVxg7TvAXmBYFzrjwbN7mTkiWv8hzpNOnrrR1V0
+Content-Type: application/json
+
+{
+    "Subject": "Too hot",
+    "Content": "Temperature is above 25 degrees",
+    "Condition": "T>25"
+}
+
+###
+
+DELETE http://localhost:5000/alert/delete/1
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM1MzgyNjYsInN1YiI6NH0.ASK7MVxg7TvAXmBYFzrjwbN7mTkiWv8hzpNOnrrR1V0
