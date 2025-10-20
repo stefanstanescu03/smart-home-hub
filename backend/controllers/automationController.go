@@ -82,7 +82,7 @@ func DeleteAutomation(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
 
-	initializers.DB.Delete(&models.Device{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+	initializers.DB.Delete(&models.Automation{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "automation deleted",
