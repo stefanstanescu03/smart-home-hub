@@ -9,13 +9,13 @@ Content-Type: application/json
 ###
 
 POST http://localhost:5000/device/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxMTksInN1YiI6NH0.9h5xKwUQenbCwuVvR-gPlnKAxyoSBzuVG56R6z3h8-U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM2NDY2NTMsInN1YiI6NX0.9Zp3aRXfY6OkzkEzL355CpRVHHbxddOdtQNooUa-HgM
 Content-Type: application/json
 
 {
-    "name": "termometru1",
-    "ip": "192.162.0.1",
-    "csv_location": "/etc/sensors/termometru1",
+    "name": "termometru",
+    "ip": "[::1]:40000",
+    "csv_location": "../telemetry",
     "visibility": false
 }
 
@@ -39,14 +39,14 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxM
 
 ###
 
-PUT http://localhost:5000/device/update/termometru2
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxMTksInN1YiI6NH0.9h5xKwUQenbCwuVvR-gPlnKAxyoSBzuVG56R6z3h8-U
+PUT http://localhost:5000/device/update/termometru
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM2NDY2NTMsInN1YiI6NX0.9Zp3aRXfY6OkzkEzL355CpRVHHbxddOdtQNooUa-HgM
 Content-Type: application/json
 
 {
-    "name": "termometru_dormitor",
-    "ip": "192.162.0.2",
-    "csv_location": "/etc/sensors/termometru2",
+    "name": "termometru",
+    "ip": "[::1]:40000",
+    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data.json",
     "visibility": false
 }
 

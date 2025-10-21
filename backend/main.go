@@ -3,6 +3,7 @@ package main
 import (
 	"backend/initializers"
 	"backend/services"
+	"backend/sockets"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,6 +14,9 @@ func init() {
 }
 
 func main() {
+
+	go sockets.StartTelemetryServer()
+
 	r := gin.Default()
 
 	services.RegisterUserRoutes(r)
