@@ -3,6 +3,7 @@ package sockets
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/utils"
 	"bufio"
 	"fmt"
 	"io"
@@ -30,19 +31,7 @@ func handleConnection(conn net.Conn, csv_location string) {
 			return
 		}
 
-		f, err := os.OpenFile(csv_location, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-		if err != nil {
-			fmt.Println("Error: ", err)
-			continue
-		}
-		if _, err := f.Write([]byte(msg)); err != nil {
-			fmt.Println("Error: ", err)
-			continue
-		}
-		if err := f.Close(); err != nil {
-			fmt.Println("Error: ", err)
-			continue
-		}
+		utils.ParseMessage(msg, csv_location)
 		// conn.Write([]byte("OK\n"))
 	}
 

@@ -9,13 +9,13 @@ Content-Type: application/json
 ###
 
 POST http://localhost:5000/device/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM2NDY2NTMsInN1YiI6NX0.9Zp3aRXfY6OkzkEzL355CpRVHHbxddOdtQNooUa-HgM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM3NDA2NDksInN1YiI6NX0.IQImMbZGByWsOg1NLr2OVLj7-7-ig9mZduKvv9ibiqc
 Content-Type: application/json
 
 {
-    "name": "termometru",
-    "ip": "[::1]:40000",
-    "csv_location": "../telemetry",
+   "name": "senzor_exterior",
+    "ip": "[::1]:40001",
+    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data_exterior.csv",
     "visibility": false
 }
 
@@ -35,18 +35,18 @@ Content-Type: application/json
 ###
 
 GET http://localhost:5000/device
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxMTksInN1YiI6NH0.9h5xKwUQenbCwuVvR-gPlnKAxyoSBzuVG56R6z3h8-U
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM3NDA2NDksInN1YiI6NX0.IQImMbZGByWsOg1NLr2OVLj7-7-ig9mZduKvv9ibiqc
 
 ###
 
 PUT http://localhost:5000/device/update/termometru
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM2NDY2NTMsInN1YiI6NX0.9Zp3aRXfY6OkzkEzL355CpRVHHbxddOdtQNooUa-HgM
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM3NDA2NDksInN1YiI6NX0.IQImMbZGByWsOg1NLr2OVLj7-7-ig9mZduKvv9ibiqc
 Content-Type: application/json
 
 {
-    "name": "termometru",
+    "name": "senzor_calitate_aer",
     "ip": "[::1]:40000",
-    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data.json",
+    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data.csv",
     "visibility": false
 }
 

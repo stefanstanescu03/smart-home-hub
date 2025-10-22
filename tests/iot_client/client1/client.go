@@ -28,8 +28,11 @@ func main() {
 
 	for {
 
-		temp := 20 + rand.Float64()*10
-		message := fmt.Sprintf("{\"device_id\":\"sensor_1\",\"temperature\":%.2f}\n", temp)
+		temp := 20 + rand.Float32()*10
+		humid := 40 + rand.Float32()*30
+		iaq := rand.Float32() * 200
+		dust := 10 + rand.Float32()*90
+		message := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%.2f,IAQ:%.2f,Dust[ug/m^3]:%.2f\n", temp, humid, iaq, dust)
 
 		_, err := conn.Write([]byte(message))
 		if err != nil {
