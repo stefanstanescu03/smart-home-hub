@@ -3,7 +3,9 @@ package utils
 import (
 	"fmt"
 	"os"
+	"strconv"
 	"strings"
+	"time"
 )
 
 func ParseMessage(msg string, filename string) {
@@ -14,8 +16,11 @@ func ParseMessage(msg string, filename string) {
 	parts := strings.Split(msg, ",")
 
 	// We form the csv first row and values that needs to be added to the file
-	csv_types := ""
+	csv_types := "timestamp,"
 	csv_values := ""
+
+	curr_time := time.Now().Unix()
+	csv_values = csv_values + strconv.FormatInt(curr_time, 10) + ","
 
 	for _, part := range parts {
 		splits := strings.Split(part, ":")
