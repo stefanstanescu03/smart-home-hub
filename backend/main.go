@@ -4,6 +4,7 @@ import (
 	"backend/initializers"
 	"backend/services"
 	"backend/sockets"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -23,6 +24,12 @@ func main() {
 	services.RegisterDeviceRoutes(r)
 	services.RegisterAutomationRoutes(r)
 	services.RegisterAlertRoutes(r)
+
+	r.GET("/test", func(c *gin.Context) {
+		c.JSON(http.StatusOK, gin.H{
+			"message": "if you see this the backend connection works",
+		})
+	})
 
 	r.Run()
 }

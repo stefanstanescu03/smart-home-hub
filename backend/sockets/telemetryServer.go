@@ -10,6 +10,7 @@ import (
 	"log"
 	"net"
 	"os"
+	"strings"
 )
 
 func handleConnection(conn net.Conn, csv_location string) {
@@ -32,7 +33,6 @@ func handleConnection(conn net.Conn, csv_location string) {
 		}
 
 		utils.ParseMessage(msg, csv_location)
-		// conn.Write([]byte("OK\n"))
 	}
 
 }
@@ -40,7 +40,9 @@ func handleConnection(conn net.Conn, csv_location string) {
 func StartTelemetryServer() {
 
 	port := os.Getenv("TELEMETRY_PORT")
-	listener, err := net.Listen("tcp", ":"+port)
+	host := os.Getenv("HOST")
+	listener, err := net.Listen("tcp", host+":"+port)
+
 	if err != nil {
 		log.Fatal(err)
 	}
@@ -55,7 +57,8 @@ func StartTelemetryServer() {
 		}
 
 		var device models.Device
-		initializers.DB.First(&device, "ip = ?", conn.RemoteAddr().String())
+		ip := strings.Split(conn.RemoteAddr().String(), ":")[0]
+		initializers.DB.First(&device, "ip = ?", ip)
 
 		if device.ID == 0 {
 			fmt.Println("Rejected: ", conn.RemoteAddr())
