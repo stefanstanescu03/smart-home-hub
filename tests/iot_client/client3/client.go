@@ -2,27 +2,34 @@ package main
 
 import (
 	"fmt"
-	"log"
-	"math/rand/v2"
+	"math/rand"
 	"net"
 	"time"
 )
 
+func connect(dialer net.Dialer) net.Conn {
+	var conn net.Conn
+	var err error
+
+	conn, err = dialer.Dial("tcp", "host.docker.internal:5001")
+	if err != nil {
+		fmt.Println("[IOT-CLIENT-debug] Connection failed:", err)
+	}
+
+	return conn
+}
+
 func main() {
 
 	localAddr := &net.TCPAddr{
-		IP:   net.ParseIP("0.0.0.0"),
-		Port: 40000,
+		IP: net.ParseIP("0.0.0.0"),
 	}
 
 	dialer := net.Dialer{
 		LocalAddr: localAddr,
 	}
 
-	conn, err := dialer.Dial("tcp", "localhost:5001")
-	if err != nil {
-		log.Fatal(err)
-	}
+	conn := connect(dialer)
 
 	fmt.Println("[IOT-CLIENT-debug] IOT-CLIENT started on port: ", localAddr.Port)
 
@@ -34,10 +41,15 @@ func main() {
 		dust := 10 + rand.Float32()*90
 		message := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%.2f,IAQ:%.2f,Dust[ug/m^3]:%.2f\n", temp, humid, iaq, dust)
 
-		_, err := conn.Write([]byte(message))
-		if err != nil {
-			fmt.Println("Error sending:", err)
-			break
+		if conn != nil {
+			_, err := conn.Write([]byte(message))
+			if err != nil {
+				fmt.Println("Error sending:", err)
+				conn = connect(dialer)
+			}
+		} else {
+			fmt.Println("No connection")
+			conn = connect(dialer)
 		}
 
 		time.Sleep(5 * time.Second)

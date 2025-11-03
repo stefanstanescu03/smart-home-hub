@@ -1,56 +1,9 @@
-POST http://localhost:5000/user/login
+POST http://localhost:5000/device/create/
 Content-Type: application/json
 
 {
-    "username": "stefan",
-    "password": "parola"
-}
-
-###
-
-POST http://localhost:5000/device/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQxNTIyMzIsInN1YiI6NH0.StjFfHKeOKrvuPaCWM7IxLlEIXy3OxvEfk4-mHur9Ck
-Content-Type: application/json
-
-{
-   "name": "termometru",
-    "ip": "172.20.10.11",
-    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data.csv",
+    "name": "living_sensor",
+    "ip": "172.17.0.2",
+    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/living.csv",
     "visibility": false
 }
-
-###
-
-POST http://localhost:5000/device/create
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxMTksInN1YiI6NH0.9h5xKwUQenbCwuVvR-gPlnKAxyoSBzuVG56R6z3h8-U
-Content-Type: application/json
-
-{
-    "name": "termometru2",
-    "ip": "192.162.0.2",
-    "csv_location": "/etc/sensors/termometru2",
-    "visibility": false
-}
-
-###
-
-GET http://localhost:5000/device
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM3NDA2NDksInN1YiI6NX0.IQImMbZGByWsOg1NLr2OVLj7-7-ig9mZduKvv9ibiqc
-
-###
-
-PUT http://localhost:5000/device/update/termometru
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQxNTIyMzIsInN1YiI6NH0.StjFfHKeOKrvuPaCWM7IxLlEIXy3OxvEfk4-mHur9Ck
-Content-Type: application/json
-
-{
-    "name": "termometru",
-    "ip": "172.20.10.11",
-    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/data.csv",
-    "visibility": false
-}
-
-###
-
-DELETE http://localhost:5000/device/delete/termometru1
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjM0NzYxMTksInN1YiI6NH0.9h5xKwUQenbCwuVvR-gPlnKAxyoSBzuVG56R6z3h8-U

@@ -2,6 +2,7 @@ package main
 
 import (
 	"backend/initializers"
+	"backend/middleware"
 	"backend/services"
 	"backend/sockets"
 	"net/http"
@@ -19,6 +20,7 @@ func main() {
 	go sockets.StartTelemetryServer()
 
 	r := gin.Default()
+	r.Use(middleware.CORSMiddleware())
 
 	services.RegisterUserRoutes(r)
 	services.RegisterDeviceRoutes(r)
