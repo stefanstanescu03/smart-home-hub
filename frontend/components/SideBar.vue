@@ -28,11 +28,15 @@ export default {
       <img src="../public/user.png" width="25" height="25" alt="" />
       <span>Account</span>
     </button>
+    <button @click="this.$router.push('/dashboards')">
+      <img src="../public/dashboard.png" width="25" height="25" alt="" />
+      <span>Dashboards</span>
+    </button>
     <button v-if="getToken() != -1" @click="this.$router.push('/automations')">
       <img src="../public/robotic-arm.png" width="25" height="25" alt="" />
       <span>Automations</span>
     </button>
-    <button @click="this.$router.push('/other')">
+    <button v-if="getToken() != -1" @click="this.$router.push('/other')">
       <img src="../public/iot-devices.png" width="25" height="25" alt="" />
       <span>Other Devices</span>
     </button>

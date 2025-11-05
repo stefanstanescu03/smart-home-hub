@@ -126,20 +126,27 @@ func ModifyUser(c *gin.Context) {
 		return
 	}
 
-	hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-	if err != nil {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Failed to generate password hash",
-		})
-		return
-	}
+	// hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
+	// if err != nil {
+	// 	c.JSON(http.StatusBadRequest, gin.H{
+	// 		"error": "Failed to generate password hash",
+	// 	})
+	// 	return
+	// }
 
 	var user models.User
 
 	initializers.DB.First(&user, currUser.(models.User).ID)
 
+	err := bcrypt.CompareHashAndPassword([]byte(user.Password), []byte(body.Password))
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Incorrect password",
+		})
+		return
+	}
+
 	user.Email = body.Email
-	user.Password = string(hash)
 	user.Username = body.Username
 
 	initializers.DB.Save(&user)

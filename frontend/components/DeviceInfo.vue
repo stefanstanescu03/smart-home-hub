@@ -28,20 +28,18 @@ export default {
 </script>
 
 <template>
-  <div class="device-container">
-    <p>{{ deviceName }}</p>
-    <p>{{ ip }}</p>
-    <p v-if="visibility == false">private</p>
-    <p v-if="visibility == true">public</p>
-    <p>{{ status }}</p>
-    <button>View</button>
-  </div>
+  <tr class="device-container">
+    <td>{{ deviceName }}</td>
+    <td>{{ ip }}</td>
+    <td v-if="visibility == false">private</td>
+    <td v-if="visibility == true">public</td>
+    <td>{{ status }}</td>
+  </tr>
 </template>
 
 <style scoped>
-.device-container {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
+td {
+  border-bottom: 1px solid #c9c9c9;
+  padding: 0.3rem;
 }
 </style>

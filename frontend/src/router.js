@@ -5,6 +5,7 @@ import Login from "../pages/Login.vue";
 import Signup from "../pages/Signup.vue";
 import Discovered from "../pages/Discovered.vue";
 import Other from "../pages/Other.vue";
+import Account from "../pages/Account.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -12,6 +13,7 @@ const routes = [
   { path: "/signup", component: Signup },
   { path: "/discovered", component: Discovered },
   { path: "/other", component: Other },
+  { path: "/account", component: Account },
 ];
 
 export default createRouter({

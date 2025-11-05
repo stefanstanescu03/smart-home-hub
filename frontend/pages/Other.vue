@@ -26,16 +26,23 @@ export default {
 <template>
   <div class="page-container">
     <SideBar />
-    <div>
+    <div class="info-container">
       <h1>List of public devices</h1>
       <h1 v-if="this.devices.length == 0">No public devices</h1>
-      <div v-for="device in this.devices" class="devices-container">
+      <table class="devices-container">
+        <tr v-if="this.devices.length != 0">
+          <th>Name</th>
+          <th>Ip</th>
+          <th>Visibility</th>
+          <th>Status</th>
+        </tr>
         <DeviceInfo
+          v-for="device in this.devices"
           :deviceName="device.Name"
           :ip="device.Ip"
           :visibility="device.Visibility"
         />
-      </div>
+      </table>
     </div>
   </div>
 </template>
@@ -47,10 +54,19 @@ export default {
   gap: 2rem;
   height: 100%;
 }
-.device-container {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  padding: 1rem;
+.info-container {
+  width: 50%;
+}
+.info-container {
+  width: 50%;
+}
+table {
+  border-collapse: collapse;
+  width: 100%;
+}
+th {
+  border-bottom: 1px solid #c9c9c9;
+  padding: 0.3rem;
+  text-align: left;
 }
 </style>
