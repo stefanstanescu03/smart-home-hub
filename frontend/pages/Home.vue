@@ -25,7 +25,6 @@ export default {
         })
         .then((response) => {
           this.devices = response.data.devices;
-          console.log(this.devices);
         })
         .catch((error) => {
           console.log(error);
@@ -44,18 +43,12 @@ export default {
     <div>
       <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
       <h1 v-if="getToken() != undefined">You are logged in</h1>
-      <div class="devices-container">
+      <h1 v-if="this.devices.length == 0">No devices added</h1>
+      <div v-for="device in this.devices" class="devices-container">
         <DeviceInfo
-          deviceName="living sensor"
-          ip="192.172.0.1"
-          visibility="private"
-          deviceStatus="connected"
-        />
-        <DeviceInfo
-          deviceName="living"
-          ip="192.172.0.1"
-          visibility="private"
-          deviceStatus="connected"
+          :deviceName="device.Name"
+          :ip="device.Ip"
+          :visibility="device.Visibility"
         />
       </div>
     </div>
@@ -67,6 +60,7 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 2rem;
+  height: 100%;
 }
 .devices-container {
   display: flex;

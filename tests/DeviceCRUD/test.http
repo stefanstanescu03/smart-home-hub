@@ -1,9 +1,10 @@
 POST http://localhost:5000/device/create/
 Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjQ3NzMyMTEsInN1YiI6OH0.ht6M2glvEtEvya1ENKs0b_bqr8lBabFgehByBYThwzY
 
 {
-    "name": "living_sensor",
-    "ip": "172.17.0.2",
-    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/living.csv",
-    "visibility": false
+    "name": "termometer",
+    "ip": "172.17.0.3",
+    "csv_location": "/home/stefan/Documents/Projects/licenta/tests/telemetry/termometer.csv",
+    "visibility": true
 }

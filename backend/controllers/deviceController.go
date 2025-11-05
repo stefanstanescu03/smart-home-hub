@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/sockets"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -130,5 +131,41 @@ func DeleteDevice(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "device deleted",
+	})
+}
+
+func IsDeviceConnected(c *gin.Context) {
+
+	ip := c.Param("ip")
+	value, ok := sockets.TelemetryConnectionPool.Load(ip)
+
+	if !ok {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"status": value,
+		})
+	}
+}
+
+func GetDiscoveredDevices(c *gin.Context) {
+
+	devices := sockets.AcknowledgedDevices
+
+	c.JSON(http.StatusOK, gin.H{
+		"devices": devices,
+	})
+}
+
+func GetPublicDevices(c *gin.Context) {
+
+	var devices []models.Device
+
+	initializers.DB.Find(&devices, "visibility = ?", 1)
+
+	c.JSON(http.StatusOK, gin.H{
+		"devices": devices,
 	})
 }

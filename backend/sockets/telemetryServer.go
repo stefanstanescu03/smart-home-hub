@@ -11,13 +11,19 @@ import (
 	"net"
 	"os"
 	"strings"
+	"sync"
 	"time"
 )
+
+var TelemetryConnectionPool sync.Map
+var AcknowledgedDevices = []string{}
 
 func handleConnection(conn net.Conn, csv_location string) {
 
 	defer func() {
 		fmt.Println("Device disconnected: ", conn.RemoteAddr())
+		ip := strings.Split(conn.RemoteAddr().String(), ":")[0]
+		TelemetryConnectionPool.Delete(ip)
 		conn.Close()
 	}()
 
@@ -58,6 +64,7 @@ func StartTelemetryServer() {
 		if time.Since(lastTime).Minutes() > 1 {
 			lastTime = time.Now()
 			devices_cache = make(map[string]bool)
+			AcknowledgedDevices = []string{}
 		}
 
 		conn, err := listener.Accept()
@@ -76,6 +83,7 @@ func StartTelemetryServer() {
 			initializers.DB.First(&device, "ip = ?", ip)
 			if device.ID == 0 {
 				devices_cache[ip] = true
+				AcknowledgedDevices = append(AcknowledgedDevices, ip)
 				fmt.Println("Rejected: ", conn.RemoteAddr())
 				conn.Close()
 				continue
@@ -83,6 +91,7 @@ func StartTelemetryServer() {
 		}
 
 		fmt.Println("New device connected: ", conn.RemoteAddr())
+		TelemetryConnectionPool.Store(ip, true)
 
 		go handleConnection(conn, device.Csv_location)
 

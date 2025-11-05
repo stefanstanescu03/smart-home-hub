@@ -84,6 +84,7 @@ export default {
   flex-direction: column;
   width: 20rem;
   gap: 1rem;
+  padding-top: 2rem;
 }
 .field {
   display: flex;
@@ -92,6 +93,37 @@ export default {
 .page-container {
   display: flex;
   flex-direction: row;
-  gap: 2rem;
+  gap: 25%;
+  height: 100%;
+}
+
+label {
+  font-size: large;
+}
+
+input {
+  outline: none;
+  box-shadow: none;
+  border: 1px solid #a6a6a6;
+
+  font-size: medium;
+  padding: 0.3rem;
+  border-radius: 0.3rem;
+}
+
+button {
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #ff8441;
+  color: #121212;
+  transition-duration: 300ms;
+  padding: 0.5rem;
+  font-size: large;
+  border-radius: 0.3rem;
+}
+
+button:hover {
+  background-color: #fe8d50;
 }
 </style>
