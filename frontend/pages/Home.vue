@@ -64,7 +64,22 @@ export default {
       dialog.close();
     },
     async handleUpdateDevice() {
-      console.log(this.selected_device);
+      const id = this.selected_device.id;
+      await axios
+        .put(
+          `http://localhost:5000/device/update/${id}`,
+          {
+            name: this.selected_device.name,
+            ip: this.selected_device.ip,
+            csv_location: this.selected_device.csv_location,
+            visibility: this.selected_device.visibility === "public",
+          },
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          }
+        )
+        .then(this.handleCancel())
+        .catch((err) => console.log(err));
     },
   },
   mounted() {

@@ -51,7 +51,7 @@ func AddDevice(c *gin.Context) {
 func UpdateDevice(c *gin.Context) {
 
 	currUser, _ := c.Get("user")
-	name := c.Param("name")
+	id := c.Param("id")
 
 	var body struct {
 		Name         string
@@ -68,7 +68,7 @@ func UpdateDevice(c *gin.Context) {
 	}
 
 	var device models.Device
-	initializers.DB.First(&device, "name = ? and user_id = ?", name, currUser.(models.User).ID)
+	initializers.DB.First(&device, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 
 	if device.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{
