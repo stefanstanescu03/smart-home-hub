@@ -40,7 +40,7 @@ export default {
             name: this.device_name,
             ip: this.selected_ip,
             csv_location: this.device_csv_location,
-            visibility: this.device_visibility == true,
+            visibility: this.device_visibility === "public",
           },
           { headers: { Authorization: `Bearer ${this.getToken()}` } }
         )
@@ -95,14 +95,16 @@ export default {
         <div class="dialog-container">
           <div class="top-dialog">
             <p>Adding device with ip: {{ selected_ip }}</p>
-            <button @click="handleCancel" class="cancel-button">X</button>
+            <button @click="handleCancel" class="cancel-button">
+              <img src="../public/close.png" height="20" width="20" alt="" />
+            </button>
           </div>
           <div class="field">
-            <label for="name">Name</label>
+            <label for="name">Name: </label>
             <input type="text" id="name" name="name" v-model="device_name" />
           </div>
           <div class="field">
-            <label for="device_csv_location">Data directory</label>
+            <label for="device_csv_location">Data directory: </label>
             <input
               type="text"
               id="device_csv_location"
@@ -111,7 +113,7 @@ export default {
             />
           </div>
           <div class="field">
-            <label for="device_visibility">Visibility</label>
+            <label for="device_visibility">Visibility: </label>
             <select
               name="device_visibility"
               id="device_visibility"
@@ -206,5 +208,17 @@ input:focus {
 
 .create-button:hover {
   background-color: #fe8d50;
+}
+
+.cancel-button {
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+dialog {
+  border: 1px solid #a6a6a6;
+  border-radius: 0.3rem;
 }
 </style>

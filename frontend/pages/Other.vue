@@ -41,6 +41,7 @@ export default {
           :deviceName="device.Name"
           :ip="device.Ip"
           :visibility="device.Visibility"
+          :should_appear="false"
         />
       </table>
     </div>

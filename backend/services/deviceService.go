@@ -14,7 +14,7 @@ func RegisterDeviceRoutes(r *gin.Engine) {
 		deviceRoutes.PUT("/update/:name", middleware.RequireAuth, controllers.UpdateDevice)
 		deviceRoutes.GET("/:name", middleware.RequireAuth, controllers.GetDevice)
 		deviceRoutes.GET("/", middleware.RequireAuth, controllers.GetDevices)
-		deviceRoutes.DELETE("/delete/:name", middleware.RequireAuth, controllers.DeleteDevice)
+		deviceRoutes.DELETE("/delete/:id", middleware.RequireAuth, controllers.DeleteDevice)
 		deviceRoutes.GET("/ping/:ip", controllers.IsDeviceConnected)
 		deviceRoutes.GET("/discovered", controllers.GetDiscoveredDevices)
 		deviceRoutes.GET("/public", controllers.GetPublicDevices)

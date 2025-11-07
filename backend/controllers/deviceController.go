@@ -125,9 +125,9 @@ func GetDevices(c *gin.Context) {
 func DeleteDevice(c *gin.Context) {
 
 	currUser, _ := c.Get("user")
-	name := c.Param("name")
+	id := c.Param("id")
 
-	initializers.DB.Delete(&models.Device{}, "name = ? and user_id = ?", name, currUser.(models.User).ID)
+	initializers.DB.Unscoped().Delete(&models.Device{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "device deleted",

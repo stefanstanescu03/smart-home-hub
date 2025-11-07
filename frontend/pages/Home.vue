@@ -7,6 +7,12 @@ export default {
   data() {
     return {
       devices: [],
+      selected_device: {
+        id: "",
+        ip: "",
+        csv_location: "",
+        visibility: "",
+      },
     };
   },
   methods: {
@@ -30,6 +36,36 @@ export default {
           console.log(error);
         });
     },
+    async handleDelete(device) {
+      const id = device.ID;
+      await axios
+        .delete(`http://localhost:5000/device/delete/${device.ID}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        })
+        .then(
+          () =>
+            (this.devices = this.devices.filter((device) => device.ID != id))
+        )
+        .catch((err) => console.log(err));
+    },
+    async triggerEdit(device) {
+      console.log(device);
+      this.selected_device.id = device.ID;
+      this.selected_device.name = device.Name;
+      this.selected_device.csv_location = device.Csv_location;
+      this.selected_device.ip = device.Ip;
+      this.selected_device.visibility =
+        device.Visibility === true ? "public" : "private";
+      const dialog = document.querySelector("dialog");
+      dialog.show();
+    },
+    handleCancel() {
+      const dialog = document.querySelector("dialog");
+      dialog.close();
+    },
+    async handleUpdateDevice() {
+      console.log(this.selected_device);
+    },
   },
   mounted() {
     this.fetchDevices();
@@ -50,14 +86,59 @@ export default {
           <th>Ip</th>
           <th>Visibility</th>
           <th>Status</th>
+          <th>Action</th>
         </tr>
         <DeviceInfo
           v-for="device in this.devices"
           :deviceName="device.Name"
           :ip="device.Ip"
           :visibility="device.Visibility"
+          :should_appear="true"
+          @edit="triggerEdit(device)"
+          @delete="handleDelete(device)"
         />
       </table>
+
+      <dialog>
+        <div class="dialog-container">
+          <div class="top-dialog">
+            <p>Edit device with ip: {{ this.selected_device.ip }}</p>
+            <button @click="handleCancel" class="cancel-button">
+              <img src="../public/close.png" height="20" width="20" alt="" />
+            </button>
+          </div>
+          <div class="field">
+            <label for="name">Name: </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              v-model="this.selected_device.name"
+            />
+          </div>
+          <div class="field">
+            <label for="device_csv_location">Data directory: </label>
+            <input
+              type="text"
+              id="device_csv_location"
+              name="device_csv_location"
+              v-model="this.selected_device.csv_location"
+            />
+          </div>
+          <div class="field">
+            <label for="device_visibility">Visibility: </label>
+            <select
+              name="device_visibility"
+              id="device_visibility"
+              v-model="this.selected_device.visibility"
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <button @click="handleUpdateDevice" class="create-button">Add</button>
+        </div>
+      </dialog>
     </div>
   </div>
 </template>
@@ -80,5 +161,60 @@ th {
   border-bottom: 1px solid #c9c9c9;
   padding: 0.3rem;
   text-align: left;
+}
+
+input {
+  outline: none;
+  box-shadow: none;
+  border: none;
+  border-bottom: 1px solid #a6a6a6;
+
+  font-size: medium;
+  padding: 0.3rem;
+  transition-duration: 300ms;
+}
+
+input:focus {
+  border-bottom: 1px solid #121212;
+}
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+}
+
+.top-dialog {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.create-button {
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: #ff8441;
+  color: #121212;
+  transition-duration: 300ms;
+  padding: 0.5rem;
+  font-size: large;
+  border-radius: 0.3rem;
+}
+
+.create-button:hover {
+  background-color: #fe8d50;
+}
+
+.cancel-button {
+  border: none;
+  text-decoration: none;
+  cursor: pointer;
+  background-color: transparent;
+}
+
+dialog {
+  border: 1px solid #a6a6a6;
+  border-radius: 0.3rem;
 }
 </style>

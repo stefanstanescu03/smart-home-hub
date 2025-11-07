@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["deviceName", "ip", "visibility"],
+  props: ["deviceName", "ip", "visibility", "should_appear"],
   data() {
     return {
       status: "checking...",
@@ -34,6 +34,16 @@ export default {
     <td v-if="visibility == false">private</td>
     <td v-if="visibility == true">public</td>
     <td>{{ status }}</td>
+    <td>
+      <div class="action-container" v-if="should_appear == true">
+        <button class="delete-button" @click="$emit('edit')">
+          <img src="../public/edit.png" alt="" height="25" width="25" />
+        </button>
+        <button class="delete-button" @click="$emit('delete')">
+          <img src="../public/delete.png" alt="" height="20" width="20" />
+        </button>
+      </div>
+    </td>
   </tr>
 </template>
 
@@ -41,5 +51,19 @@ export default {
 td {
   border-bottom: 1px solid #c9c9c9;
   padding: 0.3rem;
+}
+
+.delete-button {
+  border: none;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+}
+
+.action-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
 }
 </style>
