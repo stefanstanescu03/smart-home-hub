@@ -15,4 +15,6 @@ func main() {
 	initializers.DB.AutoMigrate(&models.Device{})
 	initializers.DB.AutoMigrate(&models.Automation{})
 	initializers.DB.AutoMigrate(&models.Alert{})
+	initializers.DB.AutoMigrate(&models.Dashboard{})
+	initializers.DB.AutoMigrate(&models.Widget{})
 }

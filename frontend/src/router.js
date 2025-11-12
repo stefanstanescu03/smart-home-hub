@@ -6,6 +6,7 @@ import Signup from "../pages/Signup.vue";
 import Discovered from "../pages/Discovered.vue";
 import Other from "../pages/Other.vue";
 import Account from "../pages/Account.vue";
+import Dashboards from "../pages/Dashboards.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -14,6 +15,7 @@ const routes = [
   { path: "/discovered", component: Discovered },
   { path: "/other", component: Other },
   { path: "/account", component: Account },
+  { path: "/dashboards", component: Dashboards },
 ];
 
 export default createRouter({

@@ -26,6 +26,7 @@ func main() {
 	services.RegisterDeviceRoutes(r)
 	services.RegisterAutomationRoutes(r)
 	services.RegisterAlertRoutes(r)
+	services.RegisterDashboardRoutes(r)
 
 	r.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

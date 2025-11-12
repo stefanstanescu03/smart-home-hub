@@ -93,7 +93,7 @@ export default {
     <SideBar />
     <div class="info-container">
       <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
-      <h1 v-if="getToken() != undefined">Your devices</h1>
+      <h1 v-if="getToken() != undefined">My devices</h1>
       <h1 v-if="this.devices.length == 0">No devices added</h1>
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
