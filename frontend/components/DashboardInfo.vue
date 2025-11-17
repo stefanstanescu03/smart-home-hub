@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ["name", "visibility", "should_appear"],
+  props: ["name", "visibility", "should_appear", "id"],
 };
 </script>
 
@@ -17,7 +17,12 @@ export default {
         <button class="delete-button" @click="$emit('delete')">
           <img src="../public/delete.png" alt="" height="20" width="20" />
         </button>
-        <button class="view-button">View</button>
+        <button
+          class="view-button"
+          @click="this.$router.push(`/dashboard/${id}`)"
+        >
+          View
+        </button>
       </div>
     </td>
   </tr>

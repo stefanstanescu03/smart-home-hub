@@ -52,20 +52,23 @@ export default {
         .catch((err) => console.log(err));
     },
     async handleCreateDashboard() {
-      await axios
-        .post(
+      try {
+        await axios.post(
           "http://localhost:5000/dashboard/create",
           {
             name: this.dashboard_name,
             visibility: this.dashboard_visibility === "public",
           },
-          { headers: { Authorization: `Bearer ${this.getToken()}` } }
-        )
-        .then(() => {
-          this.handleCancelCreateDialog();
-          this.$router.go(0);
-        })
-        .catch((err) => console.log(err));
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          }
+        );
+
+        this.handleCancelCreateDialog();
+        this.$router.go(0);
+      } catch (err) {
+        console.error("Dashboard creation failed:", err);
+      }
     },
     async handleDeleteDashboard(dashboard) {
       const id = dashboard.ID;
@@ -124,6 +127,7 @@ export default {
           :name="dashboard.Name"
           :visibility="dashboard.Visibility"
           :should_appear="true"
+          :id="dashboard.ID"
           @edit="triggerUpdateDialog(dashboard)"
           @delete="handleDeleteDashboard(dashboard)"
         />

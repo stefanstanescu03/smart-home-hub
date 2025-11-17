@@ -68,17 +68,6 @@ export default {
       <h1>List of discovered devices</h1>
       <h1 v-if="this.devices.length == 0">No devices discovered</h1>
       <div class="discovered-list">
-        <!-- <div class="device-container">
-          <p>Device ip: 172.0.11.1</p>
-          <button class="add-button">
-            <img
-              src="../public/plus-symbol-button.png"
-              height="25"
-              width="25"
-              alt=""
-            />
-          </button>
-        </div> -->
         <div v-for="device in devices" class="device-container">
           <p>Device ip: {{ device }}</p>
           <button @click="triggerDialog(device)" class="add-button">
@@ -174,7 +163,6 @@ input {
 
   font-size: medium;
   padding: 0.3rem;
-  /* border-radius: 0.3rem; */
   transition-duration: 300ms;
 }
 
