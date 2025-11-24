@@ -92,10 +92,10 @@ func UpdateDevice(c *gin.Context) {
 func GetDevice(c *gin.Context) {
 
 	currUser, _ := c.Get("user")
-	name := c.Param("name")
+	id := c.Param("id")
 
 	var device models.Device
-	initializers.DB.First(&device, "name = ? and (user_id = ? or visibility = true)", name, currUser.(models.User).ID)
+	initializers.DB.First(&device, "id = ? and (user_id = ? or visibility = true)", id, currUser.(models.User).ID)
 
 	if device.ID == 0 {
 		c.JSON(http.StatusBadRequest, gin.H{

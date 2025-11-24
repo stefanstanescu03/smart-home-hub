@@ -18,6 +18,7 @@ func init() {
 func main() {
 
 	go sockets.StartTelemetryServer()
+	go sockets.StartStreamingServer()
 
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())

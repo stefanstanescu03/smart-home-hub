@@ -11,6 +11,7 @@ export default {
       available_devices: [],
       widget_type: "",
       device: "",
+      ws: null,
     };
   },
   methods: {
@@ -22,32 +23,46 @@ export default {
       }
       return token;
     },
+
     async handleFetchDashboard() {
-      await axios
-        .get(`http://localhost:5000/dashboard/${this.$route.params.id}`, {
-          headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then((res) => (this.dashboard = res.data.dashboard))
-        .catch((err) => console.log(err));
+      try {
+        const res = await axios.get(
+          `http://localhost:5000/dashboard/${this.$route.params.id}`,
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          }
+        );
+        this.dashboard = res.data.dashboard;
+      } catch (err) {
+        console.error(err);
+      }
     },
     async handleFetchWidgets() {
-      await this.handleFetchDashboard();
-      if (this.dashboard.ID != "undefined") {
-        await axios
-          .get(`http://localhost:5000/widget/${this.dashboard.ID}`, {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          })
-          .then((res) => (this.widgets = res.data.widgets))
-          .catch((err) => console.log(err));
+      try {
+        await this.handleFetchDashboard();
+
+        if (this.dashboard?.ID) {
+          const res = await axios.get(
+            `http://localhost:5000/widget/${this.dashboard.ID}`,
+            {
+              headers: { Authorization: `Bearer ${this.getToken()}` },
+            }
+          );
+          this.widgets = res.data.widgets;
+        }
+      } catch (err) {
+        console.error(err);
       }
     },
     async handleGetAvailableDevices() {
-      await axios
-        .get("http://localhost:5000/device/", {
+      try {
+        const res = await axios.get("http://localhost:5000/device/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then((res) => (this.available_devices = res.data.devices))
-        .catch((err) => console.log(err));
+        });
+        this.available_devices = res.data.devices;
+      } catch (err) {
+        console.error(err);
+      }
     },
     async handleAddWidget() {
       try {
@@ -76,10 +91,29 @@ export default {
       const dialog = document.querySelector("dialog");
       dialog.close();
     },
+
+    setupWebsocket() {
+      this.ws = new WebSocket("ws://localhost:5003/streaming");
+      this.ws.onopen = () => {
+        console.log("Connected to streaming server");
+        this.widgets.forEach((widget) => {
+          if (widget.DeviceId) {
+            this.ws.send(JSON.stringify(`subscribe:${widget.DeviceId}`));
+          }
+        });
+      };
+      this.ws.onmessage = (event) => {
+        console.log(event.data);
+      };
+      this.ws.onclose = () => {
+        console.log("disconnected");
+      };
+    },
   },
   async mounted() {
     await this.handleFetchWidgets();
     await this.handleGetAvailableDevices();
+    this.setupWebsocket();
   },
 };
 </script>
@@ -91,7 +125,11 @@ export default {
       <h1>{{ this.dashboard.Name }}</h1>
       <div class="widgets-container">
         <div v-for="widget in this.widgets">
-          <Card v-if="widget.Widgettype == 'ca'" />
+          <Card
+            v-if="widget.Widgettype == 'ca'"
+            :deviceId="widget.DeviceId"
+            deviceName="default"
+          />
         </div>
         <button class="add-button" @click="triggerDialog">+</button>
       </div>

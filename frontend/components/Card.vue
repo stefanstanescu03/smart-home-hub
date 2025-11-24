@@ -1,12 +1,12 @@
 <script>
 export default {
-  props: ["name"],
+  props: ["deviceId", "deviceName"],
 };
 </script>
 
 <template>
   <div class="card-container">
-    <h1 class="name-h">{{ name }}</h1>
+    <h1 class="name-h">{{ deviceName }}</h1>
     <p class="value-h">Temperature: 23C</p>
     <p class="value-h">Humidity: 50%</p>
   </div>
