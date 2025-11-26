@@ -1,14 +1,34 @@
 <script>
 export default {
-  props: ["deviceId", "deviceName"],
+  props: ["deviceId", "deviceName", "streamData"],
+  data() {
+    return {
+      values: {},
+    };
+  },
+  watch: {
+    streamData: {
+      immediate: true,
+      deep: true,
+      handler(message) {
+        if (!message) return;
+        const parts = message.split(",");
+        parts.forEach((p) => {
+          const [k, v] = p.split(":");
+          if (k != "timestamp" && k != "id") {
+            this.values[k] = v;
+          }
+        });
+      },
+    },
+  },
 };
 </script>
 
 <template>
   <div class="card-container">
     <h1 class="name-h">{{ deviceName }}</h1>
-    <p class="value-h">Temperature: 23C</p>
-    <p class="value-h">Humidity: 50%</p>
+    <div v-for="(val, key) in values" :key="key">{{ key }}: {{ val }}</div>
   </div>
 </template>
 

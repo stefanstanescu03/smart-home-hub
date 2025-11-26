@@ -57,14 +57,14 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
 			fmt.Println("Error reading message:", err)
-			continue
+			break
 		}
 
 		// Get the id from the message (that should be like subscribe:id)
 		parts := strings.Split(strings.Trim(string(message), "\""), ":")
 		if len(parts) != 2 || parts[0] != "subscribe" {
 			fmt.Println("[WS-debug] Invalid subscribe message")
-			continue
+			break
 		}
 		id := parts[1]
 
@@ -73,7 +73,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		initializers.DB.First(&device, "id = ?", id)
 		if device.ID == 0 {
 			fmt.Println("[WS-debug] Device not found")
-			continue
+			break
 		}
 		csv_location := device.Csv_location
 
@@ -85,7 +85,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 		if err := conn.WriteMessage(websocket.TextMessage, []byte(csv_location)); err != nil {
 			fmt.Println("Error writing message:", err)
-			continue
+			break
 		}
 	}
 

@@ -48,7 +48,10 @@ export default {
               headers: { Authorization: `Bearer ${this.getToken()}` },
             }
           );
-          this.widgets = res.data.widgets;
+          this.widgets = res.data.widgets.map((widget) => ({
+            ...widget,
+            streamData: null,
+          }));
         }
       } catch (err) {
         console.error(err);
@@ -103,7 +106,15 @@ export default {
         });
       };
       this.ws.onmessage = (event) => {
-        console.log(event.data);
+        const message = event.data;
+        const parts = message.split(",");
+        const widget = this.widgets.find(
+          (widget) =>
+            String(widget.DeviceId) ===
+            String(parts[parts.length - 1].split(":")[1])
+        );
+        if (!widget) return;
+        widget.dataStream = message;
       };
       this.ws.onclose = () => {
         console.log("disconnected");
@@ -128,6 +139,7 @@ export default {
           <Card
             v-if="widget.Widgettype == 'ca'"
             :deviceId="widget.DeviceId"
+            :streamData="widget.dataStream"
             deviceName="default"
           />
         </div>
