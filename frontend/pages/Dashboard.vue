@@ -1,9 +1,11 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
+import Chart from "../components/Chart.vue";
+import Table from "../components/Table.vue";
 import axios from "axios";
 export default {
-  components: { SideBar, Card },
+  components: { SideBar, Card, Chart, Table },
   data() {
     return {
       dashboard: "",
@@ -123,16 +125,19 @@ export default {
       this.ws.onmessage = (event) => {
         const message = event.data;
         const parts = message.split(",");
-        const widget = this.widgets.find(
-          (widget) =>
-            String(widget.DeviceId) ===
-            String(parts[parts.length - 1].split(":")[1])
+
+        const deviceId = String(parts[parts.length - 1].split(":")[1]);
+        const matchingWidgets = this.widgets.filter(
+          (widget) => String(widget.DeviceId) === deviceId
         );
-        if (!widget) return;
-        widget.dataStream = message;
-      };
-      this.ws.onclose = () => {
-        console.log("disconnected");
+
+        if (!matchingWidgets.length) return;
+
+        matchingWidgets.forEach((widget) => {
+          widget.dataStream = message;
+        });
+
+        this.widgets = [...this.widgets];
       };
     },
   },
@@ -153,6 +158,12 @@ export default {
         <div v-for="widget in this.widgets">
           <Card
             v-if="widget.Widgettype == 'ca'"
+            :deviceId="widget.DeviceId"
+            :streamData="widget.dataStream"
+            :deviceName="widget.deviceName"
+          />
+          <Table
+            v-if="widget.Widgettype == 'ta'"
             :deviceId="widget.DeviceId"
             :streamData="widget.dataStream"
             :deviceName="widget.deviceName"

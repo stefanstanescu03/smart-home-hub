@@ -28,7 +28,9 @@ export default {
 <template>
   <div class="card-container">
     <h1 class="name-h">{{ deviceName }}</h1>
-    <div v-for="(val, key) in values" :key="key">{{ key }}: {{ val }}</div>
+    <div class="values-container">
+      <div v-for="(val, key) in values" :key="key">{{ key }}: {{ val }}</div>
+    </div>
   </div>
 </template>
 
@@ -37,8 +39,13 @@ export default {
   font-size: large;
 }
 .card-container {
-  border: 1px solid #a6a6a6;
+  border: 1px solid #eeeeee;
   border-radius: 1rem;
-  padding: 0.5rem;
+  padding: 1rem;
+}
+.values-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
 }
 </style>
