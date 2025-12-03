@@ -54,6 +54,7 @@ export default {
   flex-direction: row;
   gap: 2rem;
   height: 100%;
+  color: #eeeeee;
 }
 .info-container {
   width: 50%;
@@ -66,7 +67,7 @@ table {
   width: 100%;
 }
 th {
-  border-bottom: 1px solid #c9c9c9;
+  border-bottom: 1px solid #eeeeee;
   padding: 0.3rem;
   text-align: left;
 }

@@ -49,7 +49,7 @@ export default {
 
 <style scoped>
 td {
-  border-bottom: 1px solid #c9c9c9;
+  border-bottom: 1px solid #eeeeee;
   padding: 0.3rem;
 }
 

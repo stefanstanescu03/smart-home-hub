@@ -101,6 +101,7 @@ export default {
 .field {
   display: flex;
   flex-direction: column;
+  gap: 0.3rem;
 }
 .page-container {
   display: flex;
@@ -110,24 +111,27 @@ export default {
 }
 
 label {
+  color: #eeeeee;
   font-size: large;
 }
 
 input {
+  color: #eeeeee;
+  background-color: #252525;
   outline: none;
   box-shadow: none;
-  border: 1px solid #a6a6a6;
+  border: 1px solid #eeeeee;
 
   font-size: medium;
-  padding: 0.3rem;
+  padding: 0.5rem;
   border-radius: 0.3rem;
 }
-
 button {
+  color: #eeeeee;
   border: none;
   text-decoration: none;
   cursor: pointer;
-  background-color: #ff8441;
+  background-color: #a8dadc;
   color: #121212;
   transition-duration: 300ms;
   padding: 0.5rem;
@@ -136,6 +140,6 @@ button {
 }
 
 button:hover {
-  background-color: #fe8d50;
+  background-color: #8ac6c9;
 }
 </style>

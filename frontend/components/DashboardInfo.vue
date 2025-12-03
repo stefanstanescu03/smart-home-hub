@@ -30,7 +30,7 @@ export default {
 
 <style scoped>
 td {
-  border-bottom: 1px solid #c9c9c9;
+  border-bottom: 1px solid #eeeeee;
   padding: 0.3rem;
 }
 
@@ -51,16 +51,16 @@ td {
 .view-button {
   border: none;
   background-color: transparent;
-  border: 1px solid #a6a6a6;
+  border: 1px solid #eeeeee;
   text-decoration: none;
   cursor: pointer;
-  color: #121212;
+  color: #eeeeee;
   padding: 0.5rem;
   border-radius: 0.3rem;
   transition-duration: 300ms;
 }
 
 .view-button:hover {
-  border: 1px solid #121212;
+  border: 1px solid #a6a6a6;
 }
 </style>

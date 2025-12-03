@@ -125,6 +125,7 @@ export default {
   flex-direction: row;
   gap: 2rem;
   height: 100%;
+  color: #eeeeee;
 }
 .discovered-list {
   display: flex;

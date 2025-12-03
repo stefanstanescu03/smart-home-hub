@@ -48,13 +48,28 @@ export default {
               headers: { Authorization: `Bearer ${this.getToken()}` },
             }
           );
-          this.widgets = res.data.widgets.map((widget) => ({
-            ...widget,
-            streamData: null,
-          }));
+          const widgetsWithDeviceNames = await Promise.all(
+            res.data.widgets.map(async (widget) => ({
+              ...widget,
+              dataStream: null,
+              deviceName: await this.handleGetDeviceName(widget.DeviceId),
+            }))
+          );
+
+          this.widgets = widgetsWithDeviceNames;
         }
       } catch (err) {
         console.error(err);
+      }
+    },
+    async handleGetDeviceName(id) {
+      try {
+        const res = await axios.get(`http://localhost:5000/device/${id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        return res.data.device.Name;
+      } catch (err) {
+        return "default";
       }
     },
     async handleGetAvailableDevices() {
@@ -140,7 +155,7 @@ export default {
             v-if="widget.Widgettype == 'ca'"
             :deviceId="widget.DeviceId"
             :streamData="widget.dataStream"
-            deviceName="default"
+            :deviceName="widget.deviceName"
           />
         </div>
         <button class="add-button" @click="triggerDialog">+</button>
@@ -183,6 +198,7 @@ export default {
   flex-direction: row;
   gap: 2rem;
   height: 100%;
+  color: #eeeeee;
 }
 
 .info-container {
@@ -193,19 +209,19 @@ export default {
   border: none;
   width: 10rem;
   height: 10rem;
-  color: #a6a6a6;
+  color: #eeeeee;
   font-weight: bold;
   font-size: 4rem;
   background-color: transparent;
-  border: 1px solid #a6a6a6;
+  border: 1px solid #eeeeee;
   border-style: dashed;
   transition-duration: 300ms;
 }
 
 .add-button:hover {
-  border: 1px solid #121212;
+  border: 1px solid #a6a6a6;
   border-style: dashed;
-  color: #121212;
+  color: #a6a6a6;
 }
 
 .widgets-container {
@@ -241,7 +257,10 @@ input:focus {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: #eeeeee;
+  background-color: #1a1a1a;
 }
+
 .top-dialog {
   display: flex;
   flex-direction: row;
@@ -252,7 +271,7 @@ input:focus {
   border: none;
   text-decoration: none;
   cursor: pointer;
-  background-color: #ff8441;
+  background-color: #a8dadc;
   color: #121212;
   transition-duration: 300ms;
   padding: 0.5rem;
@@ -261,7 +280,7 @@ input:focus {
 }
 
 .create-button:hover {
-  background-color: #fe8d50;
+  background-color: #8ac6c9;
 }
 
 .cancel-button {
@@ -272,7 +291,12 @@ input:focus {
 }
 
 dialog {
-  border: 1px solid #a6a6a6;
+  width: 60vw;
+  max-width: 500px;
+  border: none;
+  outline: none;
+  box-shadow: none;
   border-radius: 0.3rem;
+  background-color: #1a1a1a;
 }
 </style>

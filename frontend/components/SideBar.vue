@@ -59,7 +59,7 @@ nav {
   display: flex;
   flex-direction: column;
   width: 15%;
-  background-color: #183b4e;
+  background-color: #1a1a1a;
 }
 button {
   display: flex;
@@ -69,8 +69,8 @@ button {
   border: none;
   text-decoration: none;
   cursor: pointer;
-  background-color: #183b4e;
-  color: #d7d7d7;
+  background-color: #1a1a1a;
+  color: #eeeeee;
   transition-duration: 300ms;
   padding: 0.5rem;
   text-align: left;
@@ -78,7 +78,7 @@ button {
 }
 
 button:hover {
-  background-color: #3e657f;
+  background-color: rgb(40, 41, 43);
 }
 
 button > img {
