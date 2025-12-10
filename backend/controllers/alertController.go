@@ -16,6 +16,7 @@ func AddAlert(c *gin.Context) {
 		Subject   string
 		Content   string
 		Condition string
+		DeviceId  uint
 	}
 
 	if c.Bind(&body) != nil {
@@ -25,11 +26,21 @@ func AddAlert(c *gin.Context) {
 		return
 	}
 
+	var device models.Device
+	initializers.DB.Find(&device, "user_id = ? and id = ?", currUser.(models.User).ID, body.DeviceId)
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "device not found",
+		})
+		return
+	}
+
 	alert := models.Alert{
 		Subject:   body.Subject,
 		Content:   body.Content,
 		Condition: body.Condition,
 		UserId:    currUser.(models.User).ID,
+		DeviceId:  body.DeviceId,
 	}
 
 	res := initializers.DB.Create(&alert)
@@ -107,9 +118,10 @@ func GetAlert(c *gin.Context) {
 func GetAlerts(c *gin.Context) {
 
 	currUser, _ := c.Get("user")
+	device_id := c.Param("device_id")
 
 	var alerts []models.Alert
-	initializers.DB.Find(&alerts, "user_id = ?", currUser.(models.User).ID)
+	initializers.DB.Find(&alerts, "user_id = ? and device_id = ?", currUser.(models.User).ID, device_id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"alerts": alerts,
@@ -121,7 +133,7 @@ func DeleteAlert(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
 
-	initializers.DB.Delete(&models.Alert{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+	initializers.DB.Unscoped().Delete(&models.Alert{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "alert deleted",

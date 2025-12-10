@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["deviceName", "ip", "visibility", "should_appear"],
+  props: ["deviceName", "ip", "visibility", "should_appear", "id"],
   data() {
     return {
       status: "checking...",
@@ -36,6 +36,12 @@ export default {
     <td>{{ status }}</td>
     <td>
       <div class="action-container" v-if="should_appear == true">
+        <button
+          class="delete-button"
+          @click="this.$router.push(`/alerts/${id}`)"
+        >
+          <img src="../public/bell.png" alt="" height="20" width="20" />
+        </button>
         <button class="delete-button" @click="$emit('edit')">
           <img src="../public/edit.png" alt="" height="25" width="25" />
         </button>

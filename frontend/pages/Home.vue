@@ -108,6 +108,7 @@ export default {
           :deviceName="device.Name"
           :ip="device.Ip"
           :visibility="device.Visibility"
+          :id="device.ID"
           :should_appear="true"
           @edit="triggerEdit(device)"
           @delete="handleDelete(device)"

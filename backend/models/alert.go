@@ -9,4 +9,6 @@ type Alert struct {
 	Condition string `gorm:"not null"`
 	UserId    uint
 	User      User `gorm:"foreignKey:UserId"`
+	DeviceId  uint
+	Device    Device `gorm:"foreignKey:DeviceId"`
 }
