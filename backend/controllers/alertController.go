@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/sockets"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -49,6 +50,8 @@ func AddAlert(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+
+	sockets.NotifyAlertsHandler()
 
 	c.JSON(http.StatusOK, gin.H{
 		"alert": alert,
