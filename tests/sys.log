@@ -1,0 +1,21 @@
+2025-12-14T15:17:15+02:00 [STREAMING] Streaming server started on port: 5003
+2025-12-14T15:17:15+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2025-12-14T15:17:41+02:00 [STREAMING] New client connected
+2025-12-14T15:17:41+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:17:41+02:00 [STREAMING] Client subscribed to device: 22
+2025-12-14T15:17:41+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:17:41+02:00 [STREAMING] Client subscribed to device: 22
+2025-12-14T15:17:51+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2025-12-14T15:17:51+02:00 [STREAMING] Client disconnected
+2025-12-14T15:18:07+02:00 [TELEMETRY] New device connected: 172.17.0.2:59291
+2025-12-14T15:18:13+02:00 [STREAMING] New client connected
+2025-12-14T15:18:13+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:18:13+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:18:13+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:18:35+02:00 [TELEMETRY] Device disconnected: 172.17.0.2:59291
+2025-12-14T15:18:58+02:00 [STREAMING] Streaming server started on port: 5003
+2025-12-14T15:18:58+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2025-12-14T15:19:20+02:00 [STREAMING] New client connected
+2025-12-14T15:19:20+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:19:20+02:00 [STREAMING] Client subscribed to device: 11
+2025-12-14T15:19:20+02:00 [STREAMING] Client subscribed to device: 11

@@ -6,6 +6,7 @@ import (
 	"backend/utils"
 	"fmt"
 	"net/http"
+	"os"
 	"strings"
 	"sync"
 	"time"
@@ -30,7 +31,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 
 	conn, err := upgrader.Upgrade(w, r, nil)
 	if err != nil {
-		fmt.Println("Error upgrading:", err)
+		utils.WriteToLogs("[STREAMING]", fmt.Sprintf("Error upgrading: %s", err))
 		return
 	}
 
@@ -42,7 +43,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 	clientsMu.Lock()
 	clients[client] = true
 	clientsMu.Unlock()
-	fmt.Println("[WS-debug] New client connected")
+	utils.WriteToLogs("[STREAMING]", "New client connected")
 
 	// Disconnect a client
 	defer func() {
@@ -50,20 +51,20 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		delete(clients, client)
 		clientsMu.Unlock()
 		conn.Close()
-		fmt.Println("[WS-debug] client disconnected")
+		utils.WriteToLogs("[STREAMING]", "Client disconnected")
 	}()
 
 	for {
 		_, message, err := conn.ReadMessage()
 		if err != nil {
-			fmt.Println("Error reading message:", err)
+			utils.WriteToLogs("[STREAMING]", fmt.Sprintf("Error reading message: %s", err))
 			break
 		}
 
 		// Get the id from the message (that should be like subscribe:id)
 		parts := strings.Split(strings.Trim(string(message), "\""), ":")
 		if len(parts) != 2 || parts[0] != "subscribe" {
-			fmt.Println("[WS-debug] Invalid subscribe message")
+			utils.WriteToLogs("[STREAMING]", "A client sent an invalid subscribe message")
 			break
 		}
 		id := parts[1]
@@ -72,7 +73,7 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		var device models.Device
 		initializers.DB.First(&device, "id = ?", id)
 		if device.ID == 0 {
-			fmt.Println("[WS-debug] Device not found")
+			utils.WriteToLogs("[STREAMING]", "A client tried to subscribe to an invalid device")
 			break
 		}
 		csv_location := device.Csv_location
@@ -80,11 +81,11 @@ func wsHandler(w http.ResponseWriter, r *http.Request) {
 		// Add device
 		client.mu.Lock()
 		client.devices[id] = csv_location
-		fmt.Println("[WS-debug] Client subscribed to device: ", id)
+		utils.WriteToLogs("[STREAMING]", fmt.Sprintf("Client subscribed to device: %s", id))
 		client.mu.Unlock()
 
 		if err := conn.WriteMessage(websocket.TextMessage, []byte(csv_location)); err != nil {
-			fmt.Println("Error writing message:", err)
+			utils.WriteToLogs("[STREAMING]", fmt.Sprintf("An error writing message occurred: %s", err))
 			break
 		}
 	}
@@ -118,11 +119,17 @@ func broadcastHandler() {
 }
 
 func StartStreamingServer() {
+
+	port := os.Getenv("STREAMING_PORT")
+
 	http.HandleFunc("/streaming", wsHandler)
 	go broadcastHandler()
-	fmt.Println("[WS-debug] Listening on port: 5003")
-	err := http.ListenAndServe(":5003", nil)
+
+	utils.WriteToLogs("[STREAMING]", fmt.Sprintf("Streaming server started on port: %s", port))
+
+	err := http.ListenAndServe(":"+port, nil)
 	if err != nil {
 		fmt.Println("Error starting server:", err)
+		utils.WriteToLogs("[STREAMING]", fmt.Sprintf("Error starting streaming server: %s", err))
 	}
 }

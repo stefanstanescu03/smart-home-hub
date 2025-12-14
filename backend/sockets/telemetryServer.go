@@ -21,7 +21,7 @@ var AcknowledgedDevices = []string{}
 func handleConnection(conn net.Conn, csv_location string) {
 
 	defer func() {
-		fmt.Println("Device disconnected: ", conn.RemoteAddr())
+		utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("Device disconnected: %s", conn.RemoteAddr()))
 		ip := strings.Split(conn.RemoteAddr().String(), ":")[0]
 		TelemetryConnectionPool.Delete(ip)
 		conn.Close()
@@ -35,7 +35,7 @@ func handleConnection(conn net.Conn, csv_location string) {
 			if err == io.EOF {
 				return
 			}
-			fmt.Println("Read error:", err)
+			utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("Error reading a message from %s: %s", conn.RemoteAddr(), err))
 			return
 		}
 
@@ -57,7 +57,7 @@ func StartTelemetryServer() {
 		log.Fatal(err)
 	}
 
-	fmt.Println("[TELEMETRY-debug] Telemetry server started on port: ", port)
+	utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("Telemetry server started on port: %s", port))
 
 	for {
 
@@ -69,7 +69,7 @@ func StartTelemetryServer() {
 
 		conn, err := listener.Accept()
 		if err != nil {
-			fmt.Println("Error accepting connection: ", err)
+			utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("Error accepting connection: %s", err))
 			continue
 		}
 
@@ -84,13 +84,13 @@ func StartTelemetryServer() {
 			if device.ID == 0 {
 				devices_cache[ip] = true
 				AcknowledgedDevices = append(AcknowledgedDevices, ip)
-				fmt.Println("Rejected: ", conn.RemoteAddr())
+				utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("Connection rejected: %s", conn.RemoteAddr()))
 				conn.Close()
 				continue
 			}
 		}
 
-		fmt.Println("New device connected: ", conn.RemoteAddr())
+		utils.WriteToLogs("[TELEMETRY]", fmt.Sprintf("New device connected: %s", conn.RemoteAddr()))
 		TelemetryConnectionPool.Store(ip, true)
 
 		go handleConnection(conn, device.Csv_location)
