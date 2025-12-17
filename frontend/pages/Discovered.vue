@@ -157,24 +157,23 @@ export default {
 }
 
 input {
+  color: #eeeeee;
+  background-color: #252525;
   outline: none;
   box-shadow: none;
   border: none;
-  border-bottom: 1px solid #a6a6a6;
 
   font-size: medium;
-  padding: 0.3rem;
-  transition-duration: 300ms;
-}
-
-input:focus {
-  border-bottom: 1px solid #121212;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
 }
 
 .dialog-container {
   display: flex;
   flex-direction: column;
   gap: 1rem;
+  color: #eeeeee;
+  background-color: #1a1a1a;
 }
 
 .top-dialog {
@@ -187,7 +186,7 @@ input:focus {
   border: none;
   text-decoration: none;
   cursor: pointer;
-  background-color: #ff8441;
+  background-color: #a8dadc;
   color: #121212;
   transition-duration: 300ms;
   padding: 0.5rem;
@@ -196,7 +195,7 @@ input:focus {
 }
 
 .create-button:hover {
-  background-color: #fe8d50;
+  background-color: #8ac6c9;
 }
 
 .cancel-button {
@@ -205,9 +204,13 @@ input:focus {
   cursor: pointer;
   background-color: transparent;
 }
-
 dialog {
-  border: 1px solid #a6a6a6;
+  width: 60vw;
+  max-width: 500px;
+  border: none;
+  outline: none;
+  box-shadow: none;
   border-radius: 0.3rem;
+  background-color: #1a1a1a;
 }
 </style>
