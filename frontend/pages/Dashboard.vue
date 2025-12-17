@@ -185,7 +185,6 @@ export default {
               <option value="ca">Card</option>
               <option value="ch">Chart</option>
               <option value="ta">Table</option>
-              <option value="al">Alarm</option>
             </select>
           </div>
           <div class="field">
@@ -213,7 +212,7 @@ export default {
 }
 
 .info-container {
-  width: 50%;
+  width: 80%;
 }
 
 .add-button {
