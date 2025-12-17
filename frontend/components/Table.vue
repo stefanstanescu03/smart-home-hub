@@ -32,7 +32,10 @@ export default {
 
 <template>
   <div class="table-wrapper">
-    <h1 class="name-h">{{ deviceName }}</h1>
+    <div class="title-container">
+      <h1 class="name-h">{{ deviceName }}</h1>
+      <button @click="$emit('delete')" class="delete-button">Delete</button>
+    </div>
     <div class="values-container">
       <table>
         <thead>
@@ -57,12 +60,16 @@ export default {
 }
 .table-wrapper {
   width: 100%;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  border: 1px solid #eeeeee;
+  border-radius: 0.5rem;
+  padding-top: 0.5rem;
 }
 .values-container {
   max-height: 200px;
   overflow-y: auto;
-  border: 1px solid #eeeeee;
-  border-radius: 0.5rem;
 }
 table {
   border-collapse: collapse;
@@ -75,5 +82,31 @@ th {
 }
 td {
   padding: 0.3rem;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+  align-items: center;
+  padding: 0.5rem;
+  border-bottom: 1px solid #eeeeee;
+}
+
+.delete-button {
+  border: none;
+  background-color: transparent;
+  border: 1px solid #eeeeee;
+  text-decoration: none;
+  cursor: pointer;
+  color: #eeeeee;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  transition-duration: 300ms;
+}
+
+.delete-button:hover {
+  border: 1px solid #9e2323;
+  color: #9e2323;
 }
 </style>

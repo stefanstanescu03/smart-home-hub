@@ -64,6 +64,16 @@ export default {
         console.error(err);
       }
     },
+    async handleDeleteWidget(id) {
+      try {
+        await axios.delete(`http://localhost:5000/widget/delete/${id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.widgets = this.widgets.filter((widget) => widget.ID != id);
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async handleGetDeviceName(id) {
       try {
         const res = await axios.get(`http://localhost:5000/device/${id}`, {
@@ -161,12 +171,14 @@ export default {
             :deviceId="widget.DeviceId"
             :streamData="widget.dataStream"
             :deviceName="widget.deviceName"
+            @delete="handleDeleteWidget(widget.ID)"
           />
           <Table
             v-if="widget.Widgettype == 'ta'"
             :deviceId="widget.DeviceId"
             :streamData="widget.dataStream"
             :deviceName="widget.deviceName"
+            @delete="handleDeleteWidget(widget.ID)"
           />
         </div>
         <button class="add-button" @click="triggerDialog">+</button>
