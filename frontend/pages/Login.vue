@@ -8,6 +8,7 @@ export default {
       username: "",
       password: "",
       failed: false,
+      menuOpen: false,
     };
   },
   methods: {
@@ -40,28 +41,73 @@ export default {
 
 <template>
   <div class="page-container">
-    <SideBar />
-    <div class="login-form">
-      <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" v-model="username" />
+    <SideBar :menuOpen="this.menuOpen" />
+    <div class="info-container">
+      <div class="title-container">
+        <button class="hamburger" @click="menuOpen = !menuOpen">☰</button>
+        <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
+        <h1>Enter in your account</h1>
       </div>
-      <div class="field">
-        <label for="password">Password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          v-model="password"
-        />
+      <div class="login-form">
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" v-model="username" />
+        </div>
+        <div class="field">
+          <label for="password">Password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            v-model="password"
+          />
+        </div>
+        <button class="login-button" @click="handleLogin">Login</button>
+        <p v-if="this.failed == true">Incorrect credentials</p>
       </div>
-      <button @click="handleLogin">Login</button>
-      <p v-if="this.failed == true">Incorrect credentials</p>
     </div>
   </div>
 </template>
 
 <style scoped>
+h1 {
+  color: #eeeeee;
+}
+.hamburger {
+  display: none;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.info-container {
+  padding: 1rem;
+  width: 100%;
+}
+
 .login-form {
   display: flex;
   flex-direction: column;
@@ -98,7 +144,7 @@ input {
   border-radius: 0.3rem;
 }
 
-button {
+.login-button {
   color: #eeeeee;
   border: none;
   text-decoration: none;
@@ -111,7 +157,16 @@ button {
   border-radius: 0.3rem;
 }
 
-button:hover {
+.login-button:hover {
   background-color: #8ac6c9;
+}
+
+@media (max-width: 900px) {
+  .login-form {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 320px;
+  }
 }
 </style>

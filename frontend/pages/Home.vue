@@ -13,6 +13,7 @@ export default {
         csv_location: "",
         visibility: "",
       },
+      menuOpen: false,
     };
   },
   methods: {
@@ -90,10 +91,14 @@ export default {
 
 <template>
   <div class="page-container">
-    <SideBar />
+    <SideBar :menuOpen="this.menuOpen" />
     <div class="info-container">
-      <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
-      <h1 v-if="getToken() != undefined">My devices</h1>
+      <div class="title-container">
+        <button class="hamburger" @click="menuOpen = !menuOpen">☰</button>
+        <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
+        <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
+        <h1 v-if="getToken() != undefined">My devices</h1>
+      </div>
       <h1 v-if="this.devices.length == 0">No devices added</h1>
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
@@ -160,6 +165,36 @@ export default {
 </template>
 
 <style scoped>
+.hamburger {
+  display: none;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
 .page-container {
   display: flex;
   flex-direction: row;
@@ -168,7 +203,8 @@ export default {
   color: #eeeeee;
 }
 .info-container {
-  width: 50%;
+  padding: 1rem;
+  width: 100%;
 }
 table {
   border-collapse: collapse;
@@ -230,6 +266,12 @@ input {
 }
 
 dialog {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   width: 60vw;
   max-width: 500px;
   border: none;

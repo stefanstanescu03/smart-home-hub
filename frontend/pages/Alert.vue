@@ -14,6 +14,7 @@ export default {
         value: "",
         condition: "",
       },
+      menuOpen: false,
     };
   },
   methods: {
@@ -110,9 +111,13 @@ export default {
 
 <template>
   <div class="page-container">
-    <SideBar />
+    <SideBar :menuOpen="this.menuOpen" />
     <div class="info-container">
-      <h1>Alerts for {{ this.device.Name }}</h1>
+      <div class="title-container">
+        <button class="hamburger" @click="menuOpen = !menuOpen">☰</button>
+        <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
+        <h1>Alerts for {{ this.device.Name }}</h1>
+      </div>
       <button @click="triggerCreateDialog" class="top-create-button">
         Create Alert
       </button>
@@ -208,16 +213,46 @@ export default {
 </template>
 
 <style scoped>
+.hamburger {
+  display: none;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.info-container {
+  padding: 1rem;
+  width: 100%;
+}
 .page-container {
   display: flex;
   flex-direction: row;
   gap: 2rem;
   height: 100%;
   color: #eeeeee;
-}
-
-.info-container {
-  width: 50%;
 }
 
 .top-create-button {
@@ -260,6 +295,12 @@ export default {
 }
 
 dialog {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
   width: 60vw;
   max-width: 500px;
   border: none;

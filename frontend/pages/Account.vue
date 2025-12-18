@@ -11,6 +11,7 @@ export default {
       email: "",
       failed: false,
       changed: false,
+      menuOpen: false,
     };
   },
   methods: {
@@ -62,35 +63,80 @@ export default {
 
 <template>
   <div class="page-container">
-    <SideBar />
-    <div class="signup-form">
-      <div class="field">
-        <label for="username">Username</label>
-        <input type="text" id="username" name="username" v-model="username" />
+    <SideBar :menuOpen="this.menuOpen" />
+    <div class="info-container">
+      <div class="title-container">
+        <button class="hamburger" @click="menuOpen = !menuOpen">☰</button>
+        <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
+        <h1>Edit your account</h1>
       </div>
+      <div class="signup-form">
+        <div class="field">
+          <label for="username">Username</label>
+          <input type="text" id="username" name="username" v-model="username" />
+        </div>
 
-      <div class="field">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" v-model="email" />
-      </div>
+        <div class="field">
+          <label for="email">Email</label>
+          <input type="email" id="email" name="email" v-model="email" />
+        </div>
 
-      <div class="field">
-        <label for="password">Current password</label>
-        <input
-          type="password"
-          id="password"
-          name="password"
-          v-model="password"
-        />
+        <div class="field">
+          <label for="password">Current password</label>
+          <input
+            type="password"
+            id="password"
+            name="password"
+            v-model="password"
+          />
+        </div>
+        <button class="update-button" @click="handleUpdate">Update</button>
+        <p v-if="failed == true">Password incorrect</p>
+        <p v-if="changed == true">Account updated</p>
       </div>
-      <button @click="handleUpdate">Update</button>
-      <p v-if="failed == true">Password incorrect</p>
-      <p v-if="changed == true">Account updated</p>
     </div>
   </div>
 </template>
 
 <style scoped>
+h1 {
+  color: #eeeeee;
+}
+.hamburger {
+  display: none;
+  top: 1rem;
+  left: 1rem;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+}
+
+.info-container {
+  padding: 1rem;
+  width: 100%;
+}
+
 .signup-form {
   display: flex;
   flex-direction: column;
@@ -106,8 +152,9 @@ export default {
 .page-container {
   display: flex;
   flex-direction: row;
-  gap: 25%;
+  gap: 2rem;
   height: 100%;
+  color: #eeeeee;
 }
 
 label {
@@ -126,7 +173,7 @@ input {
   padding: 0.5rem;
   border-radius: 0.3rem;
 }
-button {
+.update-button {
   color: #eeeeee;
   border: none;
   text-decoration: none;
@@ -139,7 +186,16 @@ button {
   border-radius: 0.3rem;
 }
 
-button:hover {
+.update-button:hover {
   background-color: #8ac6c9;
+}
+
+@media (max-width: 900px) {
+  .signup-form {
+    margin-left: auto;
+    margin-right: auto;
+    width: 100%;
+    max-width: 320px;
+  }
 }
 </style>
