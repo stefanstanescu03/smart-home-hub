@@ -43,14 +43,14 @@ export default {
       dialog.close();
     },
     async handleGetDashboards() {
-      await axios
-        .get("http://localhost:5000/dashboard/", {
+      try {
+        const res = await axios.get("http://localhost:5000/dashboard/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then((res) => {
-          this.dashboards = res.data.dashboards;
-        })
-        .catch((err) => console.log(err));
+        });
+        this.dashboards = res.data.dashboards;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async handleCreateDashboard() {
       try {
@@ -73,19 +73,19 @@ export default {
     },
     async handleDeleteDashboard(dashboard) {
       const id = dashboard.ID;
-      await axios
-        .delete(`http://localhost:5000/dashboard/delete/${id}`, {
+      try {
+        await axios.delete(`http://localhost:5000/dashboard/delete/${id}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then(() => {
-          this.dashboards = this.dashboards.filter((d) => d.ID != id);
-        })
-        .catch((err) => console.log(err));
+        });
+        this.dashboards = this.dashboards.filter((d) => d.ID != id);
+      } catch (err) {
+        console.log(err);
+      }
     },
     async handleUpdateDashboard() {
       const id = this.selected_dashboard.id;
-      await axios
-        .put(
+      try {
+        await axios.put(
           `http://localhost:5000/dashboard/update/${id}`,
           {
             name: this.selected_dashboard.name,
@@ -94,12 +94,12 @@ export default {
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
           }
-        )
-        .then(() => {
-          this.handleCancelCreateDialog();
-          this.$router.go(0);
-        })
-        .catch((err) => console.log(err));
+        );
+        this.handleCancelCreateDialog();
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   mounted() {

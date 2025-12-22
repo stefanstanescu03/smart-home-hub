@@ -252,7 +252,7 @@ export default {
 
 .info-container {
   padding: 1rem;
-  width: 80%;
+  width: 100%;
 }
 .page-container {
   display: flex;

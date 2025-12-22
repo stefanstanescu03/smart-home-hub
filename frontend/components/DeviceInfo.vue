@@ -9,16 +9,19 @@ export default {
   },
   methods: {
     async checkStatus() {
-      await axios
-        .get(`http://localhost:5000/device/ping/${this.ident}`)
-        .then((response) => {
-          if (response.data.status == true) {
-            this.status = "connected";
-          } else {
-            this.status = "disconnected";
-          }
-        })
-        .catch((error) => (this.status = "disconnected"));
+      try {
+        await axios
+          .get(`http://localhost:5000/device/ping/${this.ident}`)
+          .then((response) => {
+            if (response.data.status == true) {
+              this.status = "connected";
+            } else {
+              this.status = "disconnected";
+            }
+          });
+      } catch (err) {
+        this.status = "disconnected";
+      }
     },
   },
   mounted() {

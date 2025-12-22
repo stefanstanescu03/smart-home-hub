@@ -14,18 +14,19 @@ export default {
   methods: {
     async handleLogin() {
       if (this.password != "" && this.username != "") {
-        await axios
-          .post("http://localhost:5000/user/login", {
-            username: this.username,
-            password: this.password,
-          })
-          .then((response) => {
-            this.handleAddCookie(response);
-            this.$router.push("/");
-          })
-          .catch((error) => {
-            this.failed = true;
-          });
+        try {
+          const response = await axios.post(
+            "http://localhost:5000/user/login",
+            {
+              username: this.username,
+              password: this.password,
+            }
+          );
+          this.handleAddCookie(response);
+          this.$router.push("/");
+        } catch (err) {
+          this.failed = true;
+        }
       }
     },
     handleAddCookie(response) {

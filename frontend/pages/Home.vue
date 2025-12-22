@@ -31,28 +31,25 @@ export default {
       return token;
     },
     async fetchDevices() {
-      await axios
-        .get("http://localhost:5000/device/", {
+      try {
+        const response = await axios.get("http://localhost:5000/device/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then((response) => {
-          this.devices = response.data.devices;
-        })
-        .catch((error) => {
-          console.log(error);
         });
+        this.devices = response.data.devices;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async handleDelete(device) {
       const id = device.ID;
-      await axios
-        .delete(`http://localhost:5000/device/delete/${device.ID}`, {
+      try {
+        await axios.delete(`http://localhost:5000/device/delete/${device.ID}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then(
-          () =>
-            (this.devices = this.devices.filter((device) => device.ID != id))
-        )
-        .catch((err) => console.log(err));
+        });
+        this.devices = this.devices.filter((device) => device.ID != id);
+      } catch (err) {
+        console.log(err);
+      }
     },
     async triggerEdit(device) {
       this.selected_device.id = device.ID;
@@ -78,8 +75,8 @@ export default {
     },
     async handleUpdateDevice() {
       const id = this.selected_device.id;
-      await axios
-        .put(
+      try {
+        await axios.put(
           `http://localhost:5000/device/update/${id}`,
           {
             name: this.selected_device.name,
@@ -90,16 +87,16 @@ export default {
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
           }
-        )
-        .then(() => {
-          this.handleCancelEdit();
-          this.$router.go(0);
-        })
-        .catch((err) => console.log(err));
+        );
+        this.handleCancelEdit();
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
     },
     async handleAddDevice() {
-      await axios
-        .post(
+      try {
+        await axios.post(
           "http://localhost:5000/device/create",
           {
             name: this.new_device.name,
@@ -108,12 +105,12 @@ export default {
             visibility: this.new_device.visibility === "public",
           },
           { headers: { Authorization: `Bearer ${this.getToken()}` } }
-        )
-        .then(() => {
-          this.handleCancelCreate();
-          this.$router.go(0);
-        })
-        .catch((err) => console.log(err));
+        );
+        this.handleCancelCreate();
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   mounted() {

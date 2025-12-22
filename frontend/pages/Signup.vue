@@ -21,18 +21,16 @@ export default {
         this.email != "" &&
         this.repeated_password == this.password
       ) {
-        await axios
-          .post("http://localhost:5000/user/signup", {
+        try {
+          await axios.post("http://localhost:5000/user/signup", {
             username: this.username,
             email: this.email,
             password: this.password,
-          })
-          .then((response) => {
-            this.$router.push("/login");
-          })
-          .catch((error) => {
-            console.log(error);
           });
+          this.$router.push("/login");
+        } catch (err) {
+          console.log(err);
+        }
       }
     },
     handleAddCookie(response) {

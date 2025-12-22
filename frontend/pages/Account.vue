@@ -24,19 +24,19 @@ export default {
       return token;
     },
     async getAccount() {
-      await axios
-        .get("http://localhost:5000/user/info", {
+      try {
+        const response = await axios.get("http://localhost:5000/user/info", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
-        })
-        .then((response) => {
-          this.username = response.data.user.Username;
-          this.email = response.data.user.Email;
-        })
-        .catch((err) => console.log(err));
+        });
+        this.username = response.data.user.Username;
+        this.email = response.data.user.Email;
+      } catch (err) {
+        console.log(err);
+      }
     },
     async handleUpdate() {
-      await axios
-        .put(
+      try {
+        await axios.put(
           "http://localhost:5000/user/update",
           {
             username: this.username,
@@ -44,15 +44,13 @@ export default {
             password: this.password,
           },
           { headers: { Authorization: `Bearer ${this.getToken()}` } }
-        )
-        .then((response) => {
-          this.changed = true;
-          this.failed = false;
-        })
-        .catch((err) => {
-          this.changed = false;
-          this.failed = true;
-        });
+        );
+        this.changed = true;
+        this.failed = false;
+      } catch (err) {
+        this.changed = false;
+        this.failed = true;
+      }
     },
   },
   mounted() {

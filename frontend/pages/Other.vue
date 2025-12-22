@@ -12,10 +12,12 @@ export default {
   components: { SideBar, DeviceInfo },
   methods: {
     async getDiscoveredDevices() {
-      await axios
-        .get("http://localhost:5000/device/public")
-        .then((response) => (this.devices = response.data.devices))
-        .catch((err) => console.log(err));
+      try {
+        const response = await axios.get("http://localhost:5000/device/public");
+        this.devices = response.data.devices;
+      } catch (err) {
+        console.log(err);
+      }
     },
   },
   mounted() {
