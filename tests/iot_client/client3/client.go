@@ -1,6 +1,7 @@
 package main
 
 import (
+	"flag"
 	"fmt"
 	"math/rand"
 	"net"
@@ -11,7 +12,7 @@ func connect(dialer net.Dialer) net.Conn {
 	var conn net.Conn
 	var err error
 
-	conn, err = dialer.Dial("tcp", "host.docker.internal:5001")
+	conn, err = dialer.Dial("tcp", "127.0.0.1:5001")
 	if err != nil {
 		fmt.Println("[IOT-CLIENT-debug] Connection failed:", err)
 	}
@@ -20,6 +21,15 @@ func connect(dialer net.Dialer) net.Conn {
 }
 
 func main() {
+
+	ident := flag.String("id", "", "Device identifier (required)")
+	flag.Parse()
+
+	if *ident == "" {
+		fmt.Println("ERROR: device id is required")
+		fmt.Println("Usage: ./iot-client -id sensor-000381")
+		return
+	}
 
 	localAddr := &net.TCPAddr{
 		IP: net.ParseIP("0.0.0.0"),
@@ -37,9 +47,7 @@ func main() {
 
 		temp := 20 + rand.Float32()*10
 		humid := 40 + rand.Float32()*30
-		iaq := rand.Float32() * 200
-		dust := 10 + rand.Float32()*90
-		message := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%.2f,IAQ:%.2f,Dust[ug/m^3]:%.2f\n", temp, humid, iaq, dust)
+		message := fmt.Sprintf("ident:%s,temperature[C]:%.2f,humidity[%%]:%.2f\n", *ident, temp, humid)
 
 		if conn != nil {
 			_, err := conn.Write([]byte(message))

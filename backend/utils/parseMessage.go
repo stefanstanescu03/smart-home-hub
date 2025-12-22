@@ -24,8 +24,10 @@ func ParseMessage(msg string, filename string) {
 
 	for _, part := range parts {
 		splits := strings.Split(part, ":")
-		csv_types = csv_types + splits[0] + ","
-		csv_values = csv_values + splits[1] + ","
+		if splits[0] != "ident" {
+			csv_types = csv_types + splits[0] + ","
+			csv_values = csv_values + splits[1] + ","
+		}
 	}
 
 	csv_types += "\n"

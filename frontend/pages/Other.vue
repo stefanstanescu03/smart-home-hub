@@ -37,14 +37,14 @@ export default {
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
           <th>Name</th>
-          <th>Ip</th>
+          <th>Ident</th>
           <th>Visibility</th>
           <th>Status</th>
         </tr>
         <DeviceInfo
           v-for="device in this.devices"
           :deviceName="device.Name"
-          :ip="device.Ip"
+          :ident="device.Ident"
           :visibility="device.Visibility"
           :should_appear="false"
         />

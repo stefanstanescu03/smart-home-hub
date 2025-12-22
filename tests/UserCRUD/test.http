@@ -13,8 +13,8 @@ POST http://localhost:5000/user/login
 Content-Type: application/json
 
 {
-    "username": "testuser",
-    "password": "passwrod1234"
+    "username": "stefan",
+    "password": "1234"
 }
 
 ###

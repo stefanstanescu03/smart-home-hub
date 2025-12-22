@@ -22,10 +22,6 @@ export default {
 </script>
 
 <template>
-  <!-- <button class="hamburger" @click="menuOpen = !menuOpen">☰</button> -->
-
-  <!-- <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div> -->
-
   <nav :class="{ open: menuOpen }">
     <button @click="navigate('/')">
       <img src="../public/home.png" width="25" height="25" />
@@ -50,11 +46,6 @@ export default {
     <button v-if="getToken() != -1" @click="navigate('/other')">
       <img src="../public/iot-devices.png" width="25" height="25" />
       <span>Other Devices</span>
-    </button>
-
-    <button v-if="getToken() != -1" @click="navigate('/discovered')">
-      <img src="../public/compass.png" width="25" height="25" />
-      <span>Discovered</span>
     </button>
 
     <button v-if="getToken() == -1" @click="navigate('/login')">Login</button>

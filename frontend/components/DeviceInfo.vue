@@ -1,7 +1,7 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["deviceName", "ip", "visibility", "should_appear", "id"],
+  props: ["deviceName", "ident", "visibility", "should_appear", "id"],
   data() {
     return {
       status: "checking...",
@@ -10,7 +10,7 @@ export default {
   methods: {
     async checkStatus() {
       await axios
-        .get(`http://localhost:5000/device/ping/${this.ip}`)
+        .get(`http://localhost:5000/device/ping/${this.ident}`)
         .then((response) => {
           if (response.data.status == true) {
             this.status = "connected";
@@ -30,7 +30,7 @@ export default {
 <template>
   <tr class="device-container">
     <td>{{ deviceName }}</td>
-    <td>{{ ip }}</td>
+    <td>{{ ident }}</td>
     <td v-if="visibility == false">private</td>
     <td v-if="visibility == true">public</td>
     <td>{{ status }}</td>

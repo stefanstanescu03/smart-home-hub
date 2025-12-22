@@ -9,7 +9,12 @@ export default {
       devices: [],
       selected_device: {
         id: "",
-        ip: "",
+        ident: "",
+        csv_location: "",
+        visibility: "",
+      },
+      new_device: {
+        ident: "",
         csv_location: "",
         visibility: "",
       },
@@ -50,18 +55,25 @@ export default {
         .catch((err) => console.log(err));
     },
     async triggerEdit(device) {
-      console.log(device);
       this.selected_device.id = device.ID;
       this.selected_device.name = device.Name;
       this.selected_device.csv_location = device.Csv_location;
-      this.selected_device.ip = device.Ip;
+      this.selected_device.ident = device.Ident;
       this.selected_device.visibility =
         device.Visibility === true ? "public" : "private";
-      const dialog = document.querySelector("dialog");
+      const dialog = document.getElementById("edit-dialog");
       dialog.show();
     },
-    handleCancel() {
-      const dialog = document.querySelector("dialog");
+    async triggerCreate() {
+      const dialog = document.getElementById("create-dialog");
+      dialog.show();
+    },
+    handleCancelEdit() {
+      const dialog = document.getElementById("edit-dialog");
+      dialog.close();
+    },
+    handleCancelCreate() {
+      const dialog = document.getElementById("create-dialog");
       dialog.close();
     },
     async handleUpdateDevice() {
@@ -71,7 +83,7 @@ export default {
           `http://localhost:5000/device/update/${id}`,
           {
             name: this.selected_device.name,
-            ip: this.selected_device.ip,
+            ident: this.selected_device.ident,
             csv_location: this.selected_device.csv_location,
             visibility: this.selected_device.visibility === "public",
           },
@@ -79,7 +91,28 @@ export default {
             headers: { Authorization: `Bearer ${this.getToken()}` },
           }
         )
-        .then(this.handleCancel())
+        .then(() => {
+          this.handleCancelEdit();
+          this.$router.go(0);
+        })
+        .catch((err) => console.log(err));
+    },
+    async handleAddDevice() {
+      await axios
+        .post(
+          "http://localhost:5000/device/create",
+          {
+            name: this.new_device.name,
+            ident: this.new_device.ident,
+            csv_location: this.new_device.csv_location,
+            visibility: this.new_device.visibility === "public",
+          },
+          { headers: { Authorization: `Bearer ${this.getToken()}` } }
+        )
+        .then(() => {
+          this.handleCancelCreate();
+          this.$router.go(0);
+        })
         .catch((err) => console.log(err));
     },
   },
@@ -99,11 +132,14 @@ export default {
         <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
         <h1 v-if="getToken() != undefined">My devices</h1>
       </div>
+      <button @click="triggerCreate" class="top-create-button">
+        Add a device
+      </button>
       <h1 v-if="this.devices.length == 0">No devices added</h1>
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
           <th>Name</th>
-          <th>Ip</th>
+          <th>Ident</th>
           <th>Visibility</th>
           <th>Status</th>
           <th>Action</th>
@@ -111,7 +147,7 @@ export default {
         <DeviceInfo
           v-for="device in this.devices"
           :deviceName="device.Name"
-          :ip="device.Ip"
+          :ident="device.Ident"
           :visibility="device.Visibility"
           :id="device.ID"
           :should_appear="true"
@@ -120,11 +156,11 @@ export default {
         />
       </table>
 
-      <dialog>
+      <dialog id="edit-dialog">
         <div class="dialog-container">
           <div class="top-dialog">
-            <p>Edit device with ip: {{ this.selected_device.ip }}</p>
-            <button @click="handleCancel" class="cancel-button">
+            <p>Edit {{ this.selected_device.Name }}</p>
+            <button @click="handleCancelEdit" class="cancel-button">
               <img src="../public/close.png" height="20" width="20" alt="" />
             </button>
           </div>
@@ -157,7 +193,59 @@ export default {
               <option value="private">Private</option>
             </select>
           </div>
-          <button @click="handleUpdateDevice" class="create-button">Add</button>
+          <button @click="handleUpdateDevice" class="create-button">
+            Modify
+          </button>
+        </div>
+      </dialog>
+
+      <dialog id="create-dialog">
+        <div class="dialog-container">
+          <div class="top-dialog">
+            <p>New device</p>
+            <button @click="handleCancelCreate" class="cancel-button">
+              <img src="../public/close.png" height="20" width="20" alt="" />
+            </button>
+          </div>
+          <div class="field">
+            <label for="name">Name: </label>
+            <input
+              type="text"
+              id="name"
+              name="name"
+              v-model="this.new_device.name"
+            />
+          </div>
+          <div class="field">
+            <label for="device_csv_location">Data location: </label>
+            <input
+              type="text"
+              id="device_csv_location"
+              name="device_csv_location"
+              v-model="this.new_device.csv_location"
+            />
+          </div>
+          <div class="field">
+            <label for="device_ident">Identificator: </label>
+            <input
+              type="text"
+              id="device_ident"
+              name="device_ident"
+              v-model="this.new_device.ident"
+            />
+          </div>
+          <div class="field">
+            <label for="device_visibility">Visibility: </label>
+            <select
+              name="device_visibility"
+              id="device_visibility"
+              v-model="this.new_device.visibility"
+            >
+              <option value="public">Public</option>
+              <option value="private">Private</option>
+            </select>
+          </div>
+          <button @click="handleAddDevice" class="create-button">Add</button>
         </div>
       </dialog>
     </div>
@@ -279,5 +367,21 @@ dialog {
   box-shadow: none;
   border-radius: 0.3rem;
   background-color: #1a1a1a;
+}
+
+.top-create-button {
+  border: none;
+  background-color: transparent;
+  border: 1px solid #eeeeee;
+  text-decoration: none;
+  cursor: pointer;
+  color: #eeeeee;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  transition-duration: 300ms;
+}
+
+.top-create-button:hover {
+  border: 1px solid #a6a6a6;
 }
 </style>

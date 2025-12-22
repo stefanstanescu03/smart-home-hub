@@ -15,7 +15,7 @@ func AddDevice(c *gin.Context) {
 
 	var body struct {
 		Name         string
-		Ip           string
+		Ident        string
 		Csv_location string
 		Visibility   bool
 	}
@@ -29,7 +29,7 @@ func AddDevice(c *gin.Context) {
 
 	device := models.Device{
 		Name:         body.Name,
-		Ip:           body.Ip,
+		Ident:        body.Ident,
 		Csv_location: body.Csv_location,
 		Visibility:   body.Visibility,
 		UserId:       currUser.(models.User).ID,
@@ -55,7 +55,7 @@ func UpdateDevice(c *gin.Context) {
 
 	var body struct {
 		Name         string
-		Ip           string
+		Ident        string
 		Csv_location string
 		Visibility   bool
 	}
@@ -78,7 +78,7 @@ func UpdateDevice(c *gin.Context) {
 	}
 
 	device.Name = body.Name
-	device.Ip = body.Ip
+	device.Ident = body.Ident
 	device.Csv_location = body.Csv_location
 	device.Visibility = body.Visibility
 
@@ -136,8 +136,8 @@ func DeleteDevice(c *gin.Context) {
 
 func IsDeviceConnected(c *gin.Context) {
 
-	ip := c.Param("ip")
-	value, ok := sockets.TelemetryConnectionPool.Load(ip)
+	ident := c.Param("ident")
+	value, ok := sockets.TelemetryConnectionPool.Load(ident)
 
 	if !ok {
 		c.JSON(http.StatusOK, gin.H{
@@ -148,15 +148,6 @@ func IsDeviceConnected(c *gin.Context) {
 			"status": value,
 		})
 	}
-}
-
-func GetDiscoveredDevices(c *gin.Context) {
-
-	devices := sockets.AcknowledgedDevices
-
-	c.JSON(http.StatusOK, gin.H{
-		"devices": devices,
-	})
 }
 
 func GetPublicDevices(c *gin.Context) {
