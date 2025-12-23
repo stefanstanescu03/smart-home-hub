@@ -1,11 +1,10 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
-import Chart from "../components/Chart.vue";
 import Table from "../components/Table.vue";
 import axios from "axios";
 export default {
-  components: { SideBar, Card, Chart, Table },
+  components: { SideBar, Card, Table },
   data() {
     return {
       dashboard: "",
@@ -200,7 +199,6 @@ export default {
             <label for="widget_type">Type: </label>
             <select name="widget_type" id="widget_type" v-model="widget_type">
               <option value="ca">Card</option>
-              <option value="ch">Chart</option>
               <option value="ta">Table</option>
             </select>
           </div>
