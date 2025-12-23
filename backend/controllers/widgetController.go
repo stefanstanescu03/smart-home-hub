@@ -87,6 +87,28 @@ func GetWidgets(c *gin.Context) {
 	})
 }
 
+func GetPublicWidgets(c *gin.Context) {
+
+	dashboardId := c.Param("id")
+
+	var dashboard models.Dashboard
+	initializers.DB.First(&dashboard, "visibility = true and id = ?", dashboardId)
+
+	if dashboard.ID == 0 {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You don't have access to this dashboard",
+		})
+		return
+	}
+
+	var widgets []models.Widget
+	initializers.DB.Find(&widgets, "dashboard_id = ?", dashboardId)
+
+	c.JSON(http.StatusOK, gin.H{
+		"widgets": widgets,
+	})
+}
+
 func DeleteWidget(c *gin.Context) {
 
 	currUser, _ := c.Get("user")

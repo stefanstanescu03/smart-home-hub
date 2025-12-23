@@ -7,6 +7,7 @@ export default {
   data() {
     return {
       dashboards: [],
+      public_dashboards: [],
       dashboard_visibility: "",
       dashboard_name: "",
       selected_dashboard: {},
@@ -48,6 +49,14 @@ export default {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.dashboards = res.data.dashboards;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleGetPublicDashboards() {
+      try {
+        const res = await axios.get("http://localhost:5000/dashboard/public");
+        this.public_dashboards = res.data.dashboards;
       } catch (err) {
         console.log(err);
       }
@@ -103,7 +112,10 @@ export default {
     },
   },
   mounted() {
-    this.handleGetDashboards();
+    if (this.getToken() != undefined) {
+      this.handleGetDashboards();
+    }
+    this.handleGetPublicDashboards();
   },
 };
 </script>
@@ -122,20 +134,50 @@ export default {
         Create dashboard
       </button>
       <table class="dashboards-container" v-if="this.dashboards.length != 0">
-        <tr>
-          <th>Name</th>
-          <th>Visibility</th>
-          <th>Action</th>
-        </tr>
-        <DashboardInfo
-          v-for="dashboard in this.dashboards"
-          :name="dashboard.Name"
-          :visibility="dashboard.Visibility"
-          :should_appear="true"
-          :id="dashboard.ID"
-          @edit="triggerUpdateDialog(dashboard)"
-          @delete="handleDeleteDashboard(dashboard)"
-        />
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Visibility</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <DashboardInfo
+            v-for="dashboard in this.dashboards"
+            :name="dashboard.Name"
+            :visibility="dashboard.Visibility"
+            :should_appear="true"
+            :id="dashboard.ID"
+            type="private"
+            @edit="triggerUpdateDialog(dashboard)"
+            @delete="handleDeleteDashboard(dashboard)"
+          />
+        </tbody>
+      </table>
+
+      <h1>Public dashboards</h1>
+
+      <table
+        class="dashboards-container"
+        v-if="this.public_dashboards.length != 0"
+      >
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Visibility</th>
+            <th>Action</th>
+          </tr>
+        </thead>
+        <tbody>
+          <DashboardInfo
+            v-for="dashboard in this.public_dashboards"
+            :name="dashboard.Name"
+            :visibility="dashboard.Visibility"
+            :should_appear="true"
+            :id="dashboard.ID"
+            type="public"
+          />
+        </tbody>
       </table>
 
       <dialog id="create-dialog">

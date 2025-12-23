@@ -119,9 +119,38 @@ func GetDashboards(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var dashboards []models.Dashboard
-	initializers.DB.Find(&dashboards, "user_id = ? or visibility = true", currUser.(models.User).ID)
+	initializers.DB.Find(&dashboards, "user_id = ?", currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
 		"dashboards": dashboards,
 	})
+}
+
+func GetPublicDashboards(c *gin.Context) {
+	var dashboards []models.Dashboard
+	initializers.DB.Find(&dashboards, "visibility = true")
+
+	c.JSON(http.StatusOK, gin.H{
+		"dashboards": dashboards,
+	})
+}
+
+func GetDashboardPublic(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var dashboard models.Dashboard
+	initializers.DB.First(&dashboard, "visibility = true and id = ?", id)
+
+	if dashboard.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Dashboard not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"dashboard": dashboard,
+	})
+
 }

@@ -32,10 +32,15 @@ export default {
     },
     async fetchDevices() {
       try {
-        const response = await axios.get("http://localhost:5000/device/", {
-          headers: { Authorization: `Bearer ${this.getToken()}` },
-        });
-        this.devices = response.data.devices;
+        if (this.getToken() != undefined) {
+          const response = await axios.get(
+            "http://localhost:5000/device/user",
+            {
+              headers: { Authorization: `Bearer ${this.getToken()}` },
+            }
+          );
+          this.devices = response.data.devices;
+        }
       } catch (err) {
         console.log(err);
       }
@@ -129,10 +134,16 @@ export default {
         <h1 v-if="getToken() == undefined">You are logged in as guest</h1>
         <h1 v-if="getToken() != undefined">My devices</h1>
       </div>
-      <button @click="triggerCreate" class="top-create-button">
+      <button
+        @click="triggerCreate"
+        class="top-create-button"
+        v-if="this.getToken() != undefined"
+      >
         Add a device
       </button>
-      <h1 v-if="this.devices.length == 0">No devices added</h1>
+      <h1 v-if="this.devices.length == 0 && this.getToken() != undefined">
+        No devices added
+      </h1>
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
           <th>Name</th>

@@ -15,5 +15,7 @@ func RegisterDashboardRoutes(r *gin.Engine) {
 		dashboardRoutes.GET("/", middleware.RequireAuth, controllers.GetDashboards)
 		dashboardRoutes.DELETE("/delete/:id", middleware.RequireAuth, controllers.DeleteDashboard)
 		dashboardRoutes.PUT("/update/:id", middleware.RequireAuth, controllers.UpdateDashboard)
+		dashboardRoutes.GET("/public", controllers.GetPublicDashboards)
+		dashboardRoutes.GET("/public/:id", controllers.GetDashboardPublic)
 	}
 }

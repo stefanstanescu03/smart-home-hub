@@ -115,6 +115,17 @@ func GetDevices(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	var devices []models.Device
 
+	initializers.DB.Find(&devices, "user_id = ? or visibility = true", currUser.(models.User).ID)
+
+	c.JSON(http.StatusOK, gin.H{
+		"devices": devices,
+	})
+}
+
+func GetUserDevices(c *gin.Context) {
+	currUser, _ := c.Get("user")
+	var devices []models.Device
+
 	initializers.DB.Find(&devices, "user_id = ?", currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
@@ -158,5 +169,24 @@ func GetPublicDevices(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"devices": devices,
+	})
+}
+
+func GetPublicDevice(c *gin.Context) {
+
+	id := c.Param("id")
+	var device models.Device
+
+	initializers.DB.Find(&device, "visibility = true and id = ?", id)
+
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Device not found",
+		})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"device": device,
 	})
 }

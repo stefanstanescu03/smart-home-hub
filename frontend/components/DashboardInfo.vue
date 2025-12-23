@@ -1,6 +1,6 @@
 <script>
 export default {
-  props: ["name", "visibility", "should_appear", "id"],
+  props: ["name", "visibility", "should_appear", "id", "type"],
 };
 </script>
 
@@ -11,15 +11,31 @@ export default {
     <td v-if="visibility == true">public</td>
     <td>
       <div class="action-container" v-if="should_appear == true">
-        <button class="delete-button" @click="$emit('edit')">
+        <button
+          class="delete-button"
+          @click="$emit('edit')"
+          v-if="type === 'private'"
+        >
           <img src="../public/edit.png" alt="" height="25" width="25" />
         </button>
-        <button class="delete-button" @click="$emit('delete')">
+        <button
+          class="delete-button"
+          @click="$emit('delete')"
+          v-if="type === 'private'"
+        >
           <img src="../public/delete.png" alt="" height="20" width="20" />
         </button>
         <button
           class="view-button"
           @click="this.$router.push(`/dashboard/${id}`)"
+          v-if="type === 'private'"
+        >
+          View
+        </button>
+        <button
+          class="view-button"
+          @click="this.$router.push(`/dashboard/public/${id}`)"
+          v-if="type === 'public'"
         >
           View
         </button>

@@ -7,6 +7,7 @@ import Other from "../pages/Other.vue";
 import Account from "../pages/Account.vue";
 import Dashboards from "../pages/Dashboards.vue";
 import Dashboard from "../pages/Dashboard.vue";
+import PublicDashboard from "../pages/PublicDashboard.vue";
 import Alert from "../pages/Alert.vue";
 
 const routes = [
@@ -17,6 +18,7 @@ const routes = [
   { path: "/account", component: Account },
   { path: "/dashboards", component: Dashboards },
   { path: "/dashboard/:id", component: Dashboard },
+  { path: "/dashboard/public/:id", component: PublicDashboard },
   { path: "/alerts/:id", component: Alert },
 ];
 

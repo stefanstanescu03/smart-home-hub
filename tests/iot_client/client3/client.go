@@ -45,7 +45,7 @@ func main() {
 
 	for {
 
-		temp := 20 + rand.Float32()*10
+		temp := 15 + rand.Float32()*10
 		humid := 40 + rand.Float32()*30
 		message := fmt.Sprintf("ident:%s,temperature[C]:%.2f,humidity[%%]:%.2f\n", *ident, temp, humid)
 
