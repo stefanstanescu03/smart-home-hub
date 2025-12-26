@@ -23,4 +23,9 @@ SECRET=
 sudo docker run --add-host=host.docker.internal:host-gateway device_client
 ```
 
+TODO:
+
+1. Delete a dashboard
+2. Delete a device without an error (first delete all widgets that have that device and all alerts)
+
 You need a mysql database

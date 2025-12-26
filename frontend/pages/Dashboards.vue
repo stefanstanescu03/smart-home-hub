@@ -129,8 +129,14 @@ export default {
         <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
         <h1>My dashboards</h1>
       </div>
-      <h1 v-if="this.dashboards.length == 0">No dashboard created</h1>
-      <button @click="triggerCreateDialog" class="top-create-button">
+      <h1 v-if="this.dashboards.length == 0 && this.getToken() != undefined">
+        No dashboard created
+      </h1>
+      <button
+        @click="triggerCreateDialog"
+        class="top-create-button"
+        v-if="this.getToken() != undefined"
+      >
         Create dashboard
       </button>
       <table class="dashboards-container" v-if="this.dashboards.length != 0">

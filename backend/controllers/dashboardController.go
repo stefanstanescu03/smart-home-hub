@@ -85,6 +85,17 @@ func DeleteDashboard(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
 
+	var dashboard models.Dashboard
+	initializers.DB.First(&dashboard, "user_id = ? and id = ?", currUser.(models.User).ID, id)
+
+	if dashboard.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Dashboard not found",
+		})
+		return
+	}
+
+	initializers.DB.Unscoped().Delete(models.Widget{}, "dashboard_id = ?", id)
 	initializers.DB.Unscoped().Delete(models.Dashboard{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 
 	c.JSON(http.StatusOK, gin.H{
