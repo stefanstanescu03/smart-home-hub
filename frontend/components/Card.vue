@@ -74,7 +74,7 @@ export default {
 }
 
 .delete-button:hover {
-  border: 1px solid #9e2323;
-  color: #9e2323;
+  border: 1px solid #e43333;
+  color: #e43333;
 }
 </style>

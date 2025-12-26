@@ -108,3 +108,32 @@
 2025-12-26T12:25:07+02:00 [STREAMING] Client subscribed to device: 32
 2025-12-26T12:25:17+02:00 [TELEMETRY] New device connected: sensor_1
 2025-12-26T12:26:09+02:00 [TELEMETRY] Device disconnected: sensor_1
+2025-12-26T12:28:51+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2025-12-26T12:28:51+02:00 [STREAMING] Client disconnected
+2025-12-26T12:43:10+02:00 [TELEMETRY] New device connected: sensor_0
+2025-12-26T12:47:14+02:00 [TELEMETRY] Device disconnected: sensor_0
+2025-12-26T12:47:30+02:00 [STREAMING] New client connected
+2025-12-26T12:47:30+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:47:30+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:47:30+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:47:30+02:00 [STREAMING] Client subscribed to device: 31
+2025-12-26T12:47:30+02:00 [STREAMING] Client subscribed to device: 32
+2025-12-26T12:48:12+02:00 [STREAMING] New client connected
+2025-12-26T12:48:12+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:48:12+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:48:12+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:48:12+02:00 [STREAMING] Client subscribed to device: 31
+2025-12-26T12:48:12+02:00 [STREAMING] Client subscribed to device: 32
+2025-12-26T12:48:38+02:00 [TELEMETRY] New device connected: sensor_1
+2025-12-26T12:48:41+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2025-12-26T12:48:41+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2025-12-26T12:48:41+02:00 [STREAMING] Client disconnected
+2025-12-26T12:48:41+02:00 [STREAMING] Client disconnected
+2025-12-26T12:49:03+02:00 [TELEMETRY] Device disconnected: sensor_1
+2025-12-26T12:49:11+02:00 [TELEMETRY] New device connected: dht22_001
+2025-12-26T12:49:18+02:00 [STREAMING] New client connected
+2025-12-26T12:49:18+02:00 [STREAMING] Client subscribed to device: 24
+2025-12-26T12:49:18+02:00 [STREAMING] Client subscribed to device: 31
+2025-12-26T12:49:35+02:00 [TELEMETRY] Device disconnected: dht22_001
+2025-12-26T12:54:16+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2025-12-26T12:54:16+02:00 [STREAMING] Client disconnected

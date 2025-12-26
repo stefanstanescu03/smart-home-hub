@@ -36,7 +36,14 @@ export default {
     <td>{{ ident }}</td>
     <td v-if="visibility == false">private</td>
     <td v-if="visibility == true">public</td>
-    <td>{{ status }}</td>
+    <td>
+      <span class="disconnected-text" v-if="this.status == 'disconnected'">
+        {{ status }}
+      </span>
+      <span class="connected-text" v-if="this.status == 'connected'">
+        {{ status }}
+      </span>
+    </td>
     <td>
       <div class="action-container" v-if="should_appear == true">
         <button
@@ -59,7 +66,7 @@ export default {
 <style scoped>
 td {
   border-bottom: 1px solid #eeeeee;
-  padding: 0.3rem;
+  padding: 0.7rem;
 }
 
 .delete-button {
@@ -74,5 +81,23 @@ td {
   flex-direction: row;
   gap: 0.5rem;
   align-items: center;
+}
+
+.disconnected-text {
+  display: inline-block;
+  font-size: medium;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #e43333;
+  border-radius: 1rem;
+  color: #e43333;
+}
+
+.connected-text {
+  display: inline-block;
+  font-size: medium;
+  padding: 0.3rem 0.6rem;
+  border: 1px solid #2ba618;
+  border-radius: 1rem;
+  color: #2ba618;
 }
 </style>
