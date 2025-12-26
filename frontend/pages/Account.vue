@@ -25,7 +25,7 @@ export default {
     },
     async getAccount() {
       try {
-        const response = await axios.get("http://localhost:5000/user/info", {
+        const response = await axios.get("/api/user/info", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.username = response.data.user.Username;
@@ -37,7 +37,7 @@ export default {
     async handleUpdate() {
       try {
         await axios.put(
-          "http://localhost:5000/user/update",
+          "api/user/update",
           {
             username: this.username,
             email: this.email,

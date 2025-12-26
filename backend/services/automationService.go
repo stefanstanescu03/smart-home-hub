@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterAutomationRoutes(r *gin.Engine) {
-	automationRoutes := r.Group("/automation")
+	automationRoutes := r.Group("/api/automation")
 	{
 		automationRoutes.POST("/create", middleware.RequireAuth, controllers.AddAutomation)
 		automationRoutes.GET("/:id", middleware.RequireAuth, controllers.GetAutomation)

@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterDashboardRoutes(r *gin.Engine) {
-	dashboardRoutes := r.Group("/dashboard")
+	dashboardRoutes := r.Group("/api/dashboard")
 	{
 		dashboardRoutes.POST("/create", middleware.RequireAuth, controllers.AddDashboard)
 		dashboardRoutes.GET("/:id", middleware.RequireAuth, controllers.GetDashboard)

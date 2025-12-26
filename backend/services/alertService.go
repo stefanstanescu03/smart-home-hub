@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterAlertRoutes(r *gin.Engine) {
-	alertRoutes := r.Group("/alert")
+	alertRoutes := r.Group("/api/alert")
 	{
 		alertRoutes.POST("/create", middleware.RequireAuth, controllers.AddAlert)
 		alertRoutes.PUT("/update/:id", middleware.RequireAuth, controllers.UpdateAlert)

@@ -10,15 +10,13 @@ export default {
   methods: {
     async checkStatus() {
       try {
-        await axios
-          .get(`http://localhost:5000/device/ping/${this.ident}`)
-          .then((response) => {
-            if (response.data.status == true) {
-              this.status = "connected";
-            } else {
-              this.status = "disconnected";
-            }
-          });
+        await axios.get(`/api/device/ping/${this.ident}`).then((response) => {
+          if (response.data.status == true) {
+            this.status = "connected";
+          } else {
+            this.status = "disconnected";
+          }
+        });
       } catch (err) {
         this.status = "disconnected";
       }
@@ -33,16 +31,26 @@ export default {
 <template>
   <tr class="device-container">
     <td>{{ deviceName }}</td>
-    <td>{{ ident }}</td>
+    <td class="ident">{{ ident }}</td>
     <td v-if="visibility == false">private</td>
     <td v-if="visibility == true">public</td>
-    <td>
+    <td class="large-status">
       <span class="disconnected-text" v-if="this.status == 'disconnected'">
         {{ status }}
       </span>
       <span class="connected-text" v-if="this.status == 'connected'">
         {{ status }}
       </span>
+    </td>
+    <td class="small-status">
+      <span
+        class="disconnected-small-dot"
+        v-if="this.status == 'disconnected'"
+      ></span>
+      <span
+        class="connected-small-dot"
+        v-if="this.status == 'connected'"
+      ></span>
     </td>
     <td>
       <div class="action-container" v-if="should_appear == true">
@@ -64,9 +72,13 @@ export default {
 </template>
 
 <style scoped>
-td {
+tr {
   border-bottom: 1px solid #eeeeee;
+}
+
+td {
   padding: 0.7rem;
+  vertical-align: middle;
 }
 
 .delete-button {
@@ -99,5 +111,42 @@ td {
   border: 1px solid #2ba618;
   border-radius: 1rem;
   color: #2ba618;
+}
+
+.small-status {
+  display: none;
+}
+
+.large-status {
+  display: block;
+}
+
+.disconnected-small-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  background-color: #e43333;
+  border-radius: 50%;
+}
+
+.connected-small-dot {
+  display: inline-block;
+  width: 0.7rem;
+  height: 0.7rem;
+  background-color: #2ba618;
+  border-radius: 50%;
+}
+
+@media (max-width: 900px) {
+  .ident {
+    display: none;
+  }
+  .small-status {
+    display: block;
+  }
+
+  .large-status {
+    display: none;
+  }
 }
 </style>

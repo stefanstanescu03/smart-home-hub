@@ -15,13 +15,10 @@ export default {
     async handleLogin() {
       if (this.password != "" && this.username != "") {
         try {
-          const response = await axios.post(
-            "http://localhost:5000/user/login",
-            {
-              username: this.username,
-              password: this.password,
-            }
-          );
+          const response = await axios.post("/api/user/login", {
+            username: this.username,
+            password: this.password,
+          });
           this.handleAddCookie(response);
           this.$router.push("/");
         } catch (err) {

@@ -20,7 +20,7 @@ export default {
     async handleFetchDashboard() {
       try {
         const res = await axios.get(
-          `http://localhost:5000/dashboard/public/${this.$route.params.id}`
+          `/api/dashboard/public/${this.$route.params.id}`
         );
         this.dashboard = res.data.dashboard;
       } catch (err) {
@@ -33,7 +33,7 @@ export default {
 
         if (this.dashboard?.ID) {
           const res = await axios.get(
-            `http://localhost:5000/widget/public/${this.dashboard.ID}`
+            `/api/widget/public/${this.dashboard.ID}`
           );
           const widgetsWithDeviceNames = await Promise.all(
             res.data.widgets.map(async (widget) => ({
@@ -52,16 +52,14 @@ export default {
     },
     async handleGetDeviceName(id) {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/device/public/${id}`
-        );
+        const res = await axios.get(`/api/device/public/${id}`);
         return res.data.device.Name;
       } catch (err) {
         return "default";
       }
     },
     setupWebsocket() {
-      this.ws = new WebSocket("ws://localhost:5003/streaming");
+      this.ws = new WebSocket(`ws://${location.hostname}:5003/streaming`);
       this.ws.onopen = () => {
         console.log("Connected to streaming server");
         this.widgets.forEach((widget) => {

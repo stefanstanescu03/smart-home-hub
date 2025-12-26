@@ -13,7 +13,7 @@ export default {
   methods: {
     async getDiscoveredDevices() {
       try {
-        const response = await axios.get("http://localhost:5000/device/public");
+        const response = await axios.get("/api/device/public");
         this.devices = response.data.devices;
       } catch (err) {
         console.log(err);
@@ -39,7 +39,7 @@ export default {
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
           <th>Name</th>
-          <th>Ident</th>
+          <th class="ident">Ident</th>
           <th>Visibility</th>
           <th>Status</th>
         </tr>
@@ -73,9 +73,17 @@ export default {
   gap: 1rem;
 }
 
+.ident {
+  display: block;
+}
+
 @media (max-width: 900px) {
   .hamburger {
     display: block;
+  }
+
+  .ident {
+    display: none;
   }
 }
 

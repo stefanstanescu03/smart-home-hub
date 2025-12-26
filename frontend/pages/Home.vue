@@ -33,12 +33,9 @@ export default {
     async fetchDevices() {
       try {
         if (this.getToken() != undefined) {
-          const response = await axios.get(
-            "http://localhost:5000/device/user",
-            {
-              headers: { Authorization: `Bearer ${this.getToken()}` },
-            }
-          );
+          const response = await axios.get("/api/device/user", {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          });
           this.devices = response.data.devices;
         }
       } catch (err) {
@@ -48,7 +45,7 @@ export default {
     async handleDelete(device) {
       const id = device.ID;
       try {
-        await axios.delete(`http://localhost:5000/device/delete/${device.ID}`, {
+        await axios.delete(`/api/device/delete/${device.ID}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.devices = this.devices.filter((device) => device.ID != id);
@@ -82,7 +79,7 @@ export default {
       const id = this.selected_device.id;
       try {
         await axios.put(
-          `http://localhost:5000/device/update/${id}`,
+          `/api/device/update/${id}`,
           {
             name: this.selected_device.name,
             ident: this.selected_device.ident,
@@ -102,7 +99,7 @@ export default {
     async handleAddDevice() {
       try {
         await axios.post(
-          "http://localhost:5000/device/create",
+          "/api/device/create",
           {
             name: this.new_device.name,
             ident: this.new_device.ident,
@@ -147,7 +144,7 @@ export default {
       <table class="devices-container">
         <tr v-if="this.devices.length != 0">
           <th>Name</th>
-          <th>Ident</th>
+          <th class="ident">Ident</th>
           <th>Visibility</th>
           <th>Status</th>
           <th>Action</th>
@@ -276,11 +273,19 @@ export default {
   display: flex;
   flex-direction: row;
   gap: 1rem;
+  font-family: "Inter", Inter, serif;
+}
+
+.ident {
+  display: block;
 }
 
 @media (max-width: 900px) {
   .hamburger {
     display: block;
+  }
+  .ident {
+    display: none;
   }
 }
 

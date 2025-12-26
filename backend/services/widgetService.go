@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterWidgetRoutes(r *gin.Engine) {
-	widgetRoutes := r.Group("/widget")
+	widgetRoutes := r.Group("/api/widget")
 	{
 		widgetRoutes.POST("/create", middleware.RequireAuth, controllers.AddWidget)
 		widgetRoutes.GET("/:id", middleware.RequireAuth, controllers.GetWidgets)

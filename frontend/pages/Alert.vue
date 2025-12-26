@@ -28,12 +28,9 @@ export default {
     },
     async handleFetchDevice() {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/device/${this.$route.params.id}`,
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
-        );
+        const res = await axios.get(`/api/device/${this.$route.params.id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
         this.device = res.data.device;
       } catch (err) {
         console.log(err);
@@ -54,7 +51,7 @@ export default {
           this.new_alert.key + condition + this.new_alert.value;
 
         await axios.post(
-          "http://localhost:5000/alert/create",
+          "/api/alert/create",
           {
             subject: this.new_alert.subject,
             content: this.new_alert.content,
@@ -72,12 +69,9 @@ export default {
     },
     async handleFetchAlerts() {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/alert/${this.$route.params.id}`,
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
-        );
+        const res = await axios.get(`/api/alert/${this.$route.params.id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
         this.alerts = res.data.alerts;
       } catch (err) {
         console.log(err);
@@ -85,7 +79,7 @@ export default {
     },
     async handleDeleteAlert(alertId) {
       try {
-        await axios.delete(`http://localhost:5000/alert/delete/${alertId}`, {
+        await axios.delete(`/api/alert/delete/${alertId}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.alerts = this.alerts.filter((alert) => alert.ID != alertId);

@@ -45,7 +45,7 @@ export default {
     },
     async handleGetDashboards() {
       try {
-        const res = await axios.get("http://localhost:5000/dashboard/", {
+        const res = await axios.get("/api/dashboard/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.dashboards = res.data.dashboards;
@@ -55,7 +55,7 @@ export default {
     },
     async handleGetPublicDashboards() {
       try {
-        const res = await axios.get("http://localhost:5000/dashboard/public");
+        const res = await axios.get("/api/dashboard/public");
         this.public_dashboards = res.data.dashboards;
       } catch (err) {
         console.log(err);
@@ -64,7 +64,7 @@ export default {
     async handleCreateDashboard() {
       try {
         await axios.post(
-          "http://localhost:5000/dashboard/create",
+          "api/dashboard/create",
           {
             name: this.dashboard_name,
             visibility: this.dashboard_visibility === "public",
@@ -83,7 +83,7 @@ export default {
     async handleDeleteDashboard(dashboard) {
       const id = dashboard.ID;
       try {
-        await axios.delete(`http://localhost:5000/dashboard/delete/${id}`, {
+        await axios.delete(`/api/dashboard/delete/${id}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.dashboards = this.dashboards.filter((d) => d.ID != id);
@@ -95,7 +95,7 @@ export default {
       const id = this.selected_dashboard.id;
       try {
         await axios.put(
-          `http://localhost:5000/dashboard/update/${id}`,
+          `/api/dashboard/update/${id}`,
           {
             name: this.selected_dashboard.name,
             visibility: this.selected_dashboard.visibility === "public",

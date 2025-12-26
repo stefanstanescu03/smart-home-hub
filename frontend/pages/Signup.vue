@@ -22,7 +22,7 @@ export default {
         this.repeated_password == this.password
       ) {
         try {
-          await axios.post("http://localhost:5000/user/signup", {
+          await axios.post("/api/user/signup", {
             username: this.username,
             email: this.email,
             password: this.password,

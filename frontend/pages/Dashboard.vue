@@ -28,12 +28,9 @@ export default {
 
     async handleFetchDashboard() {
       try {
-        const res = await axios.get(
-          `http://localhost:5000/dashboard/${this.$route.params.id}`,
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
-        );
+        const res = await axios.get(`/api/dashboard/${this.$route.params.id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
         this.dashboard = res.data.dashboard;
       } catch (err) {
         console.error(err);
@@ -44,12 +41,9 @@ export default {
         await this.handleFetchDashboard();
 
         if (this.dashboard?.ID) {
-          const res = await axios.get(
-            `http://localhost:5000/widget/${this.dashboard.ID}`,
-            {
-              headers: { Authorization: `Bearer ${this.getToken()}` },
-            }
-          );
+          const res = await axios.get(`/api/widget/${this.dashboard.ID}`, {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          });
           const widgetsWithDeviceNames = await Promise.all(
             res.data.widgets.map(async (widget) => ({
               ...widget,
@@ -66,7 +60,7 @@ export default {
     },
     async handleDeleteWidget(id) {
       try {
-        await axios.delete(`http://localhost:5000/widget/delete/${id}`, {
+        await axios.delete(`/api/widget/delete/${id}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.widgets = this.widgets.filter((widget) => widget.ID != id);
@@ -76,7 +70,7 @@ export default {
     },
     async handleGetDeviceName(id) {
       try {
-        const res = await axios.get(`http://localhost:5000/device/${id}`, {
+        const res = await axios.get(`/api/device/${id}`, {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         return res.data.device.Name;
@@ -86,7 +80,7 @@ export default {
     },
     async handleGetAvailableDevices() {
       try {
-        const res = await axios.get("http://localhost:5000/device/", {
+        const res = await axios.get("/api/device/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.available_devices = res.data.devices;
@@ -97,7 +91,7 @@ export default {
     async handleAddWidget() {
       try {
         await axios.post(
-          "http://localhost:5000/widget/create",
+          "/api/widget/create",
           {
             widgettype: this.widget_type,
             deviceId: this.device.ID,
@@ -123,7 +117,7 @@ export default {
     },
 
     setupWebsocket() {
-      this.ws = new WebSocket("ws://localhost:5003/streaming");
+      this.ws = new WebSocket(`ws://${location.hostname}:5003/streaming`);
       this.ws.onopen = () => {
         console.log("Connected to streaming server");
         this.widgets.forEach((widget) => {

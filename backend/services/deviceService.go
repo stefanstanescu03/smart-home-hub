@@ -8,7 +8,7 @@ import (
 )
 
 func RegisterDeviceRoutes(r *gin.Engine) {
-	deviceRoutes := r.Group("/device")
+	deviceRoutes := r.Group("/api/device")
 	{
 		deviceRoutes.POST("/create", middleware.RequireAuth, controllers.AddDevice)
 		deviceRoutes.PUT("/update/:id", middleware.RequireAuth, controllers.UpdateDevice)
