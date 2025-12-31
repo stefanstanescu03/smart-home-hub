@@ -37,11 +37,12 @@ func AddAlert(c *gin.Context) {
 	}
 
 	alert := models.Alert{
-		Subject:   body.Subject,
-		Content:   body.Content,
-		Condition: body.Condition,
-		UserId:    currUser.(models.User).ID,
-		DeviceId:  body.DeviceId,
+		Subject:     body.Subject,
+		Content:     body.Content,
+		Condition:   body.Condition,
+		NotifyEmail: false,
+		UserId:      currUser.(models.User).ID,
+		DeviceId:    body.DeviceId,
 	}
 
 	res := initializers.DB.Create(&alert)
@@ -64,9 +65,10 @@ func UpdateAlert(c *gin.Context) {
 	id := c.Param("id")
 
 	var body struct {
-		Subject   string
-		Content   string
-		Condition string
+		Subject     string
+		Content     string
+		Condition   string
+		NotifyEmail bool
 	}
 
 	if c.Bind(&body) != nil {
@@ -89,8 +91,11 @@ func UpdateAlert(c *gin.Context) {
 	alert.Subject = body.Subject
 	alert.Content = body.Content
 	alert.Condition = body.Condition
+	alert.NotifyEmail = body.NotifyEmail
 
 	initializers.DB.Save(&alert)
+
+	sockets.NotifyAlertsHandler()
 
 	c.JSON(http.StatusOK, gin.H{
 		"alert": alert,
@@ -137,6 +142,8 @@ func DeleteAlert(c *gin.Context) {
 	id := c.Param("id")
 
 	initializers.DB.Unscoped().Delete(&models.Alert{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+
+	sockets.NotifyAlertsHandler()
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "alert deleted",

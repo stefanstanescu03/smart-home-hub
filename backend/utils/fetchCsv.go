@@ -17,7 +17,7 @@ func getLastLine(filepath string) string {
 	fileHandle, err := os.Open(filepath)
 
 	if err != nil {
-		panic("Cannot open file")
+		return ""
 	}
 	defer fileHandle.Close()
 
@@ -51,7 +51,7 @@ func getFirstLine(filepath string) string {
 	fileHandle, err := os.Open(filepath)
 
 	if err != nil {
-		panic("Cannot open file")
+		return ""
 	}
 	defer fileHandle.Close()
 

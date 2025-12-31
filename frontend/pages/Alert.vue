@@ -87,6 +87,29 @@ export default {
         console.log(err);
       }
     },
+    async handleChangeNotify(alertId) {
+      try {
+        const changeAlert = this.alerts.find((alert) => alert.ID === alertId);
+
+        if (!changeAlert) return;
+
+        await axios.put(
+          `/api/alert/update/${alertId}`,
+          {
+            subject: changeAlert.Subject,
+            content: changeAlert.Content,
+            condition: changeAlert.Condition,
+            NotifyEmail: !changeAlert.NotifyEmail,
+          },
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          }
+        );
+        changeAlert.NotifyEmail = !changeAlert.NotifyEmail;
+      } catch (err) {
+        console.error(err);
+      }
+    },
     triggerCreateDialog() {
       const dialog = document.getElementById("create-dialog");
       dialog.show();
@@ -128,9 +151,28 @@ export default {
           <td>{{ alert.Content }}</td>
           <td>{{ alert.Condition }}</td>
           <td>
-            <button class="delete-button" @click="handleDeleteAlert(alert.ID)">
-              <img src="../public/delete.png" alt="" height="20" width="20" />
-            </button>
+            <div class="action-container">
+              <button
+                class="delete-button"
+                @click="handleDeleteAlert(alert.ID)"
+              >
+                <img src="../public/delete.png" alt="" height="20" width="20" />
+              </button>
+              <button
+                class="notify-button-not-pressed"
+                @click="handleChangeNotify(alert.ID)"
+                v-if="alert.NotifyEmail == false"
+              >
+                Notify
+              </button>
+              <button
+                class="notify-button-pressed"
+                @click="handleChangeNotify(alert.ID)"
+                v-if="alert.NotifyEmail == true"
+              >
+                Notify
+              </button>
+            </div>
           </td>
         </tr>
         <h1 v-if="this.alerts.length == 0">No alerts added for this device</h1>
@@ -353,5 +395,36 @@ td {
   text-decoration: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.action-container {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.notify-button-not-pressed {
+  border: none;
+  background-color: transparent;
+  border: 1px solid #eeeeee;
+  text-decoration: none;
+  cursor: pointer;
+  color: #eeeeee;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  transition-duration: 300ms;
+}
+
+.notify-button-pressed {
+  border: none;
+  background-color: transparent;
+  border: 1px solid #c9cc0d;
+  text-decoration: none;
+  cursor: pointer;
+  color: #c9cc0d;
+  padding: 0.5rem;
+  border-radius: 0.3rem;
+  transition-duration: 300ms;
 }
 </style>

@@ -60,6 +60,27 @@ func splitCondition(s string) (field, op, value string, ok bool) {
 	return "", "", "", false
 }
 
+func handleSendEmail(alert models.Alert) {
+
+	// Check if you should send it
+	var user models.User
+	initializers.DB.First(&user, "id = ?", alert.UserId)
+	if user.ID == 0 {
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("error sending email for alert: %d, can't find the desired user", alert.ID))
+		return
+	}
+
+	email := user.Email
+
+	if alert.NotifyEmail {
+		ok := utils.SendSimpleEmail(email, alert.Subject, alert.Content)
+		if !ok {
+			utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("error sending email for alert: %d", alert.ID))
+		}
+	}
+
+}
+
 func shouldTrigger(alertMetadata alertHandlerMetadata) bool {
 
 	conditionKey, op, conditionValue, ok := splitCondition(alertMetadata.alert.Condition)
@@ -130,6 +151,7 @@ func StartAlertsHandler() {
 				if shouldTrigger(alert) {
 					if !alertStates[alert.alert.ID] {
 						utils.WriteAlert(alert.alert.DeviceId, alert.alert.Subject, alert.alert.Content)
+						handleSendEmail(alert.alert)
 						alertStates[alert.alert.ID] = true
 					}
 				} else {
