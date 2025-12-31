@@ -69,6 +69,11 @@ func shouldTrigger(alertMetadata alertHandlerMetadata) bool {
 	}
 
 	entry := utils.FetchFromCSV(alertMetadata.csv_location)
+
+	if entry == "-1" {
+		return false
+	}
+
 	parts := strings.Split(entry, ",")
 
 	for _, part := range parts {

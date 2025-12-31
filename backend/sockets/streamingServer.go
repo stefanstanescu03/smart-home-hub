@@ -103,14 +103,16 @@ func broadcastHandler() {
 
 				// Get desired data from location
 				message := utils.FetchFromCSV(csv_location)
+				if message != "-1" {
 
-				// Add an id so i know where this data belongs
-				message = message + ",id:" + device
+					// Add an id so i know where this data belongs
+					message = message + ",id:" + device
 
-				err := client.conn.WriteMessage(websocket.TextMessage, []byte(message))
-				if err != nil {
-					client.conn.Close()
-					delete(clients, client)
+					err := client.conn.WriteMessage(websocket.TextMessage, []byte(message))
+					if err != nil {
+						client.conn.Close()
+						delete(clients, client)
+					}
 				}
 			}
 		}
