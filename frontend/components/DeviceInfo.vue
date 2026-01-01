@@ -52,8 +52,8 @@ export default {
         v-if="this.status == 'connected'"
       ></span>
     </td>
-    <td>
-      <div class="action-container" v-if="should_appear == true">
+    <td v-if="should_appear == true">
+      <div class="action-container">
         <button
           class="delete-button"
           @click="this.$router.push(`/alerts/${id}`)"
@@ -73,12 +73,13 @@ export default {
 
 <style scoped>
 tr {
-  border-bottom: 1px solid #eeeeee;
+  border-bottom: 1px solid #606060;
 }
 
 td {
   padding: 0.7rem;
   vertical-align: middle;
+  color: #eeeeee;
 }
 
 .delete-button {
@@ -115,10 +116,17 @@ td {
 
 .small-status {
   display: none;
+  text-align: center;
+  vertical-align: middle;
 }
 
 .large-status {
   display: block;
+}
+
+.disconnected-small-dot,
+.connected-small-dot {
+  display: inline-block;
 }
 
 .disconnected-small-dot {
@@ -135,6 +143,10 @@ td {
   height: 0.7rem;
   background-color: #2ba618;
   border-radius: 50%;
+}
+
+.ident {
+  display: block;
 }
 
 @media (max-width: 900px) {

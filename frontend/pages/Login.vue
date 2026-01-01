@@ -107,17 +107,21 @@ h1 {
 }
 
 .login-form {
+  margin-top: 2rem;
+  padding: 1.5rem;
+  width: 100%;
+  max-width: 380px;
+  background-color: #1a1a1a;
+  border-radius: 0.6rem;
+
   display: flex;
   flex-direction: column;
-  width: 20rem;
-  gap: 1rem;
-  padding-top: 2rem;
-  color: #eeeeee;
+  gap: 1.2rem;
 }
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 .page-container {
   display: flex;
@@ -128,18 +132,20 @@ h1 {
 
 label {
   font-size: large;
+  color: #eeeeee;
 }
 
 input {
-  color: #eeeeee;
   background-color: #252525;
-  outline: none;
-  box-shadow: none;
-  border: 1px solid #eeeeee;
-
-  font-size: medium;
+  border: 1px solid #333;
+  border-radius: 0.45rem;
   padding: 0.5rem;
-  border-radius: 0.3rem;
+  font-size: 0.95rem;
+  color: #eeeeee;
+}
+
+input:focus {
+  outline: none;
 }
 
 .login-button {

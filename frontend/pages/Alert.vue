@@ -249,6 +249,27 @@ export default {
 </template>
 
 <style scoped>
+.page-container {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  height: 100%;
+  color: #eeeeee;
+}
+
+.info-container {
+  padding: 1.5rem;
+  width: 100%;
+}
+
+.title-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
 .hamburger {
   display: none;
   top: 1rem;
@@ -258,12 +279,6 @@ export default {
   border: none;
   color: #eeeeee;
   cursor: pointer;
-}
-
-.title-container {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
 }
 
 @media (max-width: 900px) {
@@ -277,18 +292,6 @@ export default {
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-}
-
-.info-container {
-  padding: 1rem;
-  width: 100%;
-}
-.page-container {
-  display: flex;
-  flex-direction: row;
-  gap: 2rem;
-  height: 100%;
-  color: #eeeeee;
 }
 
 .top-create-button {
@@ -330,66 +333,27 @@ export default {
   background-color: transparent;
 }
 
-dialog {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 60vw;
-  max-width: 500px;
-  border: none;
-  outline: none;
-  box-shadow: none;
-  border-radius: 0.3rem;
-  background-color: #1a1a1a;
-}
-
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: #eeeeee;
-  background-color: #1a1a1a;
-}
-.top-dialog {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
-}
-
-.field {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-input {
-  color: #eeeeee;
-  background-color: #252525;
-  outline: none;
-  box-shadow: none;
-  border: none;
-
-  font-size: medium;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-}
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: inherit;
+}
+tr {
+  border-bottom: 1px solid #606060;
 }
 th {
-  border-bottom: 1px solid #c9c9c9;
-  padding: 0.3rem;
   text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  color: #eeeeee;
 }
 td {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0.3rem;
+  padding: 0.6rem 0.75rem;
+  vertical-align: middle;
+  color: #eeeeee;
 }
+
 .delete-button {
   border: none;
   text-decoration: none;
@@ -426,5 +390,57 @@ td {
   padding: 0.5rem;
   border-radius: 0.3rem;
   transition-duration: 300ms;
+}
+
+input,
+select {
+  color: #eeeeee;
+  background-color: #252525;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border-radius: 0.35rem;
+}
+
+select {
+  cursor: pointer;
+}
+
+dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 90vw;
+  max-width: 480px;
+  border: none;
+  border-radius: 0.5rem;
+  background-color: #1a1a1a;
+  color: #eeeeee;
+}
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.top-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #aaaaaa;
 }
 </style>

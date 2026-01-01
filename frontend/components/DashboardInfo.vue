@@ -45,9 +45,14 @@ export default {
 </template>
 
 <style scoped>
+tr {
+  border-bottom: 1px solid #606060;
+}
+
 td {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0.3rem;
+  padding: 0.5rem;
+  vertical-align: middle;
+  color: #eeeeee;
 }
 
 .delete-button {

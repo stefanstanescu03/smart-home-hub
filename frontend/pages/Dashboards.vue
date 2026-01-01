@@ -297,44 +297,19 @@ export default {
 }
 
 table {
-  border-collapse: collapse;
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: inherit;
+}
+tr {
+  border-bottom: 1px solid #606060;
 }
 th {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0.3rem;
   text-align: left;
-}
-.field {
-  display: flex;
-  flex-direction: row;
-  align-items: baseline;
-  gap: 0.5rem;
-}
-
-input {
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
   color: #eeeeee;
-  background-color: #252525;
-  outline: none;
-  box-shadow: none;
-  border: none;
-
-  font-size: medium;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-}
-
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: #eeeeee;
-  background-color: #1a1a1a;
-}
-.top-dialog {
-  display: flex;
-  flex-direction: row;
-  justify-content: space-between;
 }
 
 .create-button {
@@ -359,21 +334,56 @@ input {
   cursor: pointer;
   background-color: transparent;
 }
-
-dialog {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  margin: auto;
-  width: 60vw;
-  max-width: 500px;
+input,
+select {
+  color: #eeeeee;
+  background-color: #252525;
   border: none;
   outline: none;
-  box-shadow: none;
-  border-radius: 0.3rem;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border-radius: 0.35rem;
+}
+
+select {
+  cursor: pointer;
+}
+
+dialog {
+  position: fixed;
+  inset: 0;
+  margin: auto;
+  width: 90vw;
+  max-width: 480px;
+  border: none;
+  border-radius: 0.5rem;
   background-color: #1a1a1a;
+  color: #eeeeee;
+}
+
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.top-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #aaaaaa;
 }
 
 .top-create-button {

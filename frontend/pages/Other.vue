@@ -107,13 +107,25 @@ export default {
   color: #eeeeee;
 }
 
-table {
-  border-collapse: collapse;
+.devices-container {
   width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: inherit;
 }
-th {
-  border-bottom: 1px solid #eeeeee;
-  padding: 0.3rem;
+
+.devices-container th {
   text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #606060;
+  color: #eeeeee;
+  vertical-align: middle;
+}
+
+.devices-container td {
+  padding: 0.6rem 0.75rem;
+  vertical-align: middle;
+  color: #eeeeee;
 }
 </style>

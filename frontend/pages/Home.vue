@@ -258,44 +258,6 @@ export default {
 </template>
 
 <style scoped>
-.hamburger {
-  display: none;
-  top: 1rem;
-  left: 1rem;
-  font-size: 1.8rem;
-  background: none;
-  border: none;
-  color: #eeeeee;
-  cursor: pointer;
-}
-
-.title-container {
-  display: flex;
-  flex-direction: row;
-  gap: 1rem;
-  font-family: "Inter", Inter, serif;
-}
-
-.ident {
-  display: block;
-}
-
-@media (max-width: 900px) {
-  .hamburger {
-    display: block;
-  }
-  .ident {
-    display: none;
-  }
-}
-
-.overlay {
-  position: fixed;
-  inset: 0;
-  background: rgba(0, 0, 0, 0.5);
-  z-index: 1000;
-}
-
 .page-container {
   display: flex;
   flex-direction: row;
@@ -303,56 +265,67 @@ export default {
   height: 100%;
   color: #eeeeee;
 }
+
 .info-container {
-  padding: 1rem;
+  padding: 1.5rem;
   width: 100%;
 }
-table {
-  border-collapse: collapse;
-  width: 100%;
-}
-th {
-  border-bottom: 1px solid #c9c9c9;
-  padding: 0.3rem;
-  text-align: left;
-}
 
-input {
-  color: #eeeeee;
-  background-color: #252525;
-  outline: none;
-  box-shadow: none;
-  border: none;
-
-  font-size: medium;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-}
-
-.dialog-container {
-  display: flex;
-  flex-direction: column;
-  gap: 1rem;
-  color: #eeeeee;
-  background-color: #1a1a1a;
-}
-
-.top-dialog {
+.title-container {
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.hamburger {
+  display: none;
+  font-size: 1.8rem;
+  background: none;
+  border: none;
+  color: #eeeeee;
+  cursor: pointer;
+}
+
+@media (max-width: 900px) {
+  .hamburger {
+    display: block;
+  }
+}
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0, 0, 0, 0.6);
+  z-index: 1000;
+}
+
+.top-create-button {
+  margin-bottom: 1rem;
+  border: 1px solid #eeeeee;
+  background: transparent;
+  color: #eeeeee;
+  padding: 0.5rem 0.75rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  transition: all 200ms ease;
+}
+
+.top-create-button:hover {
+  color: #8c8c8c;
+  border-color: #8c8c8c;
 }
 
 .create-button {
   border: none;
-  text-decoration: none;
   cursor: pointer;
   background-color: #a8dadc;
   color: #121212;
-  transition-duration: 300ms;
-  padding: 0.5rem;
-  font-size: large;
-  border-radius: 0.3rem;
+  padding: 0.6rem;
+  font-size: 1rem;
+  border-radius: 0.4rem;
+  transition: background-color 200ms;
 }
 
 .create-button:hover {
@@ -361,40 +334,86 @@ input {
 
 .cancel-button {
   border: none;
-  text-decoration: none;
+  background: transparent;
   cursor: pointer;
-  background-color: transparent;
+}
+
+.devices-container {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 1rem;
+  font-family: inherit;
+}
+
+.devices-container th {
+  text-align: left;
+  font-weight: 600;
+  padding: 0.6rem 0.75rem;
+  border-bottom: 1px solid #606060;
+  color: #eeeeee;
+}
+
+.devices-container td {
+  padding: 0.6rem 0.75rem;
+  vertical-align: middle;
+  color: #eeeeee;
+}
+
+@media (max-width: 900px) {
+  .ident {
+    display: none;
+  }
+}
+
+input,
+select {
+  color: #eeeeee;
+  background-color: #252525;
+  border: none;
+  outline: none;
+  padding: 0.5rem;
+  font-size: 0.95rem;
+  border-radius: 0.35rem;
+}
+
+select {
+  cursor: pointer;
 }
 
 dialog {
-  position: absolute;
-  top: 0;
-  bottom: 0;
-  left: 0;
-  right: 0;
+  position: fixed;
+  inset: 0;
   margin: auto;
-  width: 60vw;
-  max-width: 500px;
+  width: 90vw;
+  max-width: 480px;
   border: none;
-  outline: none;
-  box-shadow: none;
-  border-radius: 0.3rem;
+  border-radius: 0.5rem;
   background-color: #1a1a1a;
-}
-
-.top-create-button {
-  border: none;
-  background-color: transparent;
-  border: 1px solid #eeeeee;
-  text-decoration: none;
-  cursor: pointer;
   color: #eeeeee;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-  transition-duration: 300ms;
 }
 
-.top-create-button:hover {
-  border: 1px solid #a6a6a6;
+.dialog-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  padding: 1rem;
+}
+
+.top-dialog {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-weight: 600;
+}
+
+.field {
+  display: flex;
+  flex-direction: column;
+  gap: 0.3rem;
+}
+
+label {
+  font-size: 0.8rem;
+  color: #aaaaaa;
 }
 </style>

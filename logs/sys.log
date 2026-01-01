@@ -249,3 +249,112 @@
 2025-12-31T15:21:09+02:00 [ALERTS-HANDLER] Started alerts handler
 2025-12-31T15:21:09+02:00 [TELEMETRY] Telemetry server started on port: 5001
 2025-12-31T15:21:32+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2025-12-31T16:04:49+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2025-12-31T16:04:49+02:00 [ALERTS-HANDLER] Started alerts handler
+2025-12-31T16:04:49+02:00 [STREAMING] Streaming server started on port: 5003
+2025-12-31T16:06:05+02:00 [STREAMING] New client connected
+2025-12-31T16:06:05+02:00 [STREAMING] Client subscribed to device: 38
+2025-12-31T16:06:05+02:00 [STREAMING] Client subscribed to device: 39
+2025-12-31T16:06:20+02:00 [TELEMETRY] New device connected: sen_001
+2025-12-31T16:08:03+02:00 [TELEMETRY] Device disconnected: sen_001
+2026-01-01T11:20:19+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-01T11:20:19+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-01T11:20:19+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-01T11:20:42+02:00 [STREAMING] New client connected
+2026-01-01T11:20:42+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T11:20:42+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T11:21:10+02:00 [STREAMING] New client connected
+2026-01-01T11:21:10+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T11:21:10+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T11:30:51+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T11:30:51+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T11:30:51+02:00 [STREAMING] Client disconnected
+2026-01-01T11:30:51+02:00 [STREAMING] Client disconnected
+2026-01-01T11:32:24+02:00 [STREAMING] New client connected
+2026-01-01T11:32:24+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T11:32:24+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T11:36:24+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T11:36:24+02:00 [STREAMING] Client disconnected
+2026-01-01T12:05:53+02:00 [STREAMING] New client connected
+2026-01-01T12:05:53+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:05:53+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:09:25+02:00 [STREAMING] New client connected
+2026-01-01T12:09:25+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:09:25+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:11:39+02:00 [STREAMING] New client connected
+2026-01-01T12:11:39+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:11:39+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:12:08+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:12:08+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:12:08+02:00 [STREAMING] Client disconnected
+2026-01-01T12:12:08+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:12:08+02:00 [STREAMING] Client disconnected
+2026-01-01T12:12:08+02:00 [STREAMING] Client disconnected
+2026-01-01T12:12:14+02:00 [STREAMING] New client connected
+2026-01-01T12:12:23+02:00 [STREAMING] New client connected
+2026-01-01T12:13:04+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:13:04+02:00 [STREAMING] Client disconnected
+2026-01-01T12:13:04+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:13:04+02:00 [STREAMING] Client disconnected
+2026-01-01T12:13:19+02:00 [TELEMETRY] New device connected: sen_002
+2026-01-01T12:13:33+02:00 [STREAMING] New client connected
+2026-01-01T12:13:39+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:13:39+02:00 [STREAMING] Client disconnected
+2026-01-01T12:13:40+02:00 [STREAMING] New client connected
+2026-01-01T12:13:40+02:00 [STREAMING] Client subscribed to device: 41
+2026-01-01T12:14:08+02:00 [STREAMING] New client connected
+2026-01-01T12:14:08+02:00 [STREAMING] Client subscribed to device: 41
+2026-01-01T12:14:54+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:14:54+02:00 [STREAMING] Client disconnected
+2026-01-01T12:15:37+02:00 [TELEMETRY] Device disconnected: sen_002
+2026-01-01T12:15:39+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:15:39+02:00 [STREAMING] Client disconnected
+2026-01-01T12:16:18+02:00 [STREAMING] New client connected
+2026-01-01T12:16:18+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:16:18+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:17:11+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:17:11+02:00 [STREAMING] Client disconnected
+2026-01-01T12:26:57+02:00 [STREAMING] New client connected
+2026-01-01T12:26:57+02:00 [STREAMING] Client subscribed to device: 41
+2026-01-01T12:27:35+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:27:35+02:00 [STREAMING] Client disconnected
+2026-01-01T12:28:56+02:00 [STREAMING] New client connected
+2026-01-01T12:28:56+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:28:56+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:34:42+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:34:42+02:00 [STREAMING] Client disconnected
+2026-01-01T12:36:54+02:00 [STREAMING] New client connected
+2026-01-01T12:36:54+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:36:54+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:37:44+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:37:44+02:00 [STREAMING] Client disconnected
+2026-01-01T12:44:39+02:00 [STREAMING] New client connected
+2026-01-01T12:44:39+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:44:39+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:55:38+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:55:38+02:00 [STREAMING] Client disconnected
+2026-01-01T12:55:54+02:00 [STREAMING] New client connected
+2026-01-01T12:55:54+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:55:54+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:56:08+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:56:08+02:00 [STREAMING] Client disconnected
+2026-01-01T12:57:12+02:00 [STREAMING] New client connected
+2026-01-01T12:57:12+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:12+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:19+02:00 [STREAMING] New client connected
+2026-01-01T12:57:19+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:57:19+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:32+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:57:32+02:00 [STREAMING] Client disconnected
+2026-01-01T12:57:32+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:57:32+02:00 [STREAMING] Client disconnected
+2026-01-01T12:57:32+02:00 [STREAMING] New client connected
+2026-01-01T12:57:32+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:57:32+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:32+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:41+02:00 [STREAMING] New client connected
+2026-01-01T12:57:41+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-01T12:57:41+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:57:41+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-01T12:58:13+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-01T12:58:13+02:00 [STREAMING] Client disconnected
