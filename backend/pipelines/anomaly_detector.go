@@ -187,10 +187,29 @@ func predict(model *distanceBasedDetector, window timeseriesWindow) bool {
 	if distance > threshold {
 		return true
 	} else {
+
+		// Adapt center
+
+		for i := range model.centroid {
+			model.centroid[i] += model.lr * (window.window[i] - model.centroid[i])
+		}
+
+		model.n += 1
+
+		delta := distance - model.mean_distance
+		model.mean_distance += delta / float32(model.n)
+		model.m2_distance += delta * (distance - model.mean_distance)
+
+		model.std_distance = float32(math.Sqrt(float64(model.m2_distance) / (float64(model.n) - 1)))
+
 		return false
 	}
 }
 
+// Note that you should never have empty datasets and windows smaller than 2
+// Always when a model is initiated collect a lot of data first and after that train
+// Model assumes that the training data is stationary and don't have drifts
+// This is much fitted for rare anomalies and eventual slow drifts
 func StartAnomalyDetectionPipeline() {
 
 	model := newAnomalyDetectionModel(3, 1e-2, 10)
@@ -199,11 +218,15 @@ func StartAnomalyDetectionPipeline() {
 
 	fit(model, &dataset)
 
+	fmt.Println(model)
+
 	testWindow := timeseriesWindow{
 		window:      []float32{22, 22, 22, 22, 22, 22, 22, 22, 22, 22},
 		numFeatures: 10,
 	}
 
 	fmt.Println(predict(model, testWindow))
+
+	fmt.Println(model)
 
 }
