@@ -61,7 +61,9 @@ export default {
           />
         </div>
         <button class="login-button" @click="handleLogin">Login</button>
-        <p v-if="this.failed == true">Incorrect credentials</p>
+        <p class="incorrect" v-if="this.failed == true">
+          Incorrect credentials
+        </p>
       </div>
     </div>
   </div>
@@ -92,6 +94,10 @@ h1 {
   .hamburger {
     display: block;
   }
+}
+
+.incorrect {
+  color: #e43333;
 }
 
 .overlay {

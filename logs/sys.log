@@ -358,3 +358,123 @@
 2026-01-01T12:57:41+02:00 [STREAMING] Client subscribed to device: 39
 2026-01-01T12:58:13+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
 2026-01-01T12:58:13+02:00 [STREAMING] Client disconnected
+2026-01-02T15:47:10+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-02T15:47:10+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-02T15:47:10+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-02T15:48:56+02:00 [STREAMING] New client connected
+2026-01-02T15:48:56+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:48:56+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:50:00+02:00 [STREAMING] New client connected
+2026-01-02T15:50:00+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-02T15:50:00+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:50:00+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:51:00+02:00 [STREAMING] New client connected
+2026-01-02T15:51:00+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:51:00+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-02T15:52:23+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-02T15:52:23+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-02T15:52:23+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-02T15:52:23+02:00 [STREAMING] Client disconnected
+2026-01-02T15:52:23+02:00 [STREAMING] Client disconnected
+2026-01-02T15:52:23+02:00 [STREAMING] Client disconnected
+2026-01-02T16:00:30+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-02T16:00:30+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-02T16:00:36+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-02T16:00:36+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-02T16:00:57+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-02T16:01:07+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-02T16:01:07+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-02T16:01:07+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-11T20:25:06+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-11T20:25:06+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-11T20:25:06+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-11T20:25:36+02:00 [STREAMING] New client connected
+2026-01-11T20:25:36+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-11T20:25:36+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-11T20:26:51+02:00 [TELEMETRY] New device connected: aht10_001
+2026-01-11T20:26:57+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-11T20:26:57+02:00 [STREAMING] Client disconnected
+2026-01-11T20:27:05+02:00 [STREAMING] New client connected
+2026-01-11T20:27:05+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-11T20:27:05+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-11T20:27:22+02:00 [TELEMETRY] Device disconnected: aht10_001
+2026-01-11T20:29:22+02:00 [STREAMING] New client connected
+2026-01-11T20:29:22+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-11T20:29:22+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-11T20:29:22+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-16T14:13:56+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:13:56+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:13:56+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:15:05+02:00 [STREAMING] New client connected
+2026-01-16T14:15:05+02:00 [STREAMING] Client subscribed to device: 38
+2026-01-16T14:15:05+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-16T14:15:05+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-16T14:15:14+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:15:14+02:00 [STREAMING] Client disconnected
+2026-01-16T14:19:41+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:19:41+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:19:41+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:23:44+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:58513: read tcp 192.168.1.183:5001->192.168.1.254:58513: read: connection reset by peer
+2026-01-16T14:24:24+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:58804: read tcp 192.168.1.183:5001->192.168.1.254:58804: read: connection reset by peer
+2026-01-16T14:25:17+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:25:17+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:25:17+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:26:40+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:26:40+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:26:40+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:29:38+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:55418: read tcp 192.168.1.183:5001->192.168.1.254:55418: read: connection reset by peer
+2026-01-16T14:30:05+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:30:05+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:30:05+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:33:41+02:00 [TELEMETRY] New device connected: sen_421
+2026-01-16T14:33:47+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:53332: read tcp 192.168.1.183:5001->192.168.1.254:53332: read: connection reset by peer
+2026-01-16T14:33:53+02:00 [TELEMETRY] Devices with the same identificator: sen_421
+2026-01-16T14:34:01+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:50853: read tcp 192.168.1.183:5001->192.168.1.254:50853: read: connection reset by peer
+2026-01-16T14:34:01+02:00 [TELEMETRY] Device disconnected: sen_421
+2026-01-16T14:34:07+02:00 [TELEMETRY] New device connected: sen_421
+2026-01-16T14:34:52+02:00 [STREAMING] New client connected
+2026-01-16T14:34:58+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:34:58+02:00 [STREAMING] Client disconnected
+2026-01-16T14:34:58+02:00 [STREAMING] New client connected
+2026-01-16T14:34:58+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-16T14:36:27+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-01-16T14:36:27+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:36:27+02:00 [STREAMING] Client disconnected
+2026-01-16T14:37:03+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-01-16T14:37:13+02:00 [STREAMING] New client connected
+2026-01-16T14:37:13+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-16T14:39:25+02:00 [STREAMING] New client connected
+2026-01-16T14:39:25+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-16T14:40:35+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:40:35+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:40:35+02:00 [STREAMING] Client disconnected
+2026-01-16T14:40:35+02:00 [STREAMING] Client disconnected
+2026-01-16T14:40:54+02:00 [STREAMING] New client connected
+2026-01-16T14:40:54+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-16T14:43:41+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:43:41+02:00 [STREAMING] Client disconnected
+2026-01-16T14:45:40+02:00 [TELEMETRY] Error reading a message from 192.168.1.254:57136: read tcp 192.168.1.183:5001->192.168.1.254:57136: read: connection timed out
+2026-01-16T14:45:40+02:00 [TELEMETRY] Device disconnected: sen_421
+2026-01-16T14:50:11+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:50:11+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:51:12+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-16T14:51:12+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-16T14:51:12+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-16T14:51:21+02:00 [STREAMING] New client connected
+2026-01-16T14:51:21+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-16T14:51:21+02:00 [STREAMING] Client subscribed to device: 39
+2026-01-16T14:51:54+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-01-16T14:52:36+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:52:36+02:00 [STREAMING] Client disconnected
+2026-01-16T14:53:17+02:00 [STREAMING] New client connected
+2026-01-16T14:53:17+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-16T14:53:21+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-01-16T14:53:21+02:00 [STREAMING] Client disconnected
+2026-01-18T15:05:09+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-18T15:05:09+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-18T15:05:09+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-18T15:24:18+02:00 [PIPELINES] Cannot open data file: open tests/telemetry/test_sensor.csv: no such file or directory
+2026-01-18T15:25:08+02:00 [PIPELINES] Failed to convert value: strconv.ParseFloat: parsing "timestamp": invalid syntax
+2026-01-18T16:47:55+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-18T16:47:55+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-18T16:47:55+02:00 [TELEMETRY] Telemetry server started on port: 5001

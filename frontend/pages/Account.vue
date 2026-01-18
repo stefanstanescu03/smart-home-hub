@@ -89,7 +89,7 @@ export default {
           />
         </div>
         <button class="update-button" @click="handleUpdate">Update</button>
-        <p v-if="failed == true">Password incorrect</p>
+        <p class="incorrect" v-if="failed == true">Incorrect password</p>
         <p v-if="changed == true">Account updated</p>
       </div>
     </div>
@@ -121,6 +121,10 @@ h1 {
   .hamburger {
     display: block;
   }
+}
+
+.incorrect {
+  color: #e43333;
 }
 
 .overlay {
