@@ -30,6 +30,7 @@ func main() {
 	services.RegisterAlertRoutes(r)
 	services.RegisterDashboardRoutes(r)
 	services.RegisterWidgetRoutes(r)
+	services.RegisterAnomalyModelRoutes(r)
 
 	r.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

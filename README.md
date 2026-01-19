@@ -19,4 +19,13 @@ LOGS=
 SECRET=
 ```
 
-You need a mysql database
+Anomaly Detection Pipeline: table in DB with model data (user, device, param, model_location, notify_email). After that everything works
+like alerts: fetch current models, feed them with new data. If we create a new one we train it
+
+# Tasks
+
+1. Create database table [done]
+2. Create the CRUD for models [done]
+3. Figure out how to save models data and how to load them
+4. See how to handle user wanting to create new model
+5. Create the checking loop like you did with alerts

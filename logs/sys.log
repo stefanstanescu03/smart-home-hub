@@ -478,3 +478,14 @@
 2026-01-18T16:47:55+02:00 [STREAMING] Streaming server started on port: 5003
 2026-01-18T16:47:55+02:00 [ALERTS-HANDLER] Started alerts handler
 2026-01-18T16:47:55+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-19T13:06:38+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-19T13:06:38+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-19T13:06:38+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-19T13:07:36+02:00 [STREAMING] New client connected
+2026-01-19T13:07:36+02:00 [STREAMING] Client subscribed to device: 42
+2026-01-19T13:08:41+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-01-19T13:08:44+02:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-01-19T13:09:12+02:00 [STREAMING] Streaming server started on port: 5003
+2026-01-19T13:09:12+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-01-19T13:09:12+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-01-19T13:13:59+02:00 [ALERTS-HANDLER] Alerts cache refreshed
