@@ -43,7 +43,7 @@ export default {
             email: this.email,
             password: this.password,
           },
-          { headers: { Authorization: `Bearer ${this.getToken()}` } }
+          { headers: { Authorization: `Bearer ${this.getToken()}` } },
         );
         this.changed = true;
         this.failed = false;

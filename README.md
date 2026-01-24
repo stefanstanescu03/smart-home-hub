@@ -26,6 +26,6 @@ like alerts: fetch current models, feed them with new data. If we create a new o
 
 1. Create database table [done]
 2. Create the CRUD for models [done]
-3. Figure out how to save models data and how to load them
-4. See how to handle user wanting to create new model
+3. Figure out how to save models data and how to load them [done]
+4. See how to handle user wanting to create new model [done]
 5. Create the checking loop like you did with alerts

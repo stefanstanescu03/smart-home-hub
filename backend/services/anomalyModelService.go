@@ -13,7 +13,7 @@ func RegisterAnomalyModelRoutes(r *gin.Engine) {
 		anomalyRoutes.POST("/create", middleware.RequireAuth, controllers.AddAnomalyModel)
 		anomalyRoutes.PUT("/update/:id", middleware.RequireAuth, controllers.UpdateAnomalyModel)
 		anomalyRoutes.GET("/:id", middleware.RequireAuth, controllers.GetAnomalyModel)
-		anomalyRoutes.GET("/device/:id", middleware.RequireAuth, controllers.GetAnomalyModels)
+		anomalyRoutes.GET("/device/:device_id", middleware.RequireAuth, controllers.GetAnomalyModels)
 		anomalyRoutes.DELETE("/:id", middleware.RequireAuth, controllers.DeleteAnomalyModel)
 	}
 }

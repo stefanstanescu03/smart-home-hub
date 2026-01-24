@@ -7,12 +7,17 @@ export default {
     return {
       device: {},
       alerts: [],
+      models: [],
       new_alert: {
         subject: "",
         content: "",
         key: "",
         value: "",
         condition: "",
+      },
+      new_model: {
+        param: "",
+        location: "",
       },
       menuOpen: false,
     };
@@ -60,7 +65,7 @@ export default {
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
+          },
         );
         this.$router.go(0);
       } catch (err) {
@@ -103,13 +108,80 @@ export default {
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
+          },
         );
         changeAlert.NotifyEmail = !changeAlert.NotifyEmail;
       } catch (err) {
         console.error(err);
       }
     },
+    async handleCreateModel() {
+      try {
+        console.log(this.device);
+
+        await axios.post(
+          "/api/model/anomaly/create",
+          {
+            location: this.new_model.location,
+            param: this.new_model.param,
+            DeviceId: this.device.ID,
+          },
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
+        );
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleFetchModels() {
+      try {
+        const res = await axios.get(
+          `/api/model/anomaly/device/${this.$route.params.id}`,
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
+        );
+        this.models = res.data.models;
+        console.log(this.models);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleChangeNotifyAD(modelId) {
+      try {
+        const changeModel = this.models.find((model) => model.ID === modelId);
+
+        if (!changeModel) return;
+
+        await axios.put(
+          `/api/model/anomaly/update/${modelId}`,
+          {
+            location: changeModel.Location,
+            NotifyEmail: !changeModel.NotifyEmail,
+          },
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
+        );
+        changeModel.NotifyEmail = !changeModel.NotifyEmail;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
+    async handleDeleteModel(modelId) {
+      try {
+        await axios.delete(`/api/model/anomaly/${modelId}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.models = this.models.filter((model) => model.ID != modelId);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+
     triggerCreateDialog() {
       const dialog = document.getElementById("create-dialog");
       dialog.show();
@@ -118,10 +190,19 @@ export default {
       const dialog = document.getElementById("create-dialog");
       dialog.close();
     },
+    triggerCreateDialogAD() {
+      const dialog = document.getElementById("create-dialog-ad");
+      dialog.show();
+    },
+    handleCancelCreateDialogAD() {
+      const dialog = document.getElementById("create-dialog-ad");
+      dialog.close();
+    },
   },
   mounted() {
     this.handleFetchDevice();
     this.handleFetchAlerts();
+    this.handleFetchModels();
   },
 };
 </script>
@@ -135,9 +216,14 @@ export default {
         <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
         <h1>Alerts for {{ this.device.Name }}</h1>
       </div>
-      <button @click="triggerCreateDialog" class="top-create-button">
-        Create Alert
-      </button>
+      <div class="buttons-container">
+        <button @click="triggerCreateDialog" class="top-create-button">
+          Create Alert
+        </button>
+        <button @click="triggerCreateDialogAD" class="top-create-button">
+          Create Anomaly Detector
+        </button>
+      </div>
 
       <table class="alerts-container">
         <tr v-if="this.alerts.length != 0">
@@ -177,6 +263,37 @@ export default {
         </tr>
         <h1 v-if="this.alerts.length == 0">No alerts added for this device</h1>
       </table>
+
+      <div class="models-container">
+        <div v-for="model in models" :key="model.ID" class="model-card">
+          <div class="model-main">
+            <div class="model-param">{{ model.Param }}</div>
+            <div class="model-meta">Anomaly Detection Model</div>
+          </div>
+
+          <div class="model-actions">
+            <button
+              class="model-notify inactive"
+              v-if="!model.NotifyEmail"
+              @click="handleChangeNotifyAD(model.ID)"
+            >
+              Notify
+            </button>
+
+            <button
+              class="model-notify active"
+              v-else
+              @click="handleChangeNotifyAD(model.ID)"
+            >
+              Notify
+            </button>
+
+            <button class="model-delete" @click="handleDeleteModel(model.ID)">
+              <img src="../public/delete.png" alt="" />
+            </button>
+          </div>
+        </div>
+      </div>
 
       <dialog id="create-dialog">
         <div class="dialog-container">
@@ -240,6 +357,45 @@ export default {
 
           <div class="field"></div>
           <button @click="handleCreateAlert" class="create-button">
+            Create
+          </button>
+        </div>
+      </dialog>
+
+      <dialog id="create-dialog-ad">
+        <div class="dialog-container">
+          <div class="top-dialog">
+            <p>Create Anomaly Detection Model</p>
+            <button @click="handleCancelCreateDialogAD" class="cancel-button">
+              <img src="../public/close.png" height="20" width="20" alt="" />
+            </button>
+          </div>
+
+          <div class="field">
+            <label for="key">Key name: </label>
+            <input
+              type="text"
+              id="key"
+              name="key"
+              v-model="this.new_model.param"
+            />
+          </div>
+          <div class="field">
+            <label for="location">Location: </label>
+            <input
+              type="text"
+              id="location"
+              name="location"
+              v-model="this.new_model.location"
+            />
+          </div>
+          <p>
+            ! Anomaly detection model needs data to learn the normal behaviour.
+            Make sure you let your sensor collect data for at least a day before
+            creating the model.
+          </p>
+          <div class="field"></div>
+          <button @click="handleCreateModel" class="create-button">
             Create
           </button>
         </div>
@@ -442,5 +598,92 @@ dialog {
 label {
   font-size: 0.8rem;
   color: #aaaaaa;
+}
+
+.buttons-container {
+  display: flex;
+  flex-direction: row;
+  gap: 1rem;
+}
+
+.models-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  max-width: 720px;
+}
+
+.model-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  padding: 0.9rem 1.1rem;
+  border-radius: 0.75rem;
+
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  width: 100%;
+}
+
+.model-main {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  flex: 1;
+  min-width: 0;
+}
+
+.model-param {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: #eeeeee;
+  word-break: break-word;
+}
+
+.model-meta {
+  font-size: 0.75rem;
+  color: #9a9a9a;
+  letter-spacing: 0.04em;
+  text-transform: uppercase;
+}
+
+.model-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  margin-left: 1rem;
+}
+
+.model-notify {
+  padding: 0.4rem 0.7rem;
+  font-size: 0.75rem;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  border: 1px solid transparent;
+  background: transparent;
+  transition: all 200ms ease;
+}
+
+.model-notify.inactive {
+  border-color: #555;
+  color: #cccccc;
+}
+
+.model-notify.active {
+  border-color: #c9cc0d;
+  color: #c9cc0d;
+}
+
+.model-delete {
+  border: none;
+  background: transparent;
+  cursor: pointer;
+}
+
+.model-delete img {
+  width: 18px;
+  height: 18px;
 }
 </style>

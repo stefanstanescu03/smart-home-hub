@@ -15,7 +15,7 @@ export default {
         const parts = message.split(",");
         parts.forEach((p) => {
           const [k, v] = p.split(":");
-          if (k != "timestamp" && k != "id") {
+          if (k !== "timestamp" && k !== "id") {
             this.values[k] = v;
           }
         });
@@ -26,55 +26,113 @@ export default {
 </script>
 
 <template>
-  <div class="card-container">
-    <div class="title-container">
-      <h1 class="name-h">{{ deviceName }}</h1>
-      <button @click="$emit('delete')" class="delete-button">Delete</button>
+  <div class="device-card">
+    <div class="card-header">
+      <div class="title">
+        <h3>{{ deviceName }}</h3>
+      </div>
+
+      <button
+        @click="$emit('delete')"
+        class="icon-button"
+        title="Delete device"
+      >
+        ✕
+      </button>
     </div>
-    <div class="values-container">
-      <div v-for="(val, key) in values" :key="key">{{ key }}: {{ val }}</div>
+
+    <div class="card-body">
+      <div v-for="(val, key) in values" :key="key" class="value-row">
+        <span class="key">{{ key }}</span>
+        <span class="value">{{ val }}</span>
+      </div>
+
+      <div v-if="Object.keys(values).length === 0" class="empty">
+        Waiting for data…
+      </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-.name-h {
-  font-size: large;
-}
-.card-container {
-  border: 1px solid #eeeeee;
+.device-card {
+  background: #1b1b1b;
+  border: 1px solid #2a2a2a;
   border-radius: 1rem;
+  overflow: hidden;
+  width: 100%;
+  max-width: 420px;
 }
-.values-container {
+
+.card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 0.9rem 1rem;
+  border-bottom: 1px solid #2a2a2a;
+}
+
+.title h3 {
+  margin: 0;
+  font-size: large;
+  font-weight: bold;
+  color: #eeeeee;
+}
+
+.icon-button {
+  background: transparent;
+  border: 1px solid #333;
+  color: #aaa;
+  border-radius: 0.4rem;
+  cursor: pointer;
+  padding: 0.25rem 0.45rem;
+  font-size: 0.8rem;
+
+  transition:
+    color 150ms ease,
+    border-color 150ms ease,
+    background 150ms ease;
+}
+
+.icon-button:hover {
+  color: #e55353;
+  border-color: #e55353;
+  background: rgba(229, 83, 83, 0.1);
+}
+
+.card-body {
+  padding: 0.9rem 1rem;
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;
-  padding: 0.5rem;
+  gap: 0.45rem;
 }
-
-.title-container {
+.value-row {
   display: flex;
-  flex-direction: row;
-  gap: 1rem;
+  justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid #eeeeee;
-  padding: 0.5rem;
+  gap: 1rem;
+  padding: 0.35rem 0.45rem;
+  border-radius: 0.4rem;
+  background: #202020;
 }
 
-.delete-button {
-  border: none;
-  background-color: transparent;
-  border: 1px solid #eeeeee;
-  text-decoration: none;
-  cursor: pointer;
+.key {
+  font-size: normal;
+  text-transform: uppercase;
+  color: #9aa0a6;
+}
+
+.value {
+  font-size: normal;
+  font-weight: 500;
   color: #eeeeee;
-  padding: 0.5rem;
-  border-radius: 0.3rem;
-  transition-duration: 300ms;
 }
 
-.delete-button:hover {
-  border: 1px solid #e43333;
-  color: #e43333;
+.empty {
+  font-size: normal;
+  color: #777;
+  text-align: center;
+  padding: 0.75rem 0;
 }
 </style>
