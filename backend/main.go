@@ -3,6 +3,7 @@ package main
 import (
 	"backend/initializers"
 	"backend/middleware"
+	"backend/pipelines"
 	"backend/services"
 	"backend/sockets"
 	"net/http"
@@ -20,6 +21,8 @@ func main() {
 	go sockets.StartTelemetryServer()
 	go sockets.StartStreamingServer()
 	go sockets.StartAlertsHandler()
+
+	go pipelines.StartAnomalyDetectionPipeline()
 
 	r := gin.Default()
 	r.Use(middleware.CORSMiddleware())

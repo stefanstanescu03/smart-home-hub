@@ -88,7 +88,7 @@ export default {
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
-          }
+          },
         );
         this.handleCancelEdit();
         this.$router.go(0);
@@ -106,7 +106,7 @@ export default {
             csv_location: this.new_device.csv_location,
             visibility: this.new_device.visibility === "public",
           },
-          { headers: { Authorization: `Bearer ${this.getToken()}` } }
+          { headers: { Authorization: `Bearer ${this.getToken()}` } },
         );
         this.handleCancelCreate();
         this.$router.go(0);

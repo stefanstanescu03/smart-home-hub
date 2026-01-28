@@ -3,7 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
-	"backend/sockets"
+	"backend/pipelines"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -50,7 +50,9 @@ func AddAnomalyModel(c *gin.Context) {
 		return
 	}
 
-	sockets.NotifyAlertsHandler()
+	pipelines.FitAndSave(body.Location, device.Csv_location, body.Param)
+
+	pipelines.NotifyAnomalyPipeline()
 
 	c.JSON(http.StatusOK, gin.H{
 		"model": model,
