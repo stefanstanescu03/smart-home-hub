@@ -2,6 +2,7 @@ package utils
 
 import (
 	"bufio"
+	"bytes"
 	"fmt"
 	"io"
 	"os"
@@ -46,7 +47,80 @@ func getLastLine(filepath string) string {
 	return line
 }
 
-func getFirstLine(filepath string) string {
+func GetLastLines(filepath string, lineCount int) ([]string, error) {
+	file, err := os.Open(filepath)
+	if err != nil {
+		return nil, err
+	}
+	defer file.Close()
+
+	stat, _ := file.Stat()
+	filesize := stat.Size()
+
+	var lines []string
+	var cursor int64 = 0
+	bufferSize := int64(1024)
+	trailingData := []byte{}
+
+	for len(lines) < lineCount && abs(cursor) < filesize {
+		// Calculate how much to read
+		currReadSize := bufferSize
+		if abs(cursor)+bufferSize > filesize {
+			currReadSize = filesize - abs(cursor)
+		}
+
+		cursor -= currReadSize
+		_, err := file.Seek(cursor, io.SeekEnd)
+		if err != nil {
+			return nil, err
+		}
+
+		buf := make([]byte, currReadSize)
+		_, err = io.ReadFull(file, buf)
+		if err != nil {
+			return nil, err
+		}
+
+		// Prepend the new chunk to what we had left over
+		combined := append(buf, trailingData...)
+		parts := bytes.Split(combined, []byte("\n"))
+
+		// The first part of the split is likely an incomplete line
+		trailingData = parts[0]
+
+		// Add parts in reverse order (excluding the incomplete first part)
+		for i := len(parts) - 1; i >= 1; i-- {
+			if len(parts[i]) == 0 && i == len(parts)-1 {
+				continue // Skip trailing newline at the very end of file
+			}
+			lines = append(lines, string(parts[i]))
+			if len(lines) == lineCount {
+				break
+			}
+		}
+	}
+
+	// Add the final remaining bit if we haven't hit the limit
+	if len(lines) < lineCount && len(trailingData) > 0 {
+		lines = append(lines, string(trailingData))
+	}
+
+	// REVERSE: Flip the slice back to original file order
+	for i, j := 0, len(lines)-1; i < j; i, j = i+1, j-1 {
+		lines[i], lines[j] = lines[j], lines[i]
+	}
+
+	return lines, nil
+}
+
+func abs(n int64) int64 {
+	if n < 0 {
+		return -n
+	}
+	return n
+}
+
+func GetFirstLine(filepath string) string {
 
 	fileHandle, err := os.Open(filepath)
 
@@ -64,7 +138,7 @@ func getFirstLine(filepath string) string {
 
 func FetchFromCSV(filename string) string {
 
-	types := getFirstLine(filename)
+	types := GetFirstLine(filename)
 	if types == "" {
 		return "-1"
 	}

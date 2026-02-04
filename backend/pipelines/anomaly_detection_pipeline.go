@@ -9,6 +9,8 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strconv"
+	"strings"
 	"time"
 )
 
@@ -20,6 +22,8 @@ type ModelInfo struct {
 var modelsPool []*ModelInfo
 
 var refreshModels = make(chan struct{}, 1)
+
+var alertStates = make(map[uint]bool)
 
 func NotifyAnomalyPipeline() {
 	select {
@@ -74,6 +78,71 @@ func FitAndSave(filename string, data_path string, param string) {
 
 }
 
+// See if you have anomalies
+// This calls predict function that also will adapt parameters
+func feed_data(model *ModelInfo) {
+
+	// Get the last window from csv file
+	window_size := len(model.model_parameters.Centroid)
+
+	device_id := model.model_metadata.DeviceId
+	var device models.Device
+	initializers.DB.First(&device, "id = ?", device_id)
+
+	if device.ID == 0 {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Somehow the device was not found: %d", device_id))
+		return
+	}
+
+	data_location := device.Csv_location
+
+	// Find what parameter are you interested in
+	param := model.model_metadata.Param
+	param_id := -1
+	first_line := utils.GetFirstLine(data_location)
+	keys := strings.Split(first_line, ",")
+	for i := range keys {
+		if keys[i] == param {
+			param_id = i
+			break
+		}
+	}
+	lines, err := utils.GetLastLines(data_location, window_size)
+	if err != nil {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Failed to get last values in: %s", data_location))
+		return
+	}
+
+	// Creating the actual window
+	var window core.TimeseriesWindow
+	window.NumFeatures = window_size
+
+	for i := range lines {
+		line := lines[i]
+		keys := strings.Split(line, ",")
+
+		value, err := strconv.ParseFloat(keys[param_id], 32)
+		if err != nil {
+			log.Fatal(err)
+		}
+		final_value := float32(value)
+
+		window.Window = append(window.Window, float32(final_value))
+	}
+	//
+
+	if core.Predict(model.model_parameters, window) {
+		if !alertStates[model.model_metadata.ID] {
+			utils.WriteAlert(model.model_metadata.DeviceId, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", param))
+			alertStates[model.model_metadata.ID] = true
+		}
+	} else {
+		alertStates[model.model_metadata.ID] = false
+		save_model(model.model_metadata.Location, model.model_parameters)
+	}
+
+}
+
 func fetchModels() {
 
 	modelsPool = nil
@@ -102,13 +171,12 @@ func StartAnomalyDetectionPipeline() {
 
 	fetchModels()
 
-	for _, model := range modelsPool {
-		fmt.Println(model.model_metadata.Location)
-	}
-
 	for {
 		select {
 		case <-ticker.C:
+			for i := range modelsPool {
+				feed_data(modelsPool[i])
+			}
 		case <-refreshModels:
 			utils.WriteToLogs("[PIPELINES]", "Refreshing models pool")
 			fetchModels()
