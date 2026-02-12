@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/pipelines"
 	"backend/sockets"
 	"net/http"
 
@@ -149,7 +150,11 @@ func DeleteDevice(c *gin.Context) {
 
 	initializers.DB.Unscoped().Delete(&models.Alert{}, "device_id = ?", id)
 	initializers.DB.Unscoped().Delete(&models.Widget{}, "device_id = ?", id)
+	initializers.DB.Unscoped().Delete(&models.AnomalyModel{}, "device_id = ?", id)
 	initializers.DB.Unscoped().Delete(&models.Device{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+
+	sockets.NotifyAlertsHandler()
+	pipelines.NotifyAnomalyPipeline()
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "device deleted",

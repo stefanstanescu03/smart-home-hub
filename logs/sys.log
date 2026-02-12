@@ -1,31 +1,168 @@
-2026-01-28T21:20:38+02:00 [PIPELINES] Anomaly detection pipeline started
-2026-01-28T21:20:38+02:00 [ALERTS-HANDLER] Started alerts handler
-2026-01-28T21:20:38+02:00 [STREAMING] Streaming server started on port: 5003
-2026-01-28T21:20:38+02:00 [TELEMETRY] Telemetry server started on port: 5001
-2026-01-28T21:21:24+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/temperature.csv
-2026-01-28T21:21:24+02:00 [PIPELINES] Refreshing models pool
-2026-01-28T21:22:30+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/demo.json
-2026-01-28T21:22:30+02:00 [PIPELINES] Refreshing models pool
-2026-01-28T21:25:00+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/air_quality.json
-2026-01-28T21:25:00+02:00 [PIPELINES] Refreshing models pool
-2026-01-28T21:50:43+02:00 [STREAMING] Streaming server started on port: 5003
-2026-01-28T21:50:43+02:00 [ALERTS-HANDLER] Started alerts handler
-2026-01-28T21:50:43+02:00 [PIPELINES] Anomaly detection pipeline started
-2026-01-28T21:50:43+02:00 [TELEMETRY] Telemetry server started on port: 5001
-2026-01-28T21:50:57+02:00 [STREAMING] Streaming server started on port: 5003
-2026-01-28T21:50:57+02:00 [PIPELINES] Anomaly detection pipeline started
-2026-01-28T21:50:57+02:00 [ALERTS-HANDLER] Started alerts handler
-2026-01-28T21:50:57+02:00 [TELEMETRY] Telemetry server started on port: 5001
-2026-01-28T22:02:54+02:00 [ALERTS-HANDLER] Started alerts handler
-2026-01-28T22:02:54+02:00 [PIPELINES] Anomaly detection pipeline started
-2026-01-28T22:02:54+02:00 [STREAMING] Streaming server started on port: 5003
-2026-01-28T22:02:54+02:00 [TELEMETRY] Telemetry server started on port: 5001
-2026-01-28T22:04:07+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/da.json
-2026-01-28T22:04:07+02:00 [PIPELINES] Refreshing models pool
-2026-01-28T22:05:25+02:00 [ALERTS-HANDLER] Started alerts handler
-2026-01-28T22:05:25+02:00 [STREAMING] Streaming server started on port: 5003
-2026-01-28T22:05:25+02:00 [PIPELINES] Anomaly detection pipeline started
-2026-01-28T22:05:25+02:00 [TELEMETRY] Telemetry server started on port: 5001
-2026-01-28T22:05:34+02:00 [STREAMING] New client connected
-2026-01-28T22:05:34+02:00 [STREAMING] Client subscribed to device: 42
-2026-01-28T22:05:34+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-04T17:44:35+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T17:44:35+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T17:44:35+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T17:44:35+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T17:47:30+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T17:47:30+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T17:47:30+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T17:47:30+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:06:33+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:06:33+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:06:33+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:06:33+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:09:15+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:09:15+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:09:15+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:09:15+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:17:27+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:17:27+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:17:27+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:17:27+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:19:39+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:19:39+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:19:39+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:19:39+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:21:56+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:21:56+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:21:56+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:21:56+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:23:01+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:23:01+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:23:01+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:23:09+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:23:09+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:23:09+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:23:17+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:23:17+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:23:17+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:23:17+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:34:38+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:34:38+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:34:38+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:34:38+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:43:50+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:43:50+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:43:50+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:43:50+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:45:09+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:45:09+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-04T18:45:09+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:45:09+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:46:36+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-04T18:46:36+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-04T18:46:36+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-04T18:46:36+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T15:31:12+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-06T15:31:12+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-06T15:31:12+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-06T15:31:12+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T15:33:22+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-06T15:33:22+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-06T15:33:22+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-06T15:33:22+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T15:34:18+02:00 [STREAMING] New client connected
+2026-02-06T15:34:18+02:00 [STREAMING] Client subscribed to device: 42
+2026-02-06T15:34:18+02:00 [STREAMING] Client subscribed to device: 42
+2026-02-06T15:46:20+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-06T15:46:20+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-06T15:46:20+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-06T15:46:20+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T15:47:03+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/termometer.json
+2026-02-06T15:47:03+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T15:47:26+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T15:48:17+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/test.json
+2026-02-06T15:48:17+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T15:48:50+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:48:55+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:00+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:05+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:10+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:15+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:17+02:00 [STREAMING] New client connected
+2026-02-06T15:49:17+02:00 [STREAMING] Client subscribed to device: 42
+2026-02-06T15:49:17+02:00 [STREAMING] Client subscribed to device: 42
+2026-02-06T15:49:20+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:21+02:00 [STREAMING] New client connected
+2026-02-06T15:49:24+02:00 [STREAMING] New client connected
+2026-02-06T15:49:24+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T15:49:24+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T15:49:24+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T15:49:24+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T15:49:25+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:30+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:30+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-02-06T15:49:30+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-02-06T15:49:30+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-02-06T15:49:30+02:00 [STREAMING] Client disconnected
+2026-02-06T15:49:30+02:00 [STREAMING] Client disconnected
+2026-02-06T15:49:30+02:00 [STREAMING] Client disconnected
+2026-02-06T15:49:35+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:40+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:45+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:50+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:49:55+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:00+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:05+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:10+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:15+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:20+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:25+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:30+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:35+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:40+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T15:50:45+02:00 [PIPELINES] Somehow the device was not found: 41
+2026-02-06T16:03:10+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-06T16:03:10+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-06T16:03:10+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-06T16:03:10+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T16:04:43+02:00 [TELEMETRY] New device connected: test01
+2026-02-06T16:05:11+02:00 [STREAMING] New client connected
+2026-02-06T16:05:11+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:05:11+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:05:11+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:05:11+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:05:20+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-02-06T16:05:20+02:00 [STREAMING] Client disconnected
+2026-02-06T16:05:20+02:00 [STREAMING] New client connected
+2026-02-06T16:05:20+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:05:20+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:05:20+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:05:20+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:05:20+02:00 [STREAMING] Client subscribed to device: 43
+2026-02-06T16:06:30+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/test1.json
+2026-02-06T16:06:30+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T16:06:30+02:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-02-06T16:06:30+02:00 [STREAMING] Client disconnected
+2026-02-06T16:06:52+02:00 [STREAMING] New client connected
+2026-02-06T16:06:52+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:06:52+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:06:52+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:06:52+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-06T16:06:52+02:00 [STREAMING] Client subscribed to device: 43
+2026-02-06T16:13:07+02:00 [TELEMETRY] Device disconnected: test01
+2026-02-06T16:13:24+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T16:15:00+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-06T16:15:00+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-06T16:15:00+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-06T16:15:00+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-06T16:15:35+02:00 [TELEMETRY] New device connected: test01
+2026-02-06T16:15:57+02:00 [PIPELINES] New model created at: /home/stefan/Documents/Projects/licenta/backend/ml-models/test2.json
+2026-02-06T16:15:57+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T16:19:55+02:00 [TELEMETRY] Device disconnected: test01
+2026-02-06T16:19:58+02:00 [PIPELINES] Refreshing models pool
+2026-02-06T16:21:47+02:00 [STREAMING] New client connected
+2026-02-06T16:21:47+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-06T16:21:47+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T11:13:22+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T11:13:22+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T11:13:22+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T11:13:22+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T11:14:01+02:00 [STREAMING] New client connected
+2026-02-12T11:14:01+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T11:14:01+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T11:14:35+02:00 [STREAMING] New client connected
+2026-02-12T11:14:35+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-12T11:14:35+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T11:14:35+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T11:14:35+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-12T11:14:35+02:00 [STREAMING] Client subscribed to device: 43

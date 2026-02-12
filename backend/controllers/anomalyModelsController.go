@@ -90,6 +90,7 @@ func UpdateAnomalyModel(c *gin.Context) {
 	model.NotifyEmail = body.NotifyEmail
 
 	initializers.DB.Save(&model)
+	pipelines.NotifyAnomalyPipeline()
 
 	c.JSON(http.StatusOK, gin.H{
 		"model": model,
@@ -136,6 +137,8 @@ func DeleteAnomalyModel(c *gin.Context) {
 	id := c.Param("id")
 
 	initializers.DB.Unscoped().Delete(&models.AnomalyModel{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+
+	pipelines.NotifyAnomalyPipeline()
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "model deleted",
