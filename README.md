@@ -29,5 +29,5 @@ like alerts: fetch current models, feed them with new data. If we create a new o
 
 # Tasks
 
-1. Make the forms look a bit better
+1. Make the forms look a bit better [done]
 2. Add validations for forms

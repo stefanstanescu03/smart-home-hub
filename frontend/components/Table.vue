@@ -37,20 +37,17 @@ export default {
 <template>
   <div class="stream-card">
     <div class="card-header">
-      <div class="title">
-        <h3>{{ deviceName }}</h3>
-      </div>
-
+      <span class="header-title">{{ deviceName }}</span>
       <button
         @click="$emit('delete')"
-        class="icon-button"
-        title="Delete stream"
+        class="minimal-delete"
+        title="Remove Stream"
       >
-        ✕
+        &times;
       </button>
     </div>
 
-    <div class="table-container">
+    <div class="table-scroll-area">
       <table v-if="valuesArray.length">
         <thead>
           <tr>
@@ -61,7 +58,10 @@ export default {
         </thead>
 
         <tbody>
-          <tr v-for="(row, index) in valuesArray" :key="index">
+          <tr
+            v-for="(row, index) in valuesArray.slice().reverse()"
+            :key="index"
+          >
             <td v-for="(cell, key) in row" :key="key">
               {{ cell }}
             </td>
@@ -69,105 +69,101 @@ export default {
         </tbody>
       </table>
 
-      <div v-else class="empty">Waiting for data…</div>
+      <div v-else class="waiting-state">Waiting for stream data...</div>
     </div>
   </div>
 </template>
 
 <style scoped>
 .stream-card {
-  background: #1b1b1b;
-  border: 1px solid #2a2a2a;
-  border-radius: 0.9rem;
-  overflow: hidden;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
   width: 100%;
-  max-width: 100%;
+  display: flex;
+  flex-direction: column;
 }
 
 .card-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-
-  padding: 0.75rem 1rem;
-  border-bottom: 1px solid #2a2a2a;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
 }
 
-.title h3 {
-  margin: 0;
-  font-size: large;
+.header-title {
+  font-size: 1rem;
   font-weight: 600;
-  color: #fff;
+  color: #eeeeee;
 }
 
-.subtitle {
-  font-size: 0.7rem;
-  color: #888;
-}
-
-/* Delete button */
-.icon-button {
-  background: transparent;
-  border: 1px solid #333;
-  color: #aaa;
-  border-radius: 0.4rem;
+.minimal-delete {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.4rem;
   cursor: pointer;
-  padding: 0.25rem 0.45rem;
-  font-size: 0.8rem;
-
-  transition:
-    color 150ms ease,
-    border-color 150ms ease,
-    background 150ms ease;
+  line-height: 1;
 }
 
-.icon-button:hover {
-  color: #e55353;
-  border-color: #e55353;
-  background: rgba(229, 83, 83, 0.12);
+.minimal-delete:hover {
+  color: #ff4444;
 }
 
-.table-container {
-  max-height: 260px;
+.table-scroll-area {
+  max-height: 300px;
   overflow-y: auto;
+  background-color: #1a1a1a;
 }
 
 table {
   width: 100%;
   border-collapse: collapse;
-  font-size: normal;
+  text-align: left;
 }
 
 thead {
   position: sticky;
   top: 0;
-  z-index: 2;
+  z-index: 10;
+  background-color: #252525;
 }
 
 th {
-  background: #202020;
-  color: #eeeeee;
-  font-weight: bold;
+  padding: 0.75rem 1rem;
+  font-size: 0.75rem;
+  font-weight: 700;
   text-transform: uppercase;
-  font-size: normal;
-  padding: 0.55rem 0.6rem;
-  border-bottom: 1px solid #2a2a2a;
+  color: #888;
+  border-bottom: 1px solid #333;
 }
 
 td {
-  padding: 0.45rem 0.6rem;
-  border-bottom: 1px solid #262626;
+  padding: 0.7rem 1rem;
+  font-size: 0.95rem;
   color: #eeeeee;
+  border-bottom: 1px solid #252525;
+  font-family: monospace;
 }
 
 tbody tr:hover {
-  background: #202020;
+  background-color: #222222;
 }
 
-.empty {
-  padding: 1rem;
+.waiting-state {
+  padding: 3rem 1rem;
   text-align: center;
-  font-size: normal;
-  color: #777;
+  color: #555;
+  font-size: 0.9rem;
+}
+
+.table-scroll-area::-webkit-scrollbar {
+  width: 6px;
+}
+.table-scroll-area::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+.table-scroll-area::-webkit-scrollbar-thumb {
+  background: #333;
 }
 </style>

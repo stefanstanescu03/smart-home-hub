@@ -296,107 +296,81 @@ export default {
       </div>
 
       <dialog id="create-dialog">
-        <div class="dialog-container">
-          <div class="top-dialog">
-            <p>Create Alert</p>
-            <button @click="handleCancelCreateDialog" class="cancel-button">
-              <img src="../public/close.png" height="20" width="20" alt="" />
-            </button>
-          </div>
+        <div class="dialog-header">
+          <span>CREATE ALERT</span>
+          <button @click="handleCancelCreateDialog" class="close-x">
+            &times;
+          </button>
+        </div>
+
+        <div class="dialog-form">
           <div class="field">
-            <label for="subject">Subject: </label>
-            <input
-              type="text"
-              id="subject"
-              name="subject"
-              v-model="this.new_alert.subject"
-            />
-          </div>
-          <div class="field">
-            <label for="content">Content: </label>
-            <input
-              type="text"
-              id="content"
-              name="content"
-              v-model="this.new_alert.content"
-            />
+            <label for="subject">Subject</label>
+            <input type="text" id="subject" v-model="new_alert.subject" />
           </div>
 
           <div class="field">
-            <label for="key">Key name: </label>
-            <input
-              type="text"
-              id="key"
-              name="key"
-              v-model="this.new_alert.key"
-            />
+            <label for="content">Notification Content</label>
+            <input type="text" id="content" v-model="new_alert.content" />
           </div>
 
           <div class="field">
-            <label for="condition">Condition: </label>
-            <select
-              name="condition"
-              id="condition"
-              v-model="this.new_alert.condition"
-            >
-              <option value="above">above</option>
-              <option value="below">below</option>
-              <option value="equal">equal</option>
-            </select>
+            <label for="key">Metric / Key Name</label>
+            <input type="text" id="key" v-model="new_alert.key" />
           </div>
 
-          <div class="field">
-            <label for="value">Value: </label>
-            <input
-              type="number"
-              id="value"
-              name="value"
-              v-model="this.new_alert.value"
-            />
+          <div class="form-row">
+            <div class="field">
+              <label for="condition">Condition</label>
+              <select id="condition" v-model="new_alert.condition">
+                <option value="above">Above</option>
+                <option value="below">Below</option>
+                <option value="equal">Equal</option>
+              </select>
+            </div>
+
+            <div class="field">
+              <label for="value">Threshold Value</label>
+              <input type="number" id="value" v-model="new_alert.value" />
+            </div>
           </div>
 
-          <div class="field"></div>
-          <button @click="handleCreateAlert" class="create-button">
-            Create
+          <button @click="handleCreateAlert" class="add-btn">
+            CREATE ALERT
           </button>
         </div>
       </dialog>
 
       <dialog id="create-dialog-ad">
-        <div class="dialog-container">
-          <div class="top-dialog">
-            <p>Create Anomaly Detection Model</p>
-            <button @click="handleCancelCreateDialogAD" class="cancel-button">
-              <img src="../public/close.png" height="20" width="20" alt="" />
-            </button>
+        <div class="dialog-header">
+          <span>CREATE ANOMALY MODEL</span>
+          <button @click="handleCancelCreateDialogAD" class="close-x">
+            &times;
+          </button>
+        </div>
+
+        <div class="dialog-form">
+          <div class="field">
+            <label for="key">Key name</label>
+            <input type="text" id="key" v-model="new_model.param" />
           </div>
 
           <div class="field">
-            <label for="key">Key name: </label>
-            <input
-              type="text"
-              id="key"
-              name="key"
-              v-model="this.new_model.param"
-            />
+            <label for="location">Location</label>
+            <input type="text" id="location" v-model="new_model.location" />
           </div>
-          <div class="field">
-            <label for="location">Location: </label>
-            <input
-              type="text"
-              id="location"
-              name="location"
-              v-model="this.new_model.location"
-            />
+
+          <div class="info-box">
+            <span class="info-icon">!</span>
+            <p>
+              Model requires baseline data. Ensure the sensor has collected data
+              for
+              <strong>at least 24 hours</strong> before initialization.
+            </p>
           </div>
-          <p>
-            ! Anomaly detection model needs data to learn the normal behaviour.
-            Make sure you let your sensor collect data for at least a day before
-            creating the model.
-          </p>
-          <div class="field"></div>
-          <button @click="handleCreateModel" class="create-button">
-            Create
+
+          <button @click="handleCreateModel" class="add-btn">
+            CREATE MODEL
           </button>
         </div>
       </dialog>
@@ -568,36 +542,87 @@ dialog {
   inset: 0;
   margin: auto;
   width: 90vw;
-  max-width: 480px;
-  border: none;
-  border-radius: 0.5rem;
+  max-width: 380px;
   background-color: #1a1a1a;
-  color: #eeeeee;
+  color: #e0e0e0;
+  border: 1px solid #444444;
+  padding: 0;
+  border-radius: 1rem;
 }
 
-.dialog-container {
+.dialog-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444444;
+}
+
+.dialog-header span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #b0b0b0;
+}
+
+.close-x {
+  background: none;
+  border: none;
+  color: #b0b0b0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.dialog-form {
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
-}
-
-.top-dialog {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #b0b0b0;
+}
+
+input,
+select {
+  background: #161616;
+  border: 1px solid #444444;
+  padding: 0.6rem;
+  color: #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.9rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #e0e0e0;
+}
+
+.add-btn {
+  margin-top: 0.5rem;
+  background-color: #8ac6c9;
+  color: #1a1a1a;
+  border: none;
+  padding: 0.75rem;
+  font-weight: 700;
   font-size: 0.8rem;
-  color: #aaaaaa;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.add-btn:hover {
+  opacity: 0.9;
 }
 
 .buttons-container {

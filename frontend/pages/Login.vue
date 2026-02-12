@@ -44,9 +44,9 @@ export default {
       <div class="title-container">
         <button class="hamburger" @click="menuOpen = !menuOpen">☰</button>
         <div v-if="menuOpen" class="overlay" @click="menuOpen = false"></div>
-        <h1>Enter in your account</h1>
       </div>
       <div class="login-form">
+        <span>Enter in your account</span>
         <div class="field">
           <label for="username">Username</label>
           <input type="text" id="username" name="username" v-model="username" />
@@ -118,7 +118,7 @@ h1 {
   width: 100%;
   max-width: 380px;
   background-color: #1a1a1a;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
 
   display: flex;
   flex-direction: column;
@@ -137,38 +137,49 @@ h1 {
 }
 
 label {
-  font-size: large;
-  color: #eeeeee;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #b0b0b0;
 }
 
-input {
-  background-color: #252525;
-  border: 1px solid #333;
-  border-radius: 0.45rem;
-  padding: 0.5rem;
-  font-size: 0.95rem;
-  color: #eeeeee;
+input,
+select {
+  background: #161616;
+  border: 1px solid #444444;
+  padding: 0.6rem;
+  color: #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.9rem;
 }
 
-input:focus {
+input:focus,
+select:focus {
   outline: none;
+  border-color: #e0e0e0;
 }
 
 .login-button {
-  color: #eeeeee;
+  margin-top: 0.5rem;
+  background-color: #8ac6c9;
+  color: #1a1a1a;
   border: none;
-  text-decoration: none;
+  padding: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  background-color: #a8dadc;
-  color: #121212;
-  transition-duration: 300ms;
-  padding: 0.5rem;
-  font-size: large;
-  border-radius: 0.3rem;
+  transition: opacity 0.2s;
 }
 
 .login-button:hover {
-  background-color: #8ac6c9;
+  opacity: 0.9;
+}
+
+span {
+  font-size: 1rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #e0e0e0;
 }
 
 @media (max-width: 900px) {

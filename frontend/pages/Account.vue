@@ -145,7 +145,7 @@ h1 {
   width: 100%;
   max-width: 380px;
   background-color: #1a1a1a;
-  border-radius: 0.6rem;
+  border-radius: 1rem;
 
   display: flex;
   flex-direction: column;
@@ -158,8 +158,10 @@ h1 {
 }
 
 label {
-  font-size: large;
-  color: #eeeeee;
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #b0b0b0;
 }
 
 .page-container {
@@ -171,33 +173,33 @@ label {
 }
 
 input {
-  background-color: #252525;
-  border: 1px solid #333;
-  border-radius: 0.45rem;
-  padding: 0.5rem;
-  font-size: 0.95rem;
-  color: #eeeeee;
+  background: #161616;
+  border: 1px solid #444444;
+  padding: 0.6rem;
+  color: #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.9rem;
 }
 
 input:focus {
   outline: none;
+  border-color: #e0e0e0;
 }
 
 .update-button {
-  color: #eeeeee;
+  margin-top: 0.5rem;
+  background-color: #8ac6c9;
+  color: #1a1a1a;
   border: none;
-  text-decoration: none;
+  padding: 0.75rem;
+  font-weight: 700;
+  font-size: 1rem;
   cursor: pointer;
-  background-color: #a8dadc;
-  color: #121212;
-  transition-duration: 300ms;
-  padding: 0.5rem;
-  font-size: large;
-  border-radius: 0.3rem;
+  transition: opacity 0.2s;
 }
 
 .update-button:hover {
-  background-color: #8ac6c9;
+  opacity: 0.9;
 }
 
 @media (max-width: 900px) {

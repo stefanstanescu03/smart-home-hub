@@ -9,16 +9,19 @@ export default {
   watch: {
     streamData: {
       immediate: true,
-      deep: true,
       handler(message) {
-        if (!message) return;
+        if (!message || typeof message !== "string") return;
+
+        const newValues = { ...this.values };
         const parts = message.split(",");
+
         parts.forEach((p) => {
           const [k, v] = p.split(":");
-          if (k !== "timestamp" && k !== "id") {
-            this.values[k] = v;
+          if (k && v && k !== "timestamp" && k !== "id") {
+            newValues[k] = v;
           }
         });
+        this.values = newValues;
       },
     },
   },
@@ -28,27 +31,20 @@ export default {
 <template>
   <div class="device-card">
     <div class="card-header">
-      <div class="title">
-        <h3>{{ deviceName }}</h3>
-      </div>
-
-      <button
-        @click="$emit('delete')"
-        class="icon-button"
-        title="Delete device"
-      >
-        ✕
+      <span class="header-title">{{ deviceName }}</span>
+      <button @click="$emit('delete')" class="minimal-delete" title="Remove">
+        &times;
       </button>
     </div>
 
     <div class="card-body">
-      <div v-for="(val, key) in values" :key="key" class="value-row">
-        <span class="key">{{ key }}</span>
-        <span class="value">{{ val }}</span>
+      <div v-if="Object.keys(values).length === 0" class="waiting-state">
+        Waiting for data...
       </div>
 
-      <div v-if="Object.keys(values).length === 0" class="empty">
-        Waiting for data…
+      <div v-for="(val, key) in values" :key="key" class="data-row">
+        <span class="data-key">{{ key }}</span>
+        <span class="data-value">{{ val }}</span>
       </div>
     </div>
   </div>
@@ -56,83 +52,72 @@ export default {
 
 <style scoped>
 .device-card {
-  background: #1b1b1b;
-  border: 1px solid #2a2a2a;
-  border-radius: 1rem;
-  overflow: hidden;
+  background-color: #1a1a1a;
+  border: 1px solid #333;
   width: 100%;
-  max-width: 420px;
+  max-width: 400px;
 }
 
 .card-header {
   display: flex;
-  align-items: center;
   justify-content: space-between;
-  gap: 1rem;
-  padding: 0.9rem 1rem;
-  border-bottom: 1px solid #2a2a2a;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid #333;
 }
 
-.title h3 {
-  margin: 0;
-  font-size: large;
-  font-weight: bold;
+.header-title {
+  font-size: 1rem;
+  font-weight: 600;
   color: #eeeeee;
 }
 
-.icon-button {
-  background: transparent;
-  border: 1px solid #333;
-  color: #aaa;
-  border-radius: 0.4rem;
+.minimal-delete {
+  background: none;
+  border: none;
+  color: #666;
+  font-size: 1.4rem;
   cursor: pointer;
-  padding: 0.25rem 0.45rem;
-  font-size: 0.8rem;
-
-  transition:
-    color 150ms ease,
-    border-color 150ms ease,
-    background 150ms ease;
+  line-height: 1;
 }
 
-.icon-button:hover {
-  color: #e55353;
-  border-color: #e55353;
-  background: rgba(229, 83, 83, 0.1);
+.minimal-delete:hover {
+  color: #ff4444;
 }
 
 .card-body {
-  padding: 0.9rem 1rem;
-  display: flex;
-  flex-direction: column;
-  gap: 0.45rem;
+  padding: 0.5rem 0;
 }
-.value-row {
+
+.data-row {
   display: flex;
   justify-content: space-between;
-  align-items: center;
   gap: 1rem;
-  padding: 0.35rem 0.45rem;
-  border-radius: 0.4rem;
-  background: #202020;
+  padding: 0.8rem 1rem;
+  border-bottom: 1px solid #252525;
 }
 
-.key {
-  font-size: normal;
-  text-transform: uppercase;
-  color: #9aa0a6;
+.data-row:last-child {
+  border-bottom: none;
 }
 
-.value {
-  font-size: normal;
-  font-weight: 500;
+.data-key {
+  font-size: 0.9rem;
+  color: #888;
+  text-transform: capitalize;
+}
+
+.data-value {
+  font-size: 1rem;
   color: #eeeeee;
+  font-weight: 500;
+  font-family: monospace;
 }
 
-.empty {
-  font-size: normal;
-  color: #777;
+.waiting-state {
+  padding: 2rem;
   text-align: center;
-  padding: 0.75rem 0;
+  color: #555;
+  font-size: 0.9rem;
 }
 </style>

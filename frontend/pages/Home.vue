@@ -162,95 +162,71 @@ export default {
       </table>
 
       <dialog id="edit-dialog">
-        <div class="dialog-container">
-          <div class="top-dialog">
-            <p>Edit {{ this.selected_device.Name }}</p>
-            <button @click="handleCancelEdit" class="cancel-button">
-              <img src="../public/close.png" height="20" width="20" alt="" />
-            </button>
-          </div>
+        <div class="dialog-header">
+          <span>EDIT DEVICE: {{ selected_device.name }}</span>
+          <button @click="handleCancelEdit" class="close-x">&times;</button>
+        </div>
+
+        <div class="dialog-form">
           <div class="field">
-            <label for="name">Name: </label>
+            <label for="edit_name">Name</label>
+            <input type="text" id="edit_name" v-model="selected_device.name" />
+          </div>
+
+          <div class="field">
+            <label for="edit_csv_location">Data directory</label>
             <input
               type="text"
-              id="name"
-              name="name"
-              v-model="this.selected_device.name"
+              id="edit_csv_location"
+              v-model="selected_device.csv_location"
             />
           </div>
+
           <div class="field">
-            <label for="device_csv_location">Data directory: </label>
-            <input
-              type="text"
-              id="device_csv_location"
-              name="device_csv_location"
-              v-model="this.selected_device.csv_location"
-            />
-          </div>
-          <div class="field">
-            <label for="device_visibility">Visibility: </label>
-            <select
-              name="device_visibility"
-              id="device_visibility"
-              v-model="this.selected_device.visibility"
-            >
+            <label for="edit_visibility">Visibility</label>
+            <select id="edit_visibility" v-model="selected_device.visibility">
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
           </div>
-          <button @click="handleUpdateDevice" class="create-button">
-            Modify
+
+          <button @click="handleUpdateDevice" class="add-btn">
+            SAVE CHANGES
           </button>
         </div>
       </dialog>
 
       <dialog id="create-dialog">
-        <div class="dialog-container">
-          <div class="top-dialog">
-            <p>New device</p>
-            <button @click="handleCancelCreate" class="cancel-button">
-              <img src="../public/close.png" height="20" width="20" alt="" />
-            </button>
-          </div>
+        <div class="dialog-header">
+          <span>NEW DEVICE</span>
+          <button @click="handleCancelCreate" class="close-x">&times;</button>
+        </div>
+
+        <div class="dialog-form">
           <div class="field">
-            <label for="name">Name: </label>
-            <input
-              type="text"
-              id="name"
-              name="name"
-              v-model="this.new_device.name"
-            />
+            <label>Name</label>
+            <input type="text" v-model="new_device.name" />
           </div>
+
           <div class="field">
-            <label for="device_csv_location">Data location: </label>
-            <input
-              type="text"
-              id="device_csv_location"
-              name="device_csv_location"
-              v-model="this.new_device.csv_location"
-            />
+            <label>Data location</label>
+            <input type="text" v-model="new_device.csv_location" />
           </div>
+
           <div class="field">
-            <label for="device_ident">Identificator: </label>
-            <input
-              type="text"
-              id="device_ident"
-              name="device_ident"
-              v-model="this.new_device.ident"
-            />
+            <label>Identificator</label>
+            <input type="text" v-model="new_device.ident" />
           </div>
+
           <div class="field">
-            <label for="device_visibility">Visibility: </label>
-            <select
-              name="device_visibility"
-              id="device_visibility"
-              v-model="this.new_device.visibility"
-            >
+            <label>Visibility</label>
+            <select v-model="new_device.visibility">
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
           </div>
-          <button @click="handleAddDevice" class="create-button">Add</button>
+
+          <button @click="handleAddDevice" class="add-btn">ADD DEVICE</button>
         </div>
       </dialog>
     </div>
@@ -365,7 +341,7 @@ export default {
   }
 }
 
-input,
+/* input,
 select {
   color: #eeeeee;
   background-color: #252525;
@@ -374,7 +350,7 @@ select {
   padding: 0.5rem;
   font-size: 0.95rem;
   border-radius: 0.35rem;
-}
+} */
 
 select {
   cursor: pointer;
@@ -385,35 +361,86 @@ dialog {
   inset: 0;
   margin: auto;
   width: 90vw;
-  max-width: 480px;
-  border: none;
-  border-radius: 0.5rem;
+  max-width: 380px;
   background-color: #1a1a1a;
-  color: #eeeeee;
+  color: #e0e0e0;
+  border: 1px solid #444444;
+  padding: 0;
+  border-radius: 1rem;
 }
 
-.dialog-container {
+.dialog-header {
+  padding: 1rem 1.25rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #444444;
+}
+
+.dialog-header span {
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 1px;
+  color: #b0b0b0;
+}
+
+.close-x {
+  background: none;
+  border: none;
+  color: #b0b0b0;
+  font-size: 1.5rem;
+  cursor: pointer;
+}
+
+.dialog-form {
+  padding: 1.25rem;
   display: flex;
   flex-direction: column;
   gap: 1rem;
-  padding: 1rem;
-}
-
-.top-dialog {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  font-weight: 600;
 }
 
 .field {
   display: flex;
   flex-direction: column;
-  gap: 0.3rem;
+  gap: 0.4rem;
 }
 
 label {
+  font-size: 0.7rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  color: #b0b0b0;
+}
+
+input,
+select {
+  background: #161616;
+  border: 1px solid #444444;
+  padding: 0.6rem;
+  color: #e0e0e0;
+  border-radius: 2px;
+  font-size: 0.9rem;
+}
+
+input:focus,
+select:focus {
+  outline: none;
+  border-color: #e0e0e0;
+}
+
+.add-btn {
+  margin-top: 0.5rem;
+  background-color: #8ac6c9;
+  color: #1a1a1a;
+  border: none;
+  padding: 0.75rem;
+  font-weight: 700;
   font-size: 0.8rem;
-  color: #aaaaaa;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.add-btn:hover {
+  opacity: 0.9;
 }
 </style>
