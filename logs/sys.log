@@ -327,3 +327,30 @@
 2026-02-12T12:50:39+02:00 [STREAMING] Client subscribed to device: 39
 2026-02-12T12:50:39+02:00 [STREAMING] Client subscribed to device: 39
 2026-02-12T12:50:39+02:00 [STREAMING] Client subscribed to device: 38
+2026-02-12T20:01:12+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T20:01:12+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T20:01:12+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T20:01:12+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T20:12:19+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T20:12:19+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T20:12:19+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T20:12:19+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T20:37:59+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T20:37:59+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T20:37:59+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T20:37:59+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T20:40:07+02:00 [STREAMING] New client connected
+2026-02-12T20:40:07+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T20:40:07+02:00 [STREAMING] Client subscribed to device: 39
+2026-02-12T20:58:08+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T20:58:08+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T20:58:08+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T20:58:08+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T21:00:32+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T21:00:32+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T21:00:32+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T21:00:32+02:00 [TELEMETRY] Telemetry server started on port: 5001
+2026-02-12T21:03:27+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-02-12T21:03:27+02:00 [STREAMING] Streaming server started on port: 5003
+2026-02-12T21:03:27+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-02-12T21:03:27+02:00 [TELEMETRY] Telemetry server started on port: 5001

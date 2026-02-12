@@ -11,26 +11,32 @@ export default {
       repeated_password: "",
       email: "",
       menuOpen: false,
+      errorMessage: "",
+      failed: false,
     };
   },
   methods: {
     async handleSignup() {
-      if (
-        this.password != "" &&
-        this.username != "" &&
-        this.email != "" &&
-        this.repeated_password == this.password
-      ) {
-        try {
-          await axios.post("/api/user/signup", {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-          });
-          this.$router.push("/login");
-        } catch (err) {
-          console.log(err);
+      if (this.password != "" && this.username != "" && this.email != "") {
+        if (this.password != this.repeated_password) {
+          this.errorMessage = "Passwords must match";
+          this.failed = true;
+        } else {
+          try {
+            await axios.post("/api/user/signup", {
+              username: this.username,
+              email: this.email,
+              password: this.password,
+            });
+            this.$router.push("/login");
+          } catch (err) {
+            this.errorMessage = err.response.data.error;
+            this.failed = true;
+          }
         }
+      } else {
+        this.errorMessage = "All fields must be completed";
+        this.failed = true;
       }
     },
     handleAddCookie(response) {
@@ -75,6 +81,13 @@ export default {
           />
         </div>
 
+        <p style="line-height: 1.6; color: #b0b0b0; font-size: 0.85rem">
+          • Minimum 8 characters<br />
+          • Uppercase & lowercase letters<br />
+          • At least one number<br />
+          • At least one special character<br />
+        </p>
+
         <div class="field">
           <label for="password">Repeat password</label>
           <input
@@ -85,6 +98,9 @@ export default {
           />
         </div>
         <button class="signup-button" @click="handleSignup">Signup</button>
+        <p class="incorrect" v-if="this.failed == true">
+          {{ this.errorMessage }}
+        </p>
       </div>
     </div>
   </div>
@@ -193,6 +209,10 @@ span {
   font-weight: 700;
   letter-spacing: 1px;
   color: #e0e0e0;
+}
+
+.incorrect {
+  color: #e43333;
 }
 
 @media (max-width: 900px) {

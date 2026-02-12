@@ -4,8 +4,10 @@ import (
 	"backend/initializers"
 	"backend/models"
 	"net/http"
+	"net/mail"
 	"os"
 	"time"
+	"unicode"
 
 	"github.com/gin-gonic/gin"
 	"github.com/golang-jwt/jwt/v5"
@@ -23,6 +25,72 @@ func Signup(c *gin.Context) {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
 		})
+		return
+	}
+
+	if body.Username == "" || body.Password == "" || body.Email == "" {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "All fields should be completed",
+		})
+		return
+	}
+
+	var existent_user models.User
+	initializers.DB.First(&existent_user, "username = ?", body.Username)
+	if existent_user.ID != 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Username already exists",
+		})
+		return
+	}
+
+	_, err := mail.ParseAddress(body.Email)
+	if err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Email is in an incorrect format",
+		})
+		return
+	}
+
+	if len(body.Password) < 8 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Password must contain at least 8 characters",
+		})
+		return
+	}
+
+	var hasUpper, hasLower, hasNumber, hasSpecial bool
+
+	for _, char := range body.Password {
+		switch {
+		case unicode.IsUpper(char):
+			hasUpper = true
+		case unicode.IsLower(char):
+			hasLower = true
+		case unicode.IsDigit(char):
+			hasNumber = true
+		case unicode.IsPunct(char) || unicode.IsSymbol(char):
+			hasSpecial = true
+		}
+	}
+
+	if !hasUpper {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must contain at least one uppercase letter"})
+		return
+	}
+
+	if !hasLower {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must contain at least one lowercase letter"})
+		return
+	}
+
+	if !hasNumber {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must contain at least one number"})
+		return
+	}
+
+	if !hasSpecial {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "Password must contain at least one special character"})
 		return
 	}
 
@@ -126,13 +194,22 @@ func ModifyUser(c *gin.Context) {
 		return
 	}
 
-	// hash, err := bcrypt.GenerateFromPassword([]byte(body.Password), 10)
-	// if err != nil {
-	// 	c.JSON(http.StatusBadRequest, gin.H{
-	// 		"error": "Failed to generate password hash",
-	// 	})
-	// 	return
-	// }
+	var existent_user models.User
+	initializers.DB.First(&existent_user, "username = ?", body.Username)
+	if existent_user.ID != 0 && existent_user.ID != currUser.(models.User).ID {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Username already exists",
+		})
+		return
+	}
+
+	_, err1 := mail.ParseAddress(body.Email)
+	if err1 != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Email is in an incorrect format",
+		})
+		return
+	}
 
 	var user models.User
 

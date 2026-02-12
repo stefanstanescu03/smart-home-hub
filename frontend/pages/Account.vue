@@ -9,6 +9,7 @@ export default {
       username: "",
       password: "",
       email: "",
+      errorMessage: "",
       failed: false,
       changed: false,
       menuOpen: false,
@@ -35,21 +36,28 @@ export default {
       }
     },
     async handleUpdate() {
-      try {
-        await axios.put(
-          "api/user/update",
-          {
-            username: this.username,
-            email: this.email,
-            password: this.password,
-          },
-          { headers: { Authorization: `Bearer ${this.getToken()}` } },
-        );
-        this.changed = true;
-        this.failed = false;
-      } catch (err) {
+      if (this.username != "" && this.email != "" && this.password != "") {
+        try {
+          await axios.put(
+            "api/user/update",
+            {
+              username: this.username,
+              email: this.email,
+              password: this.password,
+            },
+            { headers: { Authorization: `Bearer ${this.getToken()}` } },
+          );
+          this.changed = true;
+          this.failed = false;
+        } catch (err) {
+          this.changed = false;
+          this.failed = true;
+          this.errorMessage = err.response.data.error;
+        }
+      } else {
         this.changed = false;
         this.failed = true;
+        this.errorMessage = "All fields must be completed";
       }
     },
   },
@@ -89,7 +97,9 @@ export default {
           />
         </div>
         <button class="update-button" @click="handleUpdate">Update</button>
-        <p class="incorrect" v-if="failed == true">Incorrect password</p>
+        <p class="incorrect" v-if="this.failed == true">
+          {{ this.errorMessage }}
+        </p>
         <p v-if="changed == true">Account updated</p>
       </div>
     </div>

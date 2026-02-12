@@ -24,9 +24,6 @@ SMTP=smtp.gmail.com
 SMTP_PORT=587
 ```
 
-Anomaly Detection Pipeline: table in DB with model data (user, device, param, model_location, notify_email). After that everything works
-like alerts: fetch current models, feed them with new data. If we create a new one we train it
-
 # Tasks
 
 1. Make the forms look a bit better [done]

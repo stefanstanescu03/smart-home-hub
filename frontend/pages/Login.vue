@@ -8,6 +8,7 @@ export default {
       username: "",
       password: "",
       failed: false,
+      errorMessage: "",
       menuOpen: false,
     };
   },
@@ -22,8 +23,12 @@ export default {
           this.handleAddCookie(response);
           this.$router.push("/");
         } catch (err) {
+          this.errorMessage = err.response.data.error;
           this.failed = true;
         }
+      } else {
+        this.errorMessage = "All fields must be completed";
+        this.failed = true;
       }
     },
     handleAddCookie(response) {
@@ -62,7 +67,7 @@ export default {
         </div>
         <button class="login-button" @click="handleLogin">Login</button>
         <p class="incorrect" v-if="this.failed == true">
-          Incorrect credentials
+          {{ this.errorMessage }}
         </p>
       </div>
     </div>
