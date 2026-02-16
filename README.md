@@ -26,5 +26,5 @@ SMTP_PORT=587
 
 # Tasks
 
-1. Make the forms look a bit better [done]
-2. Add validations for forms
+1. Create users page for admins [done]
+2. Make it functional

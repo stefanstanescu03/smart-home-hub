@@ -19,5 +19,6 @@ func RegisterDeviceRoutes(r *gin.Engine) {
 		deviceRoutes.GET("/ping/:ident", controllers.IsDeviceConnected)
 		deviceRoutes.GET("/public", controllers.GetPublicDevices)
 		deviceRoutes.GET("/public/:id", controllers.GetPublicDevice)
+		deviceRoutes.GET("/all", middleware.RequireAuth, controllers.GetAllDevices)
 	}
 }

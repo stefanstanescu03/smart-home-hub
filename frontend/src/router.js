@@ -9,6 +9,7 @@ import Dashboards from "../pages/Dashboards.vue";
 import Dashboard from "../pages/Dashboard.vue";
 import PublicDashboard from "../pages/PublicDashboard.vue";
 import Alert from "../pages/Alert.vue";
+import Admin from "../pages/Admin.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -20,6 +21,7 @@ const routes = [
   { path: "/dashboard/:id", component: Dashboard },
   { path: "/dashboard/public/:id", component: PublicDashboard },
   { path: "/alerts/:id", component: Alert },
+  { path: "/admin", component: Admin },
 ];
 
 export default createRouter({

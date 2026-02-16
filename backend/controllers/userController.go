@@ -178,6 +178,41 @@ func ShowUser(c *gin.Context) {
 	})
 }
 
+func GetUsers(c *gin.Context) {
+	currUser, _ := c.Get("user")
+
+	// For admins only
+	if currUser.(models.User).Role != "admin" {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	type returnedAccount struct {
+		ID       uint
+		Username string
+		Email    string
+		Role     string
+	}
+
+	var users []models.User
+	initializers.DB.Find(&users, "id != ?", currUser.(models.User).ID)
+
+	var accounts []returnedAccount
+	for i := range users {
+		account := returnedAccount{
+			ID:       users[i].ID,
+			Username: users[i].Username,
+			Email:    users[i].Email,
+			Role:     users[i].Role,
+		}
+		accounts = append(accounts, account)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"accounts": accounts,
+	})
+}
+
 func ModifyUser(c *gin.Context) {
 	currUser, _ := c.Get("user")
 

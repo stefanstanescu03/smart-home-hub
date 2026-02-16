@@ -1,6 +1,13 @@
 <script>
+import axios from "axios";
+
 export default {
   props: ["menuOpen"],
+  data() {
+    return {
+      admin: false,
+    };
+  },
   methods: {
     getToken() {
       const cookies = document.cookie;
@@ -11,12 +18,34 @@ export default {
       document.cookie =
         "Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       this.$router.push("/login");
-      this.menuOpen = false;
+      // props.menuOpen = false;
     },
     navigate(path) {
       this.$router.push(path);
-      this.menuOpen = false;
+      // props.menuOpen = false;
     },
+    async isAdmin() {
+      if (this.getToken() == -1) {
+        this.admin = false;
+      }
+      try {
+        const response = await axios.get("/api/user/info", {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        const role = response.data.user.Role;
+        if (role !== "admin") {
+          this.admin = false;
+        } else {
+          this.admin = true;
+        }
+      } catch (err) {
+        console.log(err);
+        this.admin = false;
+      }
+    },
+  },
+  async mounted() {
+    await this.isAdmin();
   },
 };
 </script>
@@ -46,6 +75,11 @@ export default {
     <button v-if="getToken() != -1" @click="navigate('/other')">
       <img src="../public/iot-devices.png" width="25" height="25" />
       <span>Other Devices</span>
+    </button>
+
+    <button v-if="admin == true" @click="navigate('/admin')">
+      <img src="../public/security.png" width="25" height="25" />
+      <span>Admin</span>
     </button>
 
     <button v-if="getToken() == -1" @click="navigate('/login')">Login</button>

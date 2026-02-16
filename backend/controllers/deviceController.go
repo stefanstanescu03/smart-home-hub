@@ -123,6 +123,49 @@ func GetDevices(c *gin.Context) {
 	})
 }
 
+func GetAllDevices(c *gin.Context) {
+	currUser, _ := c.Get("user")
+
+	// For admins only
+	if currUser.(models.User).Role != "admin" {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	type returnedDevice struct {
+		ID         uint
+		Name       string
+		Ident      string
+		Visibility bool
+		Owner      string
+	}
+
+	var devices []models.Device
+	initializers.DB.Find(&devices)
+
+	var returnedDevices []returnedDevice
+
+	for i := range devices {
+
+		var user models.User
+		initializers.DB.First(&user, "ID = ?", devices[i].UserId)
+
+		device := returnedDevice{
+			ID:         devices[i].ID,
+			Name:       devices[i].Name,
+			Ident:      devices[i].Ident,
+			Visibility: devices[i].Visibility,
+			Owner:      user.Username,
+		}
+
+		returnedDevices = append(returnedDevices, device)
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"devices": returnedDevices,
+	})
+}
+
 func GetUserDevices(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	var devices []models.Device

@@ -69,7 +69,7 @@ export default {
         </tbody>
       </table>
 
-      <div v-else class="waiting-state">Waiting for stream data...</div>
+      <div v-else class="waiting-state">Waiting for data...</div>
     </div>
   </div>
 </template>
