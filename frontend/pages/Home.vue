@@ -142,23 +142,25 @@ export default {
         No devices added
       </h1>
       <table class="devices-container">
-        <tr v-if="this.devices.length != 0">
-          <th>Name</th>
-          <th class="ident">Ident</th>
-          <th>Visibility</th>
-          <th>Status</th>
-          <th>Action</th>
-        </tr>
-        <DeviceInfo
-          v-for="device in this.devices"
-          :deviceName="device.Name"
-          :ident="device.Ident"
-          :visibility="device.Visibility"
-          :id="device.ID"
-          :should_appear="true"
-          @edit="triggerEdit(device)"
-          @delete="handleDelete(device)"
-        />
+        <tbody>
+          <tr v-if="this.devices.length != 0">
+            <th>Name</th>
+            <th class="ident">Ident</th>
+            <th>Visibility</th>
+            <th>Status</th>
+            <th>Action</th>
+          </tr>
+          <DeviceInfo
+            v-for="device in this.devices"
+            :deviceName="device.Name"
+            :ident="device.Ident"
+            :visibility="device.Visibility"
+            :id="device.ID"
+            :should_appear="true"
+            @edit="triggerEdit(device)"
+            @delete="handleDelete(device)"
+          />
+        </tbody>
       </table>
 
       <dialog id="edit-dialog">

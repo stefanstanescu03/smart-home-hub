@@ -14,7 +14,8 @@ func RegisterUserRoutes(r *gin.Engine) {
 		userRoutes.POST("/login", controllers.Login)
 		userRoutes.GET("/info", middleware.RequireAuth, controllers.ShowUser)
 		userRoutes.PUT("/update", middleware.RequireAuth, controllers.ModifyUser)
-		userRoutes.DELETE("/delete", middleware.RequireAuth, controllers.DeleteUser)
+		userRoutes.DELETE("/delete/:id", middleware.RequireAuth, controllers.DeleteUser)
 		userRoutes.GET("/all", middleware.RequireAuth, controllers.GetUsers)
+		userRoutes.PUT("/toggle-role/:id", middleware.RequireAuth, controllers.ToggleRole)
 	}
 }

@@ -269,10 +269,63 @@ func ModifyUser(c *gin.Context) {
 
 }
 
+func ToggleRole(c *gin.Context) {
+	currUser, _ := c.Get("user")
+
+	// For admins only
+	if currUser.(models.User).Role != "admin" {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	id := c.Param("id")
+
+	var user models.User
+	initializers.DB.First(&user, "id = ?", id)
+
+	if user.Role == "admin" {
+		user.Role = "user"
+	} else {
+		user.Role = "admin"
+	}
+
+	initializers.DB.Save(&user)
+
+	c.JSON(http.StatusOK, gin.H{
+		"user": user,
+	})
+}
+
 func DeleteUser(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
-	initializers.DB.Delete(&models.User{}, currUser.(models.User).ID)
+	// For admins only
+	if currUser.(models.User).Role != "admin" {
+		c.AbortWithStatus(http.StatusForbidden)
+		return
+	}
+
+	id := c.Param("id")
+
+	var devices []models.Device
+	var dashboards []models.Dashboard
+
+	initializers.DB.Find(&devices, "user_id", id)
+	for i := range devices {
+		initializers.DB.Unscoped().Delete(&models.Alert{}, "device_id = ?", devices[i].ID)
+		initializers.DB.Unscoped().Delete(&models.Widget{}, "device_id = ?", devices[i].ID)
+		initializers.DB.Unscoped().Delete(&models.AnomalyModel{}, "device_id = ?", devices[i].ID)
+	}
+
+	initializers.DB.Find(&dashboards, "user_id", id)
+	for i := range dashboards {
+		initializers.DB.Unscoped().Delete(&models.Widget{}, "dashboard_id = ?", dashboards[i].ID)
+	}
+
+	initializers.DB.Unscoped().Delete(&models.Dashboard{}, "user_id = ?", id)
+	initializers.DB.Unscoped().Delete(&models.Device{}, "user_id = ?", id)
+
+	initializers.DB.Unscoped().Delete(&models.User{}, id)
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "user deleted",

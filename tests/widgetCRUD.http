@@ -29,3 +29,8 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NjU3MDc1O
 DELETE http://localhost:5000/api/model/anomaly/1
 Content-Type: application/json
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzE0MTMxMTMsInN1YiI6OH0.yUwnVOtcc9XgRM5kRUqTzMgelu5aN1j9YTW3CP1-qg8
+
+###
+DELETE http://localhost:5000/api/device/delete/38
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJleHAiOjE3NzM5NDYwNjYsInN1YiI6MjB9.rEh3QrcXCUpttFDvXU-gAzB-QBjY9RtBXqyF323wqzE

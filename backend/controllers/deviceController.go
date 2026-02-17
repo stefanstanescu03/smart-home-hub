@@ -182,19 +182,21 @@ func DeleteDevice(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
 
-	var device models.Device
-	initializers.DB.First(&device, "id = ? and user_id = ?", id, currUser.(models.User).ID)
-	if device.ID == 0 {
-		c.JSON(http.StatusBadRequest, gin.H{
-			"error": "Device not found",
-		})
-		return
+	if currUser.(models.User).Role != "admin" {
+		var device models.Device
+		initializers.DB.First(&device, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+		if device.ID == 0 {
+			c.JSON(http.StatusBadRequest, gin.H{
+				"error": "Device not found",
+			})
+			return
+		}
 	}
 
 	initializers.DB.Unscoped().Delete(&models.Alert{}, "device_id = ?", id)
 	initializers.DB.Unscoped().Delete(&models.Widget{}, "device_id = ?", id)
 	initializers.DB.Unscoped().Delete(&models.AnomalyModel{}, "device_id = ?", id)
-	initializers.DB.Unscoped().Delete(&models.Device{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+	initializers.DB.Unscoped().Delete(&models.Device{}, "id = ?", id)
 
 	sockets.NotifyAlertsHandler()
 	pipelines.NotifyAnomalyPipeline()

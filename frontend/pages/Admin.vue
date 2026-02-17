@@ -41,29 +41,38 @@ export default {
         console.log(err);
       }
     },
-    async handleUpdate() {
-      if (this.username != "" && this.email != "" && this.password != "") {
-        try {
-          await axios.put(
-            "api/user/update",
-            {
-              username: this.username,
-              email: this.email,
-              password: this.password,
-            },
-            { headers: { Authorization: `Bearer ${this.getToken()}` } },
-          );
-          this.changed = true;
-          this.failed = false;
-        } catch (err) {
-          this.changed = false;
-          this.failed = true;
-          this.errorMessage = err.response.data.error;
-        }
-      } else {
-        this.changed = false;
-        this.failed = true;
-        this.errorMessage = "All fields must be completed";
+    async handleMakeAdmin(accountId) {
+      try {
+        await axios.put(
+          `/api/user/toggle-role/${accountId}`,
+          {},
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
+        );
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleDeleteAccount(accountId) {
+      try {
+        await axios.delete(`/api/user/delete/${accountId}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleDeleteDevice(deviceId) {
+      try {
+        await axios.delete(`/api/device/delete/${deviceId}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.devices = this.devices.filter((device) => device.ID != deviceId);
+      } catch (err) {
+        console.log(err);
       }
     },
   },
@@ -85,67 +94,84 @@ export default {
       </div>
       <div class="table-container">
         <h2>Created accounts</h2>
-        <table class="alerts-container">
-          <tr>
-            <th>Username</th>
-            <th>Email</th>
-            <th>Role</th>
-            <th>Action</th>
-          </tr>
-          <tr v-for="account in accounts">
-            <td>{{ account.Username }}</td>
-            <td>{{ account.Email }}</td>
-            <td>{{ account.Role }}</td>
-            <td>
-              <div class="action-container">
-                <button class="delete-button">
-                  <img
-                    src="../public/delete.png"
-                    alt=""
-                    height="20"
-                    width="20"
-                  />
-                </button>
-                <button class="action-button">Make admin</button>
-              </div>
-            </td>
-          </tr>
+        <table>
+          <tbody>
+            <tr>
+              <th>Username</th>
+              <th>Email</th>
+              <th>Role</th>
+              <th>Action</th>
+            </tr>
+            <tr v-for="account in accounts">
+              <td>{{ account.Username }}</td>
+              <td>{{ account.Email }}</td>
+              <td>{{ account.Role }}</td>
+              <td>
+                <div class="action-container">
+                  <button
+                    class="delete-button"
+                    @click="this.handleDeleteAccount(account.ID)"
+                  >
+                    <img
+                      src="../public/delete.png"
+                      alt=""
+                      height="20"
+                      width="20"
+                    />
+                  </button>
+                  <button
+                    class="action-button"
+                    @click="this.handleMakeAdmin(account.ID)"
+                    v-if="account.Role === 'user'"
+                  >
+                    Make admin
+                  </button>
+                  <button
+                    class="action-button"
+                    @click="this.handleMakeAdmin(account.ID)"
+                    v-if="account.Role === 'admin'"
+                  >
+                    Make user
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
       <div class="table-container">
         <h2>Added devices</h2>
-        <table class="alerts-container">
-          <tr>
-            <th>Name</th>
-            <th>Ident</th>
-            <th>Visibility</th>
-            <th>Owner</th>
-            <th>Action</th>
-          </tr>
-          <tr v-for="device in devices">
-            <td>{{ device.Name }}</td>
-            <td>{{ device.Ident }}</td>
-            <td>{{ device.Visibility ? "public" : "private" }}</td>
-            <td>{{ device.Owner }}</td>
-            <td>
-              <div class="action-container">
-                <button class="delete-button">
-                  <img src="../public/bell.png" alt="" height="20" width="20" />
-                </button>
-                <button class="delete-button">
-                  <img src="../public/edit.png" alt="" height="25" width="25" />
-                </button>
-                <button class="delete-button">
-                  <img
-                    src="../public/delete.png"
-                    alt=""
-                    height="20"
-                    width="20"
-                  />
-                </button>
-              </div>
-            </td>
-          </tr>
+        <table>
+          <tbody>
+            <tr>
+              <th>Name</th>
+              <th>Ident</th>
+              <th>Visibility</th>
+              <th>Owner</th>
+              <th>Action</th>
+            </tr>
+            <tr v-for="device in devices">
+              <td>{{ device.Name }}</td>
+              <td>{{ device.Ident }}</td>
+              <td>{{ device.Visibility ? "public" : "private" }}</td>
+              <td>{{ device.Owner }}</td>
+              <td>
+                <div class="action-container">
+                  <button
+                    class="delete-button"
+                    @click="this.handleDeleteDevice(device.ID)"
+                  >
+                    <img
+                      src="../public/delete.png"
+                      alt=""
+                      height="20"
+                      width="20"
+                    />
+                  </button>
+                </div>
+              </td>
+            </tr>
+          </tbody>
         </table>
       </div>
     </div>
