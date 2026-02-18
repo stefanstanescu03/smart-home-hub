@@ -5,7 +5,10 @@ import (
 	"backend/models"
 	"backend/pipelines"
 	"backend/sockets"
+	"backend/utils"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -15,10 +18,10 @@ func AddDevice(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var body struct {
-		Name         string
-		Ident        string
-		Csv_location string
-		Visibility   bool
+		Name  string
+		Ident string
+		// Csv_location string
+		Visibility bool
 	}
 
 	if c.Bind(&body) != nil {
@@ -31,7 +34,7 @@ func AddDevice(c *gin.Context) {
 	device := models.Device{
 		Name:         body.Name,
 		Ident:        body.Ident,
-		Csv_location: body.Csv_location,
+		Csv_location: os.Getenv("DATA_LOCATION") + "/" + utils.Format(body.Name) + fmt.Sprint(currUser.(models.User).ID) + ".csv",
 		Visibility:   body.Visibility,
 		UserId:       currUser.(models.User).ID,
 	}

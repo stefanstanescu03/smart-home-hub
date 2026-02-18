@@ -17,7 +17,6 @@ export default {
       },
       new_model: {
         param: "",
-        location: "",
       },
       menuOpen: false,
     };
@@ -122,7 +121,6 @@ export default {
         await axios.post(
           "/api/model/anomaly/create",
           {
-            location: this.new_model.location,
             param: this.new_model.param,
             DeviceId: this.device.ID,
           },
@@ -158,7 +156,6 @@ export default {
         await axios.put(
           `/api/model/anomaly/update/${modelId}`,
           {
-            location: changeModel.Location,
             NotifyEmail: !changeModel.NotifyEmail,
           },
           {
@@ -353,11 +350,6 @@ export default {
           <div class="field">
             <label for="key">Key name</label>
             <input type="text" id="key" v-model="new_model.param" />
-          </div>
-
-          <div class="field">
-            <label for="location">Location</label>
-            <input type="text" id="location" v-model="new_model.location" />
           </div>
 
           <div class="info-box">

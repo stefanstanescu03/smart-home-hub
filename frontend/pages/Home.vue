@@ -10,12 +10,10 @@ export default {
       selected_device: {
         id: "",
         ident: "",
-        csv_location: "",
         visibility: "",
       },
       new_device: {
         ident: "",
-        csv_location: "",
         visibility: "",
       },
       menuOpen: false,
@@ -83,7 +81,6 @@ export default {
           {
             name: this.selected_device.name,
             ident: this.selected_device.ident,
-            csv_location: this.selected_device.csv_location,
             visibility: this.selected_device.visibility === "public",
           },
           {
@@ -103,7 +100,6 @@ export default {
           {
             name: this.new_device.name,
             ident: this.new_device.ident,
-            csv_location: this.new_device.csv_location,
             visibility: this.new_device.visibility === "public",
           },
           { headers: { Authorization: `Bearer ${this.getToken()}` } },
@@ -176,15 +172,6 @@ export default {
           </div>
 
           <div class="field">
-            <label for="edit_csv_location">Data directory</label>
-            <input
-              type="text"
-              id="edit_csv_location"
-              v-model="selected_device.csv_location"
-            />
-          </div>
-
-          <div class="field">
             <label for="edit_visibility">Visibility</label>
             <select id="edit_visibility" v-model="selected_device.visibility">
               <option value="public">Public</option>
@@ -208,11 +195,6 @@ export default {
           <div class="field">
             <label>Name</label>
             <input type="text" v-model="new_device.name" />
-          </div>
-
-          <div class="field">
-            <label>Data location</label>
-            <input type="text" v-model="new_device.csv_location" />
           </div>
 
           <div class="field">
@@ -343,17 +325,6 @@ export default {
   }
 }
 
-/* input,
-select {
-  color: #eeeeee;
-  background-color: #252525;
-  border: none;
-  outline: none;
-  padding: 0.5rem;
-  font-size: 0.95rem;
-  border-radius: 0.35rem;
-} */
-
 select {
   cursor: pointer;
 }
@@ -440,6 +411,7 @@ select:focus {
   font-size: 0.8rem;
   cursor: pointer;
   transition: opacity 0.2s;
+  border-radius: 2px;
 }
 
 .add-btn:hover {

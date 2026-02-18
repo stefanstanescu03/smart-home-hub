@@ -71,6 +71,7 @@ export default {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.devices = this.devices.filter((device) => device.ID != deviceId);
+        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;
       } catch (err) {
         console.log(err);
       }

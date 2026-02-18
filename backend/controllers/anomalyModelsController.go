@@ -4,7 +4,9 @@ import (
 	"backend/initializers"
 	"backend/models"
 	"backend/pipelines"
+	"fmt"
 	"net/http"
+	"os"
 
 	"github.com/gin-gonic/gin"
 )
@@ -14,7 +16,6 @@ func AddAnomalyModel(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var body struct {
-		Location string
 		Param    string
 		DeviceId uint
 	}
@@ -35,8 +36,10 @@ func AddAnomalyModel(c *gin.Context) {
 		return
 	}
 
+	location := os.Getenv("ANOMALY_MODELS_LOCATION") + "/" + fmt.Sprint(body.DeviceId) + body.Param + ".json"
+
 	model := models.AnomalyModel{
-		Location:    body.Location,
+		Location:    location,
 		Param:       body.Param,
 		NotifyEmail: false,
 		UserId:      currUser.(models.User).ID,
@@ -50,7 +53,7 @@ func AddAnomalyModel(c *gin.Context) {
 		return
 	}
 
-	pipelines.FitAndSave(body.Location, device.Csv_location, body.Param)
+	pipelines.FitAndSave(location, device.Csv_location, body.Param)
 
 	pipelines.NotifyAnomalyPipeline()
 
@@ -65,7 +68,6 @@ func UpdateAnomalyModel(c *gin.Context) {
 	id := c.Param("id")
 
 	var body struct {
-		Location    string
 		NotifyEmail bool
 	}
 
@@ -86,7 +88,6 @@ func UpdateAnomalyModel(c *gin.Context) {
 		return
 	}
 
-	model.Location = body.Location
 	model.NotifyEmail = body.NotifyEmail
 
 	initializers.DB.Save(&model)

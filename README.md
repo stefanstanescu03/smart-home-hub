@@ -24,7 +24,8 @@ SMTP=smtp.gmail.com
 SMTP_PORT=587
 ```
 
-# Tasks
+# Milestones
 
-1. Create users page for admins [done]
-2. Make it functional
+1. Cloud
+2. Automations
+3. Forecasting

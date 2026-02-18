@@ -25,6 +25,24 @@ var refreshModels = make(chan struct{}, 1)
 
 var alertStates = make(map[uint]bool)
 
+func handleSendEmail(model models.AnomalyModel) {
+
+	var user models.User
+	initializers.DB.First(&user, "id = ?", model.UserId)
+	if user.ID == 0 {
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("error sending email for anomaly model: %d, can't find the desired user", model.ID))
+		return
+	}
+
+	email := user.Email
+
+	ok := utils.SendSimpleEmail(email, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", model.Param))
+	if !ok {
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("error sending email for anomaly model: %d", model.ID))
+	}
+
+}
+
 func NotifyAnomalyPipeline() {
 	select {
 	case refreshModels <- struct{}{}:
@@ -134,6 +152,9 @@ func feed_data(model *ModelInfo) {
 	if core.Predict(model.model_parameters, window) {
 		if !alertStates[model.model_metadata.ID] {
 			utils.WriteAlert(model.model_metadata.DeviceId, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", param))
+			if model.model_metadata.NotifyEmail {
+				handleSendEmail(*model.model_metadata)
+			}
 			alertStates[model.model_metadata.ID] = true
 		}
 	} else {
