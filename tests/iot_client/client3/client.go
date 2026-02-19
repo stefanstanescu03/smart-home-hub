@@ -4,21 +4,10 @@ import (
 	"flag"
 	"fmt"
 	"math/rand"
-	"net"
 	"time"
+
+	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
-
-func connect(dialer net.Dialer) net.Conn {
-	var conn net.Conn
-	var err error
-
-	conn, err = dialer.Dial("tcp", "127.0.0.1:5001")
-	if err != nil {
-		fmt.Println("[IOT-CLIENT-debug] Connection failed:", err)
-	}
-
-	return conn
-}
 
 func main() {
 
@@ -30,46 +19,36 @@ func main() {
 		return
 	}
 
-	localAddr := &net.TCPAddr{
-		IP: net.ParseIP("0.0.0.0"),
+	broker := "tcp://0.0.0.0:5001"
+
+	clientID := *ident
+
+	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID(clientID)
+	opts.SetKeepAlive(60 * time.Second)
+	opts.SetAutoReconnect(true)
+
+	client := mqtt.NewClient(opts)
+	if token := client.Connect(); token.Wait() && token.Error() != nil {
+		panic(token.Error())
 	}
+	fmt.Printf("Connected as %s. Starting data stream...\n", clientID)
 
-	dialer := net.Dialer{
-		LocalAddr: localAddr,
+	ticker := time.NewTicker(5 * time.Second)
+	defer ticker.Stop()
+
+	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+
+	for range ticker.C {
+
+		temp := 20 + r.Float64()*(30-20)
+		humidity := 40 + r.Intn(20)
+
+		payload := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%d", temp, humidity)
+
+		topic := "telemetry/sensors"
+		token := client.Publish(topic, 1, false, payload)
+		token.Wait()
+
+		fmt.Printf("[%s] Sent: %s\n", time.Now().Format("15:04:05"), payload)
 	}
-
-	conn := connect(dialer)
-
-	fmt.Println("[IOT-CLIENT-debug] IOT-CLIENT started on port: ", localAddr.Port)
-
-	cnt := 0
-	var final_temp float32 = 20.0
-	var temp float32
-	for {
-
-		if cnt == 10 {
-			temp = final_temp
-		} else if cnt < 10 {
-			temp = 15 + rand.Float32()*10
-		} else {
-			temp -= temp * 0.01
-		}
-
-		humid := 40 + rand.Float32()*30
-		message := fmt.Sprintf("ident:%s,temperature[C]:%.2f,humidity[%%]:%.2f\n", *ident, temp, humid)
-		if conn != nil {
-			_, err := conn.Write([]byte(message))
-			if err != nil {
-				fmt.Println("Error sending:", err)
-				conn = connect(dialer)
-			}
-		} else {
-			fmt.Println("No connection")
-			conn = connect(dialer)
-		}
-
-		cnt += 1
-		time.Sleep(5 * time.Second)
-	}
-
 }

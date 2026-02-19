@@ -18,7 +18,8 @@ func init() {
 
 func main() {
 
-	go sockets.StartTelemetryServer()
+	// go sockets.StartTelemetryServer()
+	go sockets.StartMQTTBroker()
 	go sockets.StartStreamingServer()
 	go sockets.StartAlertsHandler()
 

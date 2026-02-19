@@ -212,7 +212,7 @@ func DeleteDevice(c *gin.Context) {
 func IsDeviceConnected(c *gin.Context) {
 
 	ident := c.Param("ident")
-	value, ok := sockets.TelemetryConnectionPool.Load(ident)
+	_, ok := sockets.ConnectionPool.Load(ident)
 
 	if !ok {
 		c.JSON(http.StatusOK, gin.H{
@@ -220,7 +220,7 @@ func IsDeviceConnected(c *gin.Context) {
 		})
 	} else {
 		c.JSON(http.StatusOK, gin.H{
-			"status": value,
+			"status": true,
 		})
 	}
 }
