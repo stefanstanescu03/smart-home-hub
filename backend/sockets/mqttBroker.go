@@ -10,7 +10,6 @@ import (
 	"sync"
 
 	mqtt "github.com/mochi-mqtt/server/v2"
-	"github.com/mochi-mqtt/server/v2/hooks/auth"
 	"github.com/mochi-mqtt/server/v2/listeners"
 	"github.com/mochi-mqtt/server/v2/packets"
 )
@@ -26,25 +25,27 @@ func (h *TelemetryHook) ID() string {
 }
 
 func (h *TelemetryHook) Provides(b byte) bool {
-	// You MUST include mqtt.OnDisconnect here!
-	return b == mqtt.OnConnectAuthenticate || b == mqtt.OnPublish || b == mqtt.OnDisconnect
+	return b == mqtt.OnConnectAuthenticate || b == mqtt.OnPublish || b == mqtt.OnDisconnect || b == mqtt.OnACLCheck
 }
 
 func (h *TelemetryHook) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet) bool {
-	ident := string(cl.ID)
 
-	var device models.Device
-	initializers.DB.First(&device, "ident = ?", ident)
-	if device.ID == 0 {
-		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Connection rejected: %s", ident))
-		return false
+	if cl.ID != "SYSTEM_CMD_CLIENT" {
+		ident := string(cl.ID)
+
+		var device models.Device
+		initializers.DB.First(&device, "ident = ?", ident)
+		if device.ID == 0 {
+			utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Connection rejected: %s", ident))
+			return false
+		}
+
+		fmt.Println(cl.ID)
+
+		ConnectionPool.Store(cl.ID, device.Csv_location)
+
+		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("New device connected: %s", ident))
 	}
-
-	fmt.Println(cl.ID)
-
-	ConnectionPool.Store(cl.ID, device.Csv_location)
-
-	utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("New device connected: %s", ident))
 	return true
 }
 
@@ -55,6 +56,30 @@ func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.P
 		utils.ParseMessage(msg, csv_location.(string))
 	}
 	return pk, nil
+}
+
+func (h *TelemetryHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) bool {
+
+	if cl.ID == "SYSTEM_CMD_CLIENT" {
+		return true
+	}
+
+	if write {
+		if topic == fmt.Sprintf("telemetry/%s", cl.ID) {
+			return true
+		}
+
+		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("A client tried to publish in a forbidden topic: %s", cl.ID))
+		return false
+	}
+
+	if topic == fmt.Sprintf("cmd/%s", cl.ID) {
+		return true
+	}
+
+	utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("A client tried to subscribe to a forbidden topic: %s", cl.ID))
+	return false
+
 }
 
 func (h *TelemetryHook) OnDisconnect(cl *mqtt.Client, err error, reason bool) {
@@ -75,7 +100,7 @@ func StartMQTTBroker() {
 		log.Fatal(err)
 	}
 
-	_ = server.AddHook(new(auth.AllowHook), nil)
+	// _ = server.AddHook(new(auth.AllowHook), nil)
 
 	port := os.Getenv("TELEMETRY_PORT")
 	host := os.Getenv("HOST")

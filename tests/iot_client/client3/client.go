@@ -45,7 +45,7 @@ func main() {
 
 		payload := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%d", temp, humidity)
 
-		topic := "telemetry/sensors"
+		topic := "telemetry/" + clientID
 		token := client.Publish(topic, 1, false, payload)
 		token.Wait()
 

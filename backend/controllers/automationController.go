@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/sockets"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -86,5 +87,18 @@ func DeleteAutomation(c *gin.Context) {
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "automation deleted",
+	})
+}
+
+func SendCommandDirect(c *gin.Context) {
+
+	ident := c.Query("ident")
+	payload := c.Query("payload")
+
+	sockets.PublishCmd(ident, payload)
+
+	c.JSON(http.StatusOK, gin.H{
+		"ident":   ident,
+		"payload": payload,
 	})
 }

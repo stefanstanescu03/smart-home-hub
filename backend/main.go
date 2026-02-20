@@ -7,6 +7,7 @@ import (
 	"backend/services"
 	"backend/sockets"
 	"net/http"
+	"time"
 
 	"github.com/gin-gonic/gin"
 )
@@ -22,6 +23,8 @@ func main() {
 	go sockets.StartMQTTBroker()
 	go sockets.StartStreamingServer()
 	go sockets.StartAlertsHandler()
+	time.Sleep(1 * time.Second)
+	go sockets.StartCmdClient()
 
 	go pipelines.StartAnomalyDetectionPipeline()
 
