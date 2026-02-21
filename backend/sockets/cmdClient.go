@@ -4,12 +4,15 @@ import (
 	"backend/utils"
 	"fmt"
 	"os"
+	"strings"
+	"sync"
 	"time"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
 var cmd_client mqtt.Client
+var DeviceStates sync.Map
 
 func PublishCmd(ident string, payload string) {
 	if cmd_client == nil || !cmd_client.IsConnected() {
@@ -26,6 +29,16 @@ func PublishCmd(ident string, payload string) {
 	}()
 }
 
+var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
+	topic := msg.Topic()
+	payload := string(msg.Payload())
+
+	if strings.HasPrefix(topic, "stat/") {
+		ident := strings.Split(topic, "/")[1]
+		DeviceStates.Store(ident, payload)
+	}
+}
+
 func StartCmdClient() {
 
 	port := os.Getenv("TELEMETRY_PORT")
@@ -37,11 +50,17 @@ func StartCmdClient() {
 	opts.SetAutoReconnect(true)
 	opts.SetConnectRetry(true)
 	opts.SetConnectTimeout(5 * time.Second)
+	opts.SetDefaultPublishHandler(messagePubHandler)
 
 	cmd_client = mqtt.NewClient(opts)
 
 	if token := cmd_client.Connect(); token.Wait() && token.Error() != nil {
 		utils.WriteToLogs("[CMD-CLIENT]", "Failed to connect to broker")
+		panic(token.Error())
+	}
+
+	if token := cmd_client.Subscribe("stat/#", 1, nil); token.Wait() && token.Error() != nil {
+		utils.WriteToLogs("[CMD-CLIENT]", "Client failed to subscribe to stat/#")
 		panic(token.Error())
 	}
 

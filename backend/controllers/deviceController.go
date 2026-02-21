@@ -259,8 +259,8 @@ func GetPublicDevices(c *gin.Context) {
 func GetPublicDevice(c *gin.Context) {
 
 	id := c.Param("id")
-	var device models.Device
 
+	var device models.Device
 	initializers.DB.Find(&device, "visibility = true and id = ?", id)
 
 	if device.ID == 0 {
@@ -273,4 +273,25 @@ func GetPublicDevice(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"device": device,
 	})
+}
+
+func GetDeviceState(c *gin.Context) {
+
+	id := c.Param("id")
+
+	var device models.Device
+	initializers.DB.Find(&device, "visibility = true and id = ?", id)
+
+	state, ok := sockets.DeviceStates.Load(device.Ident)
+
+	if !ok {
+		c.JSON(http.StatusOK, gin.H{
+			"state": "not registered",
+		})
+	} else {
+		c.JSON(http.StatusOK, gin.H{
+			"state": state,
+		})
+	}
+
 }

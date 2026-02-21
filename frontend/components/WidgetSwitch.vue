@@ -1,20 +1,17 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["deviceId", "deviceName", "label", "payload", "widgetID"],
+  props: ["deviceId", "deviceName", "label", "widgetID", "payload", "payload2"],
   data() {
     return {
+      state: false,
       active: false,
     };
   },
   methods: {
     getToken() {
       const cookies = document.cookie;
-      let token = cookies.split("=")[1];
-      if (token === undefined) {
-        return undefined;
-      }
-      return token;
+      return cookies.split("=")[1] || undefined;
     },
     async isActive() {
       try {
@@ -31,15 +28,36 @@ export default {
         this.active = false;
       }
     },
-    async handleClick() {
+    async getState() {
+      try {
+        const res = await axios.get(`/api/device/state/${this.deviceId}`);
+        if (res.data.state === "not registered" || res.data.state === "false") {
+          this.state = false;
+        } else {
+          this.state = true;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleToggle() {
       if (this.active) {
         try {
+          let payload_to_send = "";
+          if (!this.state) {
+            this.state = true;
+            payload_to_send = this.payload;
+          } else {
+            this.state = false;
+            payload_to_send = this.payload2;
+          }
+
           await axios.post(
             "/api/widget/cmd",
             {
               Widget: this.widgetID,
               DeviceId: this.deviceId,
-              Payload: this.payload,
+              Payload: payload_to_send,
             },
             { headers: { Authorization: `Bearer ${this.getToken()}` } },
           );
@@ -49,8 +67,9 @@ export default {
       }
     },
   },
-  async mounted() {
-    await this.isActive();
+  mounted() {
+    this.isActive();
+    this.getState();
   },
 };
 </script>
@@ -58,8 +77,8 @@ export default {
 <template>
   <div
     class="smart-tile"
-    :class="{ 'is-active': active, 'is-disabled': !active }"
-    @click="handleClick"
+    :class="{ 'is-active': state, 'is-disabled': !active }"
+    @click="handleToggle"
   >
     <div class="title-header">
       <span class="device-name">{{ deviceName }}</span>
@@ -87,12 +106,10 @@ export default {
     </div>
 
     <div class="tile-footer">
-      <div class="status-row">
-        <div class="indicator"></div>
-        <span class="status-text">
-          {{ active ? "Online" : "Offline" }}
-        </span>
-      </div>
+      <label class="accent-switch" @click.stop>
+        <input type="checkbox" :checked="this.state" @change="handleToggle" />
+        <span class="accent-slider"></span>
+      </label>
     </div>
   </div>
 </template>
@@ -126,24 +143,69 @@ export default {
   background: #1a1a1a;
 }
 
-.is-active .indicator {
-  background: #2ba618;
+.accent-switch {
+  position: relative;
+  display: inline-block;
+  width: 50px;
+  height: 28px;
 }
 
-.is-active .status-text {
-  color: #2ba618;
+.accent-switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
 }
 
-.smart-tile:active:not(.is-disabled) {
-  transform: scale(0.95);
-  background: #252525 !important;
-  border-color: #555;
+.accent-slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #2a2a2a;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 30px;
+  border: 1px solid #333;
 }
 
-.title-header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
+.accent-slider:before {
+  position: absolute;
+  content: "";
+  height: 20px;
+  width: 20px;
+  left: 3px;
+  bottom: 3px;
+  background-color: #555;
+  transition: 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+  border-radius: 50%;
+}
+
+input:checked + .accent-slider {
+  background-color: #2ba618;
+}
+
+input:checked + .accent-slider:before {
+  transform: translateX(22px);
+  background-color: #fff;
+}
+
+.device-name {
+  font-size: 0.65rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.3);
+}
+
+.label {
+  font-size: 1.1rem;
+  font-weight: 500;
+  color: #eeeeee;
+  margin: 0;
+}
+
+.smart-tile:active {
+  transform: scale(0.94);
 }
 
 .delete-btn {
@@ -171,41 +233,9 @@ export default {
   transform: scale(1.1);
 }
 
-.status-row {
+.title-header {
   display: flex;
+  justify-content: space-between;
   align-items: center;
-  gap: 6px;
-}
-
-.indicator {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: #444;
-}
-
-.device-name {
-  font-size: 0.65rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.label {
-  font-size: 1.1rem;
-  font-weight: 500;
-  color: #eeeeee;
-  margin: 0;
-}
-
-.status-text {
-  font-size: 0.65rem;
-  color: rgba(255, 255, 255, 0.3);
-}
-
-.smart-tile:hover:not(.is-disabled) {
-  background: #1d1d1d;
-  border-color: #444;
-  transform: translateY(-4px);
 }
 </style>

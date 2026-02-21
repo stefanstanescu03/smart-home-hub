@@ -7,6 +7,7 @@ import (
 	"fmt"
 	"log"
 	"os"
+	"strings"
 	"sync"
 
 	mqtt "github.com/mochi-mqtt/server/v2"
@@ -51,7 +52,9 @@ func (h *TelemetryHook) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet
 
 func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.Packet, error) {
 
-	if csv_location, ok := ConnectionPool.Load(cl.ID); ok {
+	topic := pk.TopicName
+
+	if csv_location, ok := ConnectionPool.Load(cl.ID); ok && strings.HasPrefix(topic, "telemetry/") {
 		msg := string(pk.Payload)
 		utils.ParseMessage(msg, csv_location.(string))
 	}
@@ -65,7 +68,7 @@ func (h *TelemetryHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) bo
 	}
 
 	if write {
-		if topic == fmt.Sprintf("telemetry/%s", cl.ID) {
+		if topic == fmt.Sprintf("telemetry/%s", cl.ID) || topic == fmt.Sprintf("stat/%s", cl.ID) {
 			return true
 		}
 

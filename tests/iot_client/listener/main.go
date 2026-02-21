@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"os"
 	"os/signal"
+	"strconv"
 	"syscall"
 
 	mqtt "github.com/eclipse/paho.mqtt.golang"
@@ -27,8 +28,20 @@ func main() {
 	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID(clientID)
 	opts.SetAutoReconnect(true)
 
+	state := false
+
 	var messageHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-		fmt.Printf("Payload: %s\n", string(msg.Payload()))
+		if string(msg.Payload()) == "ON" {
+			state = true
+		} else if string(msg.Payload()) == "OFF" {
+			state = false
+		}
+
+		topic := "stat/" + clientID
+		token := client.Publish(topic, 1, false, strconv.FormatBool(state))
+		token.Wait()
+
+		fmt.Printf("Current state: %t\n", state)
 	}
 
 	opts.SetDefaultPublishHandler(messageHandler)

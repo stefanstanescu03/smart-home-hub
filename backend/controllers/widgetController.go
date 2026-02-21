@@ -18,6 +18,7 @@ func AddWidget(c *gin.Context) {
 		DeviceId    uint
 		DashboardId uint
 		Payload     string
+		Payload2    string
 		Label       string
 	}
 
@@ -53,6 +54,7 @@ func AddWidget(c *gin.Context) {
 		DeviceId:    body.DeviceId,
 		DashboardId: body.DashboardId,
 		Payload:     body.Payload,
+		Payload2:    body.Payload2,
 		Label:       body.Label,
 	}
 

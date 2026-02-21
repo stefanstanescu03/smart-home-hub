@@ -4,8 +4,9 @@ import Card from "../components/Card.vue";
 import Table from "../components/Table.vue";
 import axios from "axios";
 import WidgetButton from "../components/WidgetButton.vue";
+import WidgetSwitch from "../components/WidgetSwitch.vue";
 export default {
-  components: { SideBar, Card, Table, WidgetButton },
+  components: { SideBar, Card, Table, WidgetButton, WidgetSwitch },
   data() {
     return {
       dashboard: "",
@@ -16,6 +17,7 @@ export default {
         device: "",
         label: "",
         payload: "",
+        payload2: "",
       },
       ws: null,
       menuOpen: false,
@@ -58,7 +60,6 @@ export default {
           );
 
           this.widgets = widgetsWithDeviceNames;
-          console.log(this.widgets);
         }
       } catch (err) {
         console.error(err);
@@ -104,6 +105,7 @@ export default {
             dashboardId: this.dashboard.ID,
             label: this.new_widget.label,
             payload: this.new_widget.payload,
+            payload2: this.new_widget.payload2,
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
@@ -195,6 +197,16 @@ export default {
             :widgetID="widget.ID"
             @delete="handleDeleteWidget(widget.ID)"
           />
+          <WidgetSwitch
+            v-if="widget.Widgettype == 'sw'"
+            :deviceId="widget.DeviceId"
+            :deviceName="widget.deviceName"
+            :label="widget.Label"
+            :payload="widget.Payload"
+            :payload2="widget.Payload2"
+            :widgetID="widget.ID"
+            @delete="handleDeleteWidget(widget.ID)"
+          />
         </div>
         <button class="add-button" @click="triggerDialog">+</button>
       </div>
@@ -211,6 +223,7 @@ export default {
               <option value="ca">Card (Metric View)</option>
               <option value="ta">Table (Data Grid)</option>
               <option value="btn">Button (Action)</option>
+              <option value="sw">Switch (2 States Action)</option>
             </select>
           </div>
 
@@ -227,18 +240,40 @@ export default {
             </select>
           </div>
 
-          <div class="field" v-if="this.new_widget.widget_type == 'btn'">
+          <div
+            class="field"
+            v-if="
+              this.new_widget.widget_type == 'btn' ||
+              this.new_widget.widget_type == 'sw'
+            "
+          >
             <label for="label">Label</label>
             <input type="text" id="label" v-model="this.new_widget.label" />
           </div>
 
-          <div class="field" v-if="this.new_widget.widget_type == 'btn'">
+          <div
+            class="field"
+            v-if="
+              this.new_widget.widget_type == 'btn' ||
+              this.new_widget.widget_type == 'sw'
+            "
+          >
             <label for="payload">Payload</label>
             <textarea
               id="payload"
               rows="4"
               cols="50"
               v-model="this.new_widget.payload"
+            />
+          </div>
+
+          <div class="field" v-if="this.new_widget.widget_type == 'sw'">
+            <label for="payload2">Payload 2</label>
+            <textarea
+              id="payload2"
+              rows="4"
+              cols="50"
+              v-model="this.new_widget.payload2"
             />
           </div>
 
