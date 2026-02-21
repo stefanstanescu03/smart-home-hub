@@ -3,15 +3,20 @@ import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
 import Table from "../components/Table.vue";
 import axios from "axios";
+import WidgetButton from "../components/WidgetButton.vue";
 export default {
-  components: { SideBar, Card, Table },
+  components: { SideBar, Card, Table, WidgetButton },
   data() {
     return {
       dashboard: "",
       widgets: [],
       available_devices: [],
-      widget_type: "",
-      device: "",
+      new_widget: {
+        widget_type: "",
+        device: "",
+        label: "",
+        payload: "",
+      },
       ws: null,
       menuOpen: false,
     };
@@ -53,6 +58,7 @@ export default {
           );
 
           this.widgets = widgetsWithDeviceNames;
+          console.log(this.widgets);
         }
       } catch (err) {
         console.error(err);
@@ -93,9 +99,11 @@ export default {
         await axios.post(
           "/api/widget/create",
           {
-            widgettype: this.widget_type,
-            deviceId: this.device.ID,
+            widgettype: this.new_widget.widget_type,
+            deviceId: this.new_widget.device.ID,
             dashboardId: this.dashboard.ID,
+            label: this.new_widget.label,
+            payload: this.new_widget.payload,
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
@@ -178,6 +186,15 @@ export default {
             :deviceName="widget.deviceName"
             @delete="handleDeleteWidget(widget.ID)"
           />
+          <WidgetButton
+            v-if="widget.Widgettype == 'btn'"
+            :deviceId="widget.DeviceId"
+            :deviceName="widget.deviceName"
+            :label="widget.Label"
+            :payload="widget.Payload"
+            :widgetID="widget.ID"
+            @delete="handleDeleteWidget(widget.ID)"
+          />
         </div>
         <button class="add-button" @click="triggerDialog">+</button>
       </div>
@@ -189,16 +206,17 @@ export default {
 
         <div class="dialog-form">
           <div class="field">
-            <label for="widget_type">Display Type</label>
-            <select id="widget_type" v-model="widget_type">
+            <label for="widget_type">Type</label>
+            <select id="widget_type" v-model="this.new_widget.widget_type">
               <option value="ca">Card (Metric View)</option>
               <option value="ta">Table (Data Grid)</option>
+              <option value="btn">Button (Action)</option>
             </select>
           </div>
 
           <div class="field">
             <label for="device">Source Device</label>
-            <select id="device" v-model="device">
+            <select id="device" v-model="this.new_widget.device">
               <option
                 v-for="dev in available_devices"
                 :key="dev.id"
@@ -207,6 +225,21 @@ export default {
                 {{ dev.Name }}
               </option>
             </select>
+          </div>
+
+          <div class="field" v-if="this.new_widget.widget_type == 'btn'">
+            <label for="label">Label</label>
+            <input type="text" id="label" v-model="this.new_widget.label" />
+          </div>
+
+          <div class="field" v-if="this.new_widget.widget_type == 'btn'">
+            <label for="payload">Payload</label>
+            <textarea
+              id="payload"
+              rows="4"
+              cols="50"
+              v-model="this.new_widget.payload"
+            />
           </div>
 
           <button @click="handleAddWidget" class="add-btn">
@@ -310,21 +343,6 @@ export default {
   background-color: transparent;
 }
 
-input,
-select {
-  color: #eeeeee;
-  background-color: #252525;
-  border: none;
-  outline: none;
-  padding: 0.5rem;
-  font-size: 0.95rem;
-  border-radius: 0.35rem;
-}
-
-select {
-  cursor: pointer;
-}
-
 dialog {
   position: fixed;
   inset: 0;
@@ -382,6 +400,7 @@ label {
 }
 
 input,
+textarea,
 select {
   background: #161616;
   border: 1px solid #444444;
@@ -392,6 +411,7 @@ select {
 }
 
 input:focus,
+textarea:focus,
 select:focus {
   outline: none;
   border-color: #e0e0e0;

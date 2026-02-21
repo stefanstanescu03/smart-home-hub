@@ -4,7 +4,9 @@ import "gorm.io/gorm"
 
 type Widget struct {
 	gorm.Model
-	Widgettype  string `gorm:"check:widget_type_check,widgettype IN ('ta', 'ca')"`
+	Widgettype  string `gorm:"check:widget_type_check,widgettype IN ('ta', 'ca', 'btn')"`
+	Payload     string
+	Label       string
 	DeviceId    uint
 	Device      Device `gorm:"foreignKey:DeviceId"`
 	DashboardId uint

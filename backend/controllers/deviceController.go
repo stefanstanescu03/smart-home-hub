@@ -214,6 +214,26 @@ func IsDeviceConnected(c *gin.Context) {
 	ident := c.Param("ident")
 	_, ok := sockets.ConnectionPool.Load(ident)
 
+	if ok {
+		c.JSON(http.StatusOK, gin.H{
+			"status": true,
+		})
+		return
+	}
+
+	// Maybe we try to check by id
+
+	var device models.Device
+	initializers.DB.First(&device, "id = ?", ident)
+	if device.ID == 0 {
+		c.JSON(http.StatusOK, gin.H{
+			"status": false,
+		})
+		return
+	}
+
+	_, ok = sockets.ConnectionPool.Load(device.Ident)
+
 	if !ok {
 		c.JSON(http.StatusOK, gin.H{
 			"status": false,

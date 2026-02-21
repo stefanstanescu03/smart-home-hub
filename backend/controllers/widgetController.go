@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/sockets"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -16,6 +17,8 @@ func AddWidget(c *gin.Context) {
 		Widgettype  string
 		DeviceId    uint
 		DashboardId uint
+		Payload     string
+		Label       string
 	}
 
 	if c.Bind(&body) != nil {
@@ -49,6 +52,8 @@ func AddWidget(c *gin.Context) {
 		Widgettype:  body.Widgettype,
 		DeviceId:    body.DeviceId,
 		DashboardId: body.DashboardId,
+		Payload:     body.Payload,
+		Label:       body.Label,
 	}
 
 	res := initializers.DB.Create(&widget)
@@ -132,4 +137,46 @@ func DeleteWidget(c *gin.Context) {
 		"message": "widget deleted",
 	})
 
+}
+
+func SendCommand(c *gin.Context) {
+
+	currUser, _ := c.Get("user")
+	var body struct {
+		Widget   uint
+		DeviceId uint
+		Payload  string
+	}
+
+	if c.Bind(&body) != nil {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Failed to read body",
+		})
+		return
+	}
+
+	var widget models.Widget
+	initializers.DB.First(&widget, "device_id = ? and id = ?", body.DeviceId, body.Widget)
+	if widget.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Widget is not linked with this device",
+		})
+		return
+	}
+
+	var device models.Device
+	initializers.DB.First(&device, "user_id = ? and id = ?", currUser.(models.User).ID, body.DeviceId)
+	if device.ID == 0 {
+		c.JSON(http.StatusForbidden, gin.H{
+			"error": "You don't have access to this device",
+		})
+		return
+	}
+
+	sockets.PublishCmd(device.Ident, body.Payload)
+
+	c.JSON(http.StatusOK, gin.H{
+		"ident":   device.Ident,
+		"payload": body.Payload,
+	})
 }

@@ -14,6 +14,5 @@ func RegisterAutomationRoutes(r *gin.Engine) {
 		automationRoutes.GET("/:id", middleware.RequireAuth, controllers.GetAutomation)
 		automationRoutes.GET("/", middleware.RequireAuth, controllers.GetAutomations)
 		automationRoutes.DELETE("/delete/:id", middleware.RequireAuth, controllers.DeleteAutomation)
-		automationRoutes.GET("/cmd", controllers.SendCommandDirect)
 	}
 }

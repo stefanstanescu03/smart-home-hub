@@ -38,12 +38,18 @@ export default {
   <div class="stream-card">
     <div class="card-header">
       <span class="header-title">{{ deviceName }}</span>
-      <button
-        @click="$emit('delete')"
-        class="minimal-delete"
-        title="Remove Stream"
-      >
-        &times;
+      <button class="delete-btn" @click="$emit('delete')" title="Delete Widget">
+        <svg
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="3"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+        >
+          <line x1="18" y1="6" x2="6" y2="18"></line>
+          <line x1="6" y1="6" x2="18" y2="18"></line>
+        </svg>
       </button>
     </div>
 
@@ -97,17 +103,36 @@ export default {
   color: #eeeeee;
 }
 
-.minimal-delete {
-  background: none;
+.delete-btn {
+  background: #303030;
+  width: 1.5rem;
+  height: 1.5rem;
+  border-radius: 50%;
   border: none;
   color: #666;
-  font-size: 1.4rem;
   cursor: pointer;
-  line-height: 1;
+  padding: 0;
+  margin: 0;
+
+  display: flex;
+  align-items: center;
+  justify-content: center;
+
+  backface-visibility: hidden;
+  transform: translateZ(0);
+
+  transition: all 0.2s ease;
 }
 
-.minimal-delete:hover {
-  color: #ff4444;
+.delete-btn svg {
+  width: 0.75rem;
+  height: 0.75rem;
+}
+
+.delete-btn:hover {
+  background: #ff4d4d;
+  color: white;
+  transform: scale(1.1);
 }
 
 .table-scroll-area {
