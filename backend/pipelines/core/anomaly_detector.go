@@ -9,11 +9,6 @@ import (
 	"strings"
 )
 
-// Note that you should never have empty datasets and windows smaller than 2
-// Always when a model is initiated collect a lot of data first and after that train
-// Model assumes that the training data is stationary and don't have drifts
-// This is much fitted for rare anomalies and eventual slow drifts
-
 type DistanceBasedDetector struct {
 	Mean_distance float32
 	Std_distance  float32

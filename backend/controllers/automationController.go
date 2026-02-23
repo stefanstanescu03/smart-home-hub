@@ -13,8 +13,11 @@ func AddAutomation(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var body struct {
-		Name    string
-		Content string
+		Name      string
+		Device1Id uint
+		Device2Id uint
+		Payload   string
+		Condition string
 	}
 
 	if c.Bind(&body) != nil {
@@ -25,10 +28,12 @@ func AddAutomation(c *gin.Context) {
 	}
 
 	automation := models.Automation{
-		Name:    body.Name,
-		Content: body.Content,
-		UserId:  currUser.(models.User).ID,
-		User:    currUser.(models.User),
+		Name:      body.Name,
+		Device1Id: body.Device1Id,
+		Device2Id: body.Device2Id,
+		Payload:   body.Payload,
+		Condition: body.Condition,
+		UserId:    currUser.(models.User).ID,
 	}
 
 	res := initializers.DB.Create(&automation)

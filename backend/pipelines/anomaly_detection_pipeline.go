@@ -52,7 +52,7 @@ func NotifyAnomalyPipeline() {
 
 func create_model(data_path string, window_size int, param string) *core.DistanceBasedDetector {
 
-	model := core.NewAnomalyDetectionModel(1, 1e-2, window_size)
+	model := core.NewAnomalyDetectionModel(1, 1e-3, window_size)
 	dataset := core.Csv_to_dataset(data_path, window_size, param)
 	core.Fit(model, &dataset)
 

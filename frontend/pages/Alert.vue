@@ -42,7 +42,6 @@ export default {
     },
     async handleCreateAlert() {
       try {
-        console.log(this.device);
         let condition = "";
         if (this.new_alert.condition === "above") {
           condition = ">";
@@ -316,20 +315,18 @@ export default {
             <input type="text" id="key" v-model="new_alert.key" />
           </div>
 
-          <div class="form-row">
-            <div class="field">
-              <label for="condition">Condition</label>
-              <select id="condition" v-model="new_alert.condition">
-                <option value="above">Above</option>
-                <option value="below">Below</option>
-                <option value="equal">Equal</option>
-              </select>
-            </div>
+          <div class="field">
+            <label for="condition">Condition</label>
+            <select id="condition" v-model="new_alert.condition">
+              <option value="above">Above</option>
+              <option value="below">Below</option>
+              <option value="equal">Equal</option>
+            </select>
+          </div>
 
-            <div class="field">
-              <label for="value">Threshold Value</label>
-              <input type="number" id="value" v-model="new_alert.value" />
-            </div>
+          <div class="field">
+            <label for="value">Threshold Value</label>
+            <input type="number" id="value" v-model="new_alert.value" />
           </div>
 
           <button @click="handleCreateAlert" class="add-btn">
