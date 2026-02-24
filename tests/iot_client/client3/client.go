@@ -40,7 +40,7 @@ func main() {
 
 	for range ticker.C {
 
-		temp := 20 + r.Float64()*(30-20)
+		temp := 15 + r.Float64()*(30-15)
 		humidity := 40 + r.Intn(20)
 
 		payload := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%d", temp, humidity)

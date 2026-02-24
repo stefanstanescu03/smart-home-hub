@@ -141,7 +141,6 @@ export default {
           },
         );
         this.models = res.data.models;
-        console.log(this.models);
       } catch (err) {
         console.log(err);
       }

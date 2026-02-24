@@ -1,2 +1,12 @@
 2026-02-23T12:55:24+02:00 [ALERT:38] Humidity : Humidity too low
 2026-02-23T13:37:37+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-23T15:55:06+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-24T13:26:44+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-24T14:49:06+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-24T15:15:07+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-02-24T15:16:32+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-02-24T16:08:18+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-24T16:51:46+02:00 [ALERT:38] Humidity : Humidity too low
+2026-02-24T16:54:06+02:00 [ALERT:46] Too cold : The temperature is too low
+2026-02-24T16:54:51+02:00 [ALERT:46] Too cold : The temperature is too low
+2026-02-24T17:02:28+02:00 [ALERT:38] Humidity : Humidity too low

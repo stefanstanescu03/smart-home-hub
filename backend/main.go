@@ -23,6 +23,7 @@ func main() {
 	go sockets.StartMQTTBroker()
 	go sockets.StartStreamingServer()
 	go sockets.StartAlertsHandler()
+	go sockets.StartAutomationsHandler()
 	time.Sleep(1 * time.Second)
 	go sockets.StartCmdClient()
 

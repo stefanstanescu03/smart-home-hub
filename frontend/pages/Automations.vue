@@ -7,6 +7,7 @@ export default {
     return {
       menuOpen: false,
       available_devices: [],
+      automations: [],
       new_automation: {
         Name: "",
         Device1: "",
@@ -27,6 +28,34 @@ export default {
       }
       return token;
     },
+    async handleFetchAutomations() {
+      try {
+        const res = await axios.get("/api/automation/", {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.automations = await Promise.all(
+          res.data.automations.map(async (automation) => ({
+            ...automation,
+            device1Name: await this.handleGetDeviceName(automation.Device1Id),
+            device2Name: await this.handleGetDeviceName(automation.Device2Id),
+          })),
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleDeleteAutomation(automationId) {
+      try {
+        await axios.delete(`/api/automation/delete/${automationId}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.automations = this.automations.filter(
+          (automation) => automation.ID != automationId,
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
     triggerCreate() {
       const dialog = document.getElementById("create-dialog");
       dialog.show();
@@ -35,11 +64,22 @@ export default {
       const dialog = document.getElementById("create-dialog");
       dialog.close();
     },
+    async handleGetDeviceName(id) {
+      try {
+        const res = await axios.get(`/api/device/${id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        return res.data.device.Name;
+      } catch (err) {
+        return "default";
+      }
+    },
     async handleGetAvailableDevices() {
       try {
         const res = await axios.get("/api/device/", {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
         this.available_devices = res.data.devices;
       } catch (err) {
         console.error(err);
@@ -79,6 +119,7 @@ export default {
   },
   async mounted() {
     await this.handleGetAvailableDevices();
+    await this.handleFetchAutomations();
   },
 };
 </script>
@@ -95,6 +136,36 @@ export default {
       <button class="top-create-button" @click="triggerCreate">
         Create automation
       </button>
+
+      <div class="automations-container">
+        <div
+          v-for="automation in automations"
+          :key="automation.ID"
+          class="automation-card"
+        >
+          <div class="automation-content">
+            <div class="automation-header">
+              <h2 class="automation-name">{{ automation.Name }}</h2>
+              <span class="automation-condition">{{
+                automation.Condition
+              }}</span>
+            </div>
+
+            <div class="devices-row">
+              <div class="device-badge">{{ automation.device1Name }}</div>
+              <div class="device-connector">→</div>
+              <div class="device-badge">{{ automation.device2Name }}</div>
+            </div>
+          </div>
+
+          <button
+            class="delete-btn"
+            @click="handleDeleteAutomation(automation.ID)"
+          >
+            <img src="../public/delete.png" alt="Delete" />
+          </button>
+        </div>
+      </div>
 
       <dialog id="create-dialog">
         <div class="dialog-header">
@@ -328,5 +399,86 @@ select:focus {
 
 .add-btn:hover {
   opacity: 0.9;
+}
+
+.automations-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  gap: 1rem;
+  max-width: 600px;
+}
+
+.automation-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.75rem;
+  padding: 20px;
+}
+
+.automation-content {
+  flex-grow: 1;
+}
+
+.automation-header {
+  display: flex;
+  align-items: baseline;
+  gap: 1rem;
+  margin-bottom: 1rem;
+}
+
+.automation-name {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: #eeeeee;
+}
+
+.automation-condition {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #eeeeee;
+  background: #2a2a2a;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+}
+
+.devices-row {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.device-badge {
+  background: #2a2a2a;
+  color: #eeeeee;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.device-connector {
+  color: #cbd5e0;
+  font-weight: bold;
+}
+
+.delete-btn {
+  background: none;
+  border: none;
+  padding: 8px;
+  cursor: pointer;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+}
+
+.delete-btn img {
+  width: 20px;
+  height: 20px;
 }
 </style>

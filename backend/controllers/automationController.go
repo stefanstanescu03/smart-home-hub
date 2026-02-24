@@ -3,6 +3,7 @@ package controllers
 import (
 	"backend/initializers"
 	"backend/models"
+	"backend/sockets"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
@@ -42,6 +43,8 @@ func AddAutomation(c *gin.Context) {
 		c.Status(http.StatusBadRequest)
 		return
 	}
+
+	sockets.NotifyAutomationsHandler()
 
 	c.JSON(http.StatusOK, gin.H{
 		"automation": automation,
@@ -87,7 +90,9 @@ func DeleteAutomation(c *gin.Context) {
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
 
-	initializers.DB.Delete(&models.Automation{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+	initializers.DB.Unscoped().Delete(&models.Automation{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
+
+	sockets.NotifyAutomationsHandler()
 
 	c.JSON(http.StatusOK, gin.H{
 		"message": "automation deleted",
