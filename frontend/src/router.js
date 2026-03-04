@@ -11,6 +11,7 @@ import PublicDashboard from "../pages/PublicDashboard.vue";
 import Alert from "../pages/Alert.vue";
 import Admin from "../pages/Admin.vue";
 import Automations from "../pages/Automations.vue";
+import Analyze from "../pages/Analyze.vue";
 
 const routes = [
   { path: "/", component: Home },
@@ -24,6 +25,7 @@ const routes = [
   { path: "/alerts/:id", component: Alert },
   { path: "/admin", component: Admin },
   { path: "/automations", component: Automations },
+  { path: "/analyze/:id", component: Analyze },
 ];
 
 export default createRouter({

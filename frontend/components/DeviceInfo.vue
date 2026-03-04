@@ -63,6 +63,12 @@ export default {
         <button class="delete-button" @click="$emit('edit')">
           <img src="../public/edit.png" alt="" height="25" width="25" />
         </button>
+        <button
+          class="delete-button"
+          @click="this.$router.push(`/analyze/${id}`)"
+        >
+          <img src="../public/business.png" alt="" height="25" width="25" />
+        </button>
         <button class="delete-button" @click="$emit('delete')">
           <img src="../public/delete.png" alt="" height="20" width="20" />
         </button>
