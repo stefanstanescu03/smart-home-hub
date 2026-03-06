@@ -46,9 +46,11 @@ def create_features(df, column, lag, steps):
 
 
 def forecast(X_train, y_train, X_forecast):
+
     model = RandomForestRegressor(
         n_estimators=100, max_depth=10, random_state=42)
     model.fit(X_train, y_train)
+
     return model.predict(X_forecast)
 
 
@@ -74,6 +76,7 @@ def last_hours(filename, num, param):
 
     hourly_df['timestamp'] = hourly_df['timestamp'].dt.strftime(
         '%Y-%m-%d %H:00')
+
     return hourly_df.to_dict(orient='records')
 
 
@@ -90,13 +93,12 @@ def last_days(filename, num, param):
 
     hourly_df['timestamp'] = hourly_df['timestamp'].dt.strftime(
         '%Y-%m-%d %H:00')
+
     return hourly_df.to_dict(orient='records')
 
 
-def predict_next_values(filename, lag, steps, param):
+def predict(df, lag, steps, param):
 
-    df = pd.read_csv(filename)
-    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
     X, y, X_forecast = create_features(df, param, int(lag), int(steps))
 
     X = X.apply(pd.to_numeric, errors='coerce')
@@ -114,3 +116,37 @@ def predict_next_values(filename, lag, steps, param):
     y_pred = y_pred.flatten()
 
     return y_pred
+
+
+def predict_next_values(filename, lag, steps, param):
+
+    df = pd.read_csv(filename)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+
+    return predict(df, lag, steps, param)
+
+
+def predict_next_hours(filename, lag, steps, param):
+
+    df = pd.read_csv(filename)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+    df = df.set_index('timestamp').sort_index()
+    hourly_df = df[param].resample('1h').mean()
+    hourly_df = hourly_df.reset_index()
+    hourly_df['timestamp'] = pd.to_datetime(hourly_df['timestamp'])
+    hourly_df = hourly_df.dropna()
+
+    return predict(hourly_df, lag, steps, param)
+
+
+def predict_next_days(filename, lag, steps, param):
+
+    df = pd.read_csv(filename)
+    df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
+    df = df.set_index('timestamp').sort_index()
+    day_df = df[param].resample('D').mean().reset_index()
+    day_df = day_df.reset_index()
+    day_df['timestamp'] = pd.to_datetime(day_df['timestamp'])
+    day_df = day_df.dropna()
+
+    return predict(day_df, lag, steps, param)

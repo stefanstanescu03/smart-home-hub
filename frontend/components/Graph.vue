@@ -23,7 +23,7 @@ ChartJS.register(
 );
 
 export default {
-  props: ["filename", "param"],
+  props: ["filename", "param", "id"],
   components: { Line },
   data() {
     return {
@@ -32,6 +32,7 @@ export default {
       steps: 3,
       lag: 7,
       is_loading: false,
+      curr: "values",
       chartOptions: {
         responsive: true,
         maintainAspectRatio: false,
@@ -79,13 +80,32 @@ export default {
     },
   },
   methods: {
+    getToken() {
+      const cookies = document.cookie;
+      let token = cookies.split("=")[1];
+      if (token === undefined) {
+        return undefined;
+      }
+      return token;
+    },
     // Change this
     async handleFetchValues(path) {
       try {
         const res = await axios.get(
-          `http://localhost:8000/${path}/?filename=${this.filename}&num=${this.num}&param=${this.param}`,
+          `/api/device/analysis/data/${this.id}?path=${path}&num=${this.num}&param=${this.param}`,
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
         );
+
         this.values = res.data.values;
+        if (path === "tail") {
+          this.curr = "values";
+        } else if (path === "hour") {
+          this.curr = "hours";
+        } else if (path === "day") {
+          this.curr = "days";
+        }
       } catch (err) {
         console.log(err);
       }
@@ -93,9 +113,14 @@ export default {
     async handleForecast(path) {
       try {
         this.is_loading = true;
+
         const res = await axios.get(
-          `http://localhost:8000/predict/${path}/?filename=${this.filename}&lag=${this.lag}&steps=${this.steps}&param=${this.param}`,
+          `/api/device/analysis/forecast/${this.id}?path=${path}&lag=${this.lag}&steps=${this.steps}&param=${this.param}`,
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
         );
+
         this.is_loading = false;
         const forecasted = res.data.values;
 
@@ -164,7 +189,7 @@ export default {
     </div>
 
     <div class="bottom-container">
-      <button @click="this.handleForecast('values')" class="title-button">
+      <button @click="this.handleForecast(this.curr)" class="title-button">
         Forecast
       </button>
       <div class="field">
@@ -185,7 +210,7 @@ export default {
   background: #1a1a1a;
   border: 1px solid #333;
   padding: 0.75rem;
-  width: 50%;
+  width: 90%;
 }
 
 .title-container {
@@ -193,6 +218,7 @@ export default {
   flex-direction: row;
   gap: 1rem;
   align-items: baseline;
+  flex-wrap: wrap;
 }
 
 .chart-title {
@@ -209,6 +235,7 @@ export default {
   gap: 1rem;
   align-items: center;
   padding: 1rem;
+  flex-wrap: wrap;
 }
 
 .chart-container {

@@ -80,6 +80,7 @@ export default {
           v-for="param in this.device.params"
           :filename="this.device.filename"
           :param="param"
+          :id="device.ID"
         />
       </div>
     </div>

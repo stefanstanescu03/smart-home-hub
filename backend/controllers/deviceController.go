@@ -6,9 +6,11 @@ import (
 	"backend/pipelines"
 	"backend/sockets"
 	"backend/utils"
+	"encoding/json"
 	"fmt"
 	"net/http"
 	"os"
+	"strings"
 
 	"github.com/gin-gonic/gin"
 )
@@ -315,5 +317,94 @@ func GetDeviceParams(c *gin.Context) {
 	c.JSON(http.StatusOK, gin.H{
 		"params": first_line,
 	})
+
+}
+
+func GetDeviceData(c *gin.Context) {
+
+	currUser, _ := c.Get("user")
+	id := c.Param("id")
+
+	path := c.Query("path")
+	num := c.Query("num")
+	param := c.Query("param")
+
+	var device models.Device
+	initializers.DB.Find(&device, "user_id = ? and id = ?", currUser.(models.User).ID, id)
+
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Device not found",
+		})
+		return
+	}
+
+	splits := strings.Split(device.Csv_location, "/")
+	filename := splits[len(splits)-1]
+
+	api := fmt.Sprintf("http://localhost:8000/%s/?filename=%s&num=%s&param=%s", path, filename, num, param)
+
+	type apiResponse struct {
+		Values []map[string]interface{} `json:"values"`
+	}
+
+	resp, err := http.Get(api)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to connect to Fastapi service"})
+		return
+	}
+
+	var data apiResponse
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse Fastapi response"})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
+
+}
+
+func GetDeviceForecast(c *gin.Context) {
+
+	currUser, _ := c.Get("user")
+	id := c.Param("id")
+
+	path := c.Query("path")
+	lag := c.Query("lag")
+	steps := c.Query("steps")
+	param := c.Query("param")
+
+	var device models.Device
+	initializers.DB.Find(&device, "user_id = ? and id = ?", currUser.(models.User).ID, id)
+
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Device not found",
+		})
+		return
+	}
+
+	splits := strings.Split(device.Csv_location, "/")
+	filename := splits[len(splits)-1]
+
+	api := fmt.Sprintf("http://localhost:8000/predict/%s/?filename=%s&lag=%s&steps=%s&param=%s", path, filename, lag, steps, param)
+
+	type apiResponse struct {
+		Values []float32 `json:"values"`
+	}
+
+	resp, err := http.Get(api)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to connect to Fastapi service"})
+		return
+	}
+
+	var data apiResponse
+	if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "Failed to parse Fastapi response"})
+		return
+	}
+
+	c.JSON(http.StatusOK, data)
 
 }

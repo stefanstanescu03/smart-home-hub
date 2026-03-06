@@ -1,4 +1,4 @@
-timestamp,temperature[C],humidity[%],gas,
+timestamp,temperature[C],humidity,gas,
 1772199491,22.07, 45.03,24747.31,
 1772199497,22.07, 45.02,24747.33,
 1772199502,22.06, 44.99,26820.11,

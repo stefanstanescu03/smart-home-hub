@@ -55,3 +55,17 @@ async def get_per_day(filename, lag, steps, param):
     csv_path = os.getenv("DATA_LOCATION") + "/" + filename
     y_pred = engine.predict_next_values(csv_path, lag, steps, param)
     return {"values": y_pred.tolist()}
+
+
+@app.get("/predict/hours/")
+async def get_per_day(filename, lag, steps, param):
+    csv_path = os.getenv("DATA_LOCATION") + "/" + filename
+    y_pred = engine.predict_next_hours(csv_path, lag, steps, param)
+    return {"values": y_pred.tolist()}
+
+
+@app.get("/predict/days/")
+async def get_per_day(filename, lag, steps, param):
+    csv_path = os.getenv("DATA_LOCATION") + "/" + filename
+    y_pred = engine.predict_next_days(csv_path, lag, steps, param)
+    return {"values": y_pred.tolist()}
