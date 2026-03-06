@@ -295,3 +295,25 @@ func GetDeviceState(c *gin.Context) {
 	}
 
 }
+
+func GetDeviceParams(c *gin.Context) {
+
+	currUser, _ := c.Get("user")
+	id := c.Param("id")
+
+	var device models.Device
+	initializers.DB.Find(&device, "user_id = ? and id = ?", currUser.(models.User).ID, id)
+
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Device not found",
+		})
+		return
+	}
+
+	first_line := utils.GetFirstLine(device.Csv_location)
+	c.JSON(http.StatusOK, gin.H{
+		"params": first_line,
+	})
+
+}

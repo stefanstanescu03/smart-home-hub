@@ -21,5 +21,6 @@ func RegisterDeviceRoutes(r *gin.Engine) {
 		deviceRoutes.GET("/public/:id", controllers.GetPublicDevice)
 		deviceRoutes.GET("/all", middleware.RequireAuth, controllers.GetAllDevices)
 		deviceRoutes.GET("/state/:id", controllers.GetDeviceState)
+		deviceRoutes.GET("/params/:id", middleware.RequireAuth, controllers.GetDeviceParams)
 	}
 }

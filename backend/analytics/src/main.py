@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import os
 import engine
+import json
 
 app = FastAPI()
 load_dotenv("../.env")
@@ -47,3 +48,10 @@ async def get_per_day(filename, num, param):
     csv_path = os.getenv("DATA_LOCATION") + "/" + filename
     values = engine.last_days(csv_path, num, param)
     return {"values": values}
+
+
+@app.get("/predict/values/")
+async def get_per_day(filename, lag, steps, param):
+    csv_path = os.getenv("DATA_LOCATION") + "/" + filename
+    y_pred = engine.predict_next_values(csv_path, lag, steps, param)
+    return {"values": y_pred.tolist()}

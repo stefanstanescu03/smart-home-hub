@@ -18,11 +18,9 @@ export default {
       document.cookie =
         "Token=; expires=Thu, 01 Jan 1970 00:00:00 UTC; path=/;";
       this.$router.push("/login");
-      // props.menuOpen = false;
     },
     navigate(path) {
       this.$router.push(path);
-      // props.menuOpen = false;
     },
     async isAdmin() {
       if (this.getToken() == -1) {
@@ -114,7 +112,7 @@ nav {
   width: 15%;
   min-width: 220px;
   background-color: #1a1a1a;
-  height: 100vh;
+  height: 100%;
 }
 
 button {

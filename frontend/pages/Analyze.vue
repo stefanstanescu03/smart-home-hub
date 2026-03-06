@@ -19,6 +19,21 @@ export default {
       }
       return token;
     },
+    async fetchParams() {
+      try {
+        if (this.getToken() != undefined) {
+          const res = await axios.get(
+            `/api/device/params/${this.$route.params.id}`,
+            {
+              headers: { Authorization: `Bearer ${this.getToken()}` },
+            },
+          );
+          return res.data.params;
+        }
+      } catch (err) {
+        console.log(err);
+      }
+    },
     async handleFetchDevice() {
       try {
         if (this.getToken() != undefined) {
@@ -31,6 +46,13 @@ export default {
           this.device = response.data.device;
           const path = this.device.Csv_location;
           this.device.filename = path.split("/").pop().split("\\").pop();
+
+          const paramsStr = await this.fetchParams();
+          let paramsArr = paramsStr.split(",");
+          paramsArr = paramsArr.filter(
+            (param) => param != "" && param != "timestamp",
+          );
+          this.device.params = paramsArr;
         }
       } catch (err) {
         console.log(err);
@@ -55,9 +77,9 @@ export default {
       <div class="graphs-container">
         <Graph
           v-if="device.filename"
+          v-for="param in this.device.params"
           :filename="this.device.filename"
-          num="10"
-          param="temperature[C]"
+          :param="param"
         />
       </div>
     </div>
@@ -71,6 +93,12 @@ export default {
   gap: 2rem;
   height: 100%;
   color: #eeeeee;
+}
+
+.graphs-container {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
 }
 
 .info-container {
