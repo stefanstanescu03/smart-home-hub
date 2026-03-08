@@ -24,6 +24,7 @@ func AddDevice(c *gin.Context) {
 		Ident string
 		// Csv_location string
 		Visibility bool
+		Cloud_api  string
 	}
 
 	if c.Bind(&body) != nil {
@@ -37,6 +38,7 @@ func AddDevice(c *gin.Context) {
 		Name:         body.Name,
 		Ident:        body.Ident,
 		Csv_location: os.Getenv("DATA_LOCATION") + "/" + utils.Format(body.Name) + fmt.Sprint(currUser.(models.User).ID) + ".csv",
+		Cloud_api:    body.Cloud_api,
 		Visibility:   body.Visibility,
 		UserId:       currUser.(models.User).ID,
 	}
@@ -60,11 +62,13 @@ func UpdateDevice(c *gin.Context) {
 	id := c.Param("id")
 
 	var body struct {
-		Name         string
-		Ident        string
-		Csv_location string
-		Visibility   bool
+		Name       string
+		Ident      string
+		Visibility bool
+		Cloud_api  string
 	}
+
+	fmt.Println(body.Cloud_api)
 
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
@@ -85,10 +89,10 @@ func UpdateDevice(c *gin.Context) {
 
 	device.Name = body.Name
 	device.Ident = body.Ident
-	device.Csv_location = body.Csv_location
 	device.Visibility = body.Visibility
+	device.Cloud_api = body.Cloud_api
 
-	initializers.DB.Save(&device)
+	initializers.DB.Updates(&device)
 
 	c.JSON(http.StatusOK, gin.H{
 		"device": device,

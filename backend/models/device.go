@@ -7,7 +7,8 @@ type Device struct {
 	Name         string `gorm:"not null;index:name;unique"`
 	Ident        string `gorm:"not null;unique"`
 	Csv_location string `gorm:"not null;unique"`
-	Visibility   bool   `gorm:"not null;default:false"`
+	Cloud_api    string
+	Visibility   bool `gorm:"not null;default:false"`
 	UserId       uint
 	User         User `gorm:"foreignKey:UserId"`
 }

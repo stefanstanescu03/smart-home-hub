@@ -11,10 +11,12 @@ export default {
         id: "",
         ident: "",
         visibility: "",
+        cloud_api: "",
       },
       new_device: {
         ident: "",
         visibility: "",
+        cloud_api: "",
       },
       menuOpen: false,
     };
@@ -58,6 +60,7 @@ export default {
       this.selected_device.ident = device.Ident;
       this.selected_device.visibility =
         device.Visibility === true ? "public" : "private";
+      this.selected_device.cloud_api = device.Cloud_api;
       const dialog = document.getElementById("edit-dialog");
       dialog.show();
     },
@@ -75,6 +78,7 @@ export default {
     },
     async handleUpdateDevice() {
       const id = this.selected_device.id;
+      console.log(this.selected_device);
       try {
         await axios.put(
           `/api/device/update/${id}`,
@@ -82,13 +86,14 @@ export default {
             name: this.selected_device.name,
             ident: this.selected_device.ident,
             visibility: this.selected_device.visibility === "public",
+            cloud_api: this.selected_device.cloud_api,
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
           },
         );
         this.handleCancelEdit();
-        this.$router.go(0);
+        // this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
@@ -101,6 +106,7 @@ export default {
             name: this.new_device.name,
             ident: this.new_device.ident,
             visibility: this.new_device.visibility === "public",
+            cloud_api: this.new_device.cloud_api,
           },
           { headers: { Authorization: `Bearer ${this.getToken()}` } },
         );
@@ -179,6 +185,11 @@ export default {
             </select>
           </div>
 
+          <div class="field">
+            <label>Cloud API (Optional)</label>
+            <input type="text" v-model="selected_device.cloud_api" />
+          </div>
+
           <button @click="handleUpdateDevice" class="add-btn">
             SAVE CHANGES
           </button>
@@ -208,6 +219,11 @@ export default {
               <option value="public">Public</option>
               <option value="private">Private</option>
             </select>
+          </div>
+
+          <div class="field">
+            <label>Cloud API (Optional)</label>
+            <input type="text" v-model="new_device.cloud_api" />
           </div>
 
           <button @click="handleAddDevice" class="add-btn">ADD DEVICE</button>

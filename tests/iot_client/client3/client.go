@@ -33,7 +33,7 @@ func main() {
 	}
 	fmt.Printf("Connected as %s. Starting data stream...\n", clientID)
 
-	ticker := time.NewTicker(5 * time.Second)
+	ticker := time.NewTicker(10 * time.Second)
 	defer ticker.Stop()
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
