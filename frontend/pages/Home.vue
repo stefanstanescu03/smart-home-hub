@@ -93,7 +93,7 @@ export default {
           },
         );
         this.handleCancelEdit();
-        // this.$router.go(0);
+        this.$router.go(0);
       } catch (err) {
         console.log(err);
       }

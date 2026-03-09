@@ -19,6 +19,11 @@ type TelemetryHook struct {
 	mqtt.HookBase
 }
 
+type ConnectionMetadata struct {
+	Csv_location string
+	Cloud_api    string
+}
+
 var ConnectionPool sync.Map
 
 func (h *TelemetryHook) ID() string {
@@ -41,9 +46,7 @@ func (h *TelemetryHook) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet
 			return false
 		}
 
-		fmt.Println(cl.ID)
-
-		ConnectionPool.Store(cl.ID, device.Csv_location)
+		ConnectionPool.Store(cl.ID, ConnectionMetadata{Csv_location: device.Csv_location, Cloud_api: device.Cloud_api})
 
 		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("New device connected: %s", ident))
 	}
@@ -54,9 +57,17 @@ func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.P
 
 	topic := pk.TopicName
 
-	if csv_location, ok := ConnectionPool.Load(cl.ID); ok && strings.HasPrefix(topic, "telemetry/") {
+	if metadata, ok := ConnectionPool.Load(cl.ID); ok && strings.HasPrefix(topic, "telemetry/") {
 		msg := string(pk.Payload)
-		utils.ParseMessage(msg, csv_location.(string))
+		utils.ParseMessage(msg, metadata.(ConnectionMetadata).Csv_location)
+
+		if len(metadata.(ConnectionMetadata).Cloud_api) != 0 {
+			err := utils.SendToCloud(msg, metadata.(ConnectionMetadata).Cloud_api)
+			if err != nil {
+				utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Error sending %s data to cloud: %s", cl.ID, err))
+			}
+		}
+
 	}
 	return pk, nil
 }
