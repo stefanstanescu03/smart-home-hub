@@ -8,6 +8,7 @@ export default {
       menuOpen: false,
       available_devices: [],
       automations: [],
+      routines: [],
       new_automation: {
         Name: "",
         Device1: "",
@@ -19,6 +20,12 @@ export default {
         ScheduleStart: "",
         ScheduleEnd: "",
         IsScheduled: false,
+      },
+      new_routine: {
+        Name: "",
+        Device: "",
+        Payload: "",
+        StartTime: "",
       },
     };
   },
@@ -43,7 +50,6 @@ export default {
             device2Name: await this.handleGetDeviceName(automation.Device2Id),
           })),
         );
-        console.log(this.automations);
       } catch (err) {
         console.log(err);
       }
@@ -68,6 +74,14 @@ export default {
       const dialog = document.getElementById("create-dialog");
       dialog.close();
     },
+    triggerCreateRoutine() {
+      const dialog = document.getElementById("create-dialog-routine");
+      dialog.show();
+    },
+    handleCancelCreateRoutine() {
+      const dialog = document.getElementById("create-dialog-routine");
+      dialog.close();
+    },
     async handleGetDeviceName(id) {
       try {
         const res = await axios.get(`/api/device/${id}`, {
@@ -87,6 +101,21 @@ export default {
         this.available_devices = res.data.devices;
       } catch (err) {
         console.error(err);
+      }
+    },
+    async handleFetchRoutines() {
+      try {
+        const res = await axios.get("/api/routine/", {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.routines = await Promise.all(
+          res.data.routines.map(async (routine) => ({
+            ...routine,
+            deviceName: await this.handleGetDeviceName(routine.DeviceId),
+          })),
+        );
+      } catch (err) {
+        console.log(err);
       }
     },
     async handleCreateAutomation() {
@@ -122,10 +151,42 @@ export default {
         console.log(err);
       }
     },
+    async handleDeleteRoutine(routineId) {
+      try {
+        await axios.delete(`/api/routine/delete/${routineId}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+        this.routines = this.routines.filter(
+          (routine) => routine.ID != routineId,
+        );
+      } catch (err) {
+        console.log(err);
+      }
+    },
+    async handleCreateRoutine() {
+      try {
+        await axios.post(
+          "/api/routine/create",
+          {
+            Name: this.new_routine.Name,
+            DeviceId: this.new_routine.Device.ID,
+            Payload: this.new_routine.Payload,
+            StartTime: this.new_routine.StartTime,
+          },
+          {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          },
+        );
+        this.$router.go(0);
+      } catch (err) {
+        console.log(err);
+      }
+    },
   },
   async mounted() {
     await this.handleGetAvailableDevices();
     await this.handleFetchAutomations();
+    await this.handleFetchRoutines();
   },
 };
 </script>
@@ -176,6 +237,34 @@ export default {
             class="delete-btn"
             @click="handleDeleteAutomation(automation.ID)"
           >
+            <img src="../public/delete.png" alt="Delete" />
+          </button>
+        </div>
+      </div>
+
+      <h1>My Routines</h1>
+      <button class="top-create-button" @click="triggerCreateRoutine">
+        Create Routine
+      </button>
+
+      <div class="routines-container">
+        <div v-for="routine in routines" :key="routine.ID" class="routine-card">
+          <div class="routine-timeline">
+            <span class="t-start">{{ routine.StartTime }}</span>
+            <span class="t-end">{{ routine.EndTime }}</span>
+          </div>
+
+          <div class="routine-body">
+            <div class="routine-meta">
+              <h2 class="routine-name">{{ routine.Name }}</h2>
+            </div>
+
+            <div class="routine-target">
+              {{ routine.deviceName }}
+            </div>
+          </div>
+
+          <button class="delete-btn" @click="handleDeleteRoutine(routine.ID)">
             <img src="../public/delete.png" alt="Delete" />
           </button>
         </div>
@@ -272,6 +361,56 @@ export default {
 
           <button @click="handleCreateAutomation" class="add-btn">
             ADD AUTOMATION
+          </button>
+        </div>
+      </dialog>
+
+      <dialog id="create-dialog-routine">
+        <div class="dialog-header">
+          <span>NEW ROUTINE</span>
+          <button @click="handleCancelCreateRoutine" class="close-x">
+            &times;
+          </button>
+        </div>
+
+        <div class="dialog-form">
+          <div class="field">
+            <label>Routine Label</label>
+            <input type="text" v-model="this.new_routine.Name" />
+          </div>
+
+          <div class="field">
+            <label for="device2">Action Device</label>
+            <select id="device2" v-model="this.new_routine.Device">
+              <option
+                v-for="dev in available_devices"
+                :key="dev.id"
+                :value="dev"
+              >
+                {{ dev.Name }}
+              </option>
+            </select>
+          </div>
+
+          <div class="field">
+            <div class="schedule-one-line">
+              <label for="schedule-times">Start Time</label>
+              <input type="time" v-model="this.new_routine.StartTime" />
+            </div>
+          </div>
+
+          <div class="field">
+            <label for="payload">Command</label>
+            <textarea
+              id="payload"
+              rows="4"
+              cols="50"
+              v-model="this.new_routine.Payload"
+            />
+          </div>
+
+          <button @click="handleCreateRoutine" class="add-btn">
+            ADD ROUTINE
           </button>
         </div>
       </dialog>
@@ -501,7 +640,7 @@ select:focus {
 }
 
 .device-connector {
-  color: #cbd5e0;
+  color: #eeeeee;
   font-weight: bold;
 }
 
@@ -560,5 +699,80 @@ select:focus {
 
 .schedule-one-line input[type="checkbox"]:checked::after {
   opacity: 1;
+}
+
+.routines-container {
+  display: flex;
+  flex-direction: column;
+  padding-top: 2rem;
+  gap: 1rem;
+  max-width: 600px;
+}
+
+.routine-card {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  border-radius: 0.75rem;
+  padding: 20px;
+}
+
+.routine-timeline {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding-right: 12px;
+  border-right: 1px solid #222;
+  min-width: 50px;
+}
+
+.t-start,
+.t-end {
+  font-family: "Monaco", monospace;
+  font-size: 1.5rem;
+  font-weight: 700;
+  color: #eeeeee;
+}
+
+.routine-body {
+  flex: 1;
+  padding-left: 12px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+
+.routine-meta {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.routine-name {
+  margin: 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: #eee;
+  white-space: nowrap;
+  overflow: hidden;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 </style>

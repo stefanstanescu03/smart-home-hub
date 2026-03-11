@@ -18,4 +18,5 @@ func main() {
 	initializers.DB.AutoMigrate(&models.Dashboard{})
 	initializers.DB.AutoMigrate(&models.Widget{})
 	initializers.DB.AutoMigrate(&models.AnomalyModel{})
+	initializers.DB.AutoMigrate(&models.Routine{})
 }

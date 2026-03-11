@@ -39,6 +39,7 @@ func main() {
 	services.RegisterDashboardRoutes(r)
 	services.RegisterWidgetRoutes(r)
 	services.RegisterAnomalyModelRoutes(r)
+	services.RegisterRoutineRoutes(r)
 
 	r.GET("/test", func(c *gin.Context) {
 		c.JSON(http.StatusOK, gin.H{

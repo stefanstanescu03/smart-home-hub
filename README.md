@@ -80,3 +80,9 @@ EMAIL_PASSWORD=
 SMTP=smtp.gmail.com
 SMTP_PORT=587
 ```
+
+## TODO
+
+1. Routines
+2. Find a way to send commands to a multi state device
+3. Add data cleaning to forecaster

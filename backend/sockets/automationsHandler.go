@@ -16,7 +16,14 @@ type automationMetadata struct {
 	ident_device2 string
 }
 
+type routineMetadata struct {
+	routine      models.Routine
+	ident_device string
+}
+
 var automationsPool []automationMetadata
+var routinesPool []routineMetadata
+
 var refreshAutomations = make(chan struct{}, 1)
 
 func NotifyAutomationsHandler() {
@@ -47,6 +54,36 @@ func fetchCurrentAutomations() {
 			ident_device2: device2.Ident,
 		})
 	}
+
+}
+
+func fetchCurrentRoutines() {
+
+	var routines []models.Routine
+	initializers.DB.Find(&routines)
+
+	for _, routine := range routines {
+
+		var device models.Device
+		initializers.DB.First(&device, "id = ?", routine.DeviceId)
+
+		routinesPool = append(routinesPool, routineMetadata{
+			routine:      routine,
+			ident_device: device.Ident,
+		})
+	}
+
+}
+
+func shouldTriggerRoutine(routine routineMetadata) bool {
+
+	now := time.Now()
+	currentMinutes := now.Hour()*60 + now.Minute()
+	var startH, startM int
+	fmt.Sscanf(routine.routine.StartTime, "%d:%d", &startH, &startM)
+	startMinutes := startH*60 + startM
+
+	return currentMinutes >= startMinutes
 
 }
 
@@ -138,15 +175,31 @@ func StartAutomationsHandler() {
 	utils.WriteToLogs("[AUTOMATIONS-HANDLER]", "Started automations handler")
 
 	fetchCurrentAutomations()
+	fetchCurrentRoutines()
 
 	ticker := time.NewTicker(5 * time.Second)
 	defer ticker.Stop()
 
 	automationsStates := make(map[uint]bool)
+	routineStates := make(map[uint]bool)
 
 	for {
 		select {
 		case <-ticker.C:
+
+			for _, routine := range routinesPool {
+				if shouldTriggerRoutine(routine) {
+					if !routineStates[routine.routine.ID] {
+
+						PublishCmd(routine.ident_device, routine.routine.Payload)
+
+						routineStates[routine.routine.ID] = true
+					}
+				} else {
+					routineStates[routine.routine.ID] = false
+				}
+			}
+
 			for _, automation := range automationsPool {
 				if showldTriggerAutomation(automation) {
 					if !automationsStates[automation.automation.ID] {
@@ -161,6 +214,7 @@ func StartAutomationsHandler() {
 			}
 		case <-refreshAutomations:
 			fetchCurrentAutomations()
+			fetchCurrentRoutines()
 			utils.WriteToLogs("[AUTOMATIONS-HANDLER]", "Automations cache refreshed")
 		}
 	}
