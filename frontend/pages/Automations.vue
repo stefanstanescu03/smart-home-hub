@@ -16,6 +16,9 @@ export default {
         Trigger: "",
         Target: "",
         Payload: "",
+        ScheduleStart: "",
+        ScheduleEnd: "",
+        IsScheduled: false,
       },
     };
   },
@@ -40,6 +43,7 @@ export default {
             device2Name: await this.handleGetDeviceName(automation.Device2Id),
           })),
         );
+        console.log(this.automations);
       } catch (err) {
         console.log(err);
       }
@@ -106,6 +110,8 @@ export default {
             Device2Id: this.new_automation.Device2.ID,
             Payload: this.new_automation.Payload,
             Condition: conditionString,
+            ScheduleStart: this.new_automation.ScheduleStart,
+            ScheduleEnd: this.new_automation.ScheduleEnd,
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
@@ -149,6 +155,14 @@ export default {
               <span class="automation-condition">{{
                 automation.Condition
               }}</span>
+              <span
+                v-if="
+                  automation.ScheduleStart != '' && automation.ScheduleEnd != ''
+                "
+                class="automation-condition"
+              >
+                {{ automation.ScheduleStart }} - {{ automation.ScheduleEnd }}
+              </span>
             </div>
 
             <div class="devices-row">
@@ -226,6 +240,24 @@ export default {
               id="value"
               v-model="this.new_automation.Target"
             />
+          </div>
+
+          <div class="field">
+            <div class="schedule-one-line">
+              <input
+                type="checkbox"
+                v-model="this.new_automation.IsScheduled"
+              />
+              <label for="schedule">Schedule</label>
+            </div>
+          </div>
+
+          <div class="field" v-if="this.new_automation.IsScheduled">
+            <div class="schedule-one-line">
+              <input type="time" v-model="this.new_automation.ScheduleStart" />
+              <label for="schedule-times">to</label>
+              <input type="time" v-model="this.new_automation.ScheduleEnd" />
+            </div>
           </div>
 
           <div class="field">
@@ -313,8 +345,11 @@ select {
 
 dialog {
   position: fixed;
-  inset: 0;
-  margin: auto;
+  top: 1rem;
+  left: 50%;
+  transform: translateX(-50%);
+
+  margin: 0;
   width: 90vw;
   max-width: 380px;
   background-color: #1a1a1a;
@@ -322,6 +357,9 @@ dialog {
   border: 1px solid #444444;
   padding: 0;
   border-radius: 1rem;
+
+  max-height: calc(100vh - 2rem);
+  overflow-y: auto;
 }
 
 .dialog-header {
@@ -480,5 +518,47 @@ select:focus {
 .delete-btn img {
   width: 20px;
   height: 20px;
+}
+
+.schedule-one-line {
+  display: flex;
+  flex-direction: row;
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.schedule-one-line input[type="checkbox"] {
+  appearance: none;
+  -webkit-appearance: none;
+  width: 20px;
+  height: 20px;
+  border: 1px solid #333;
+  border-radius: 4px;
+  background-color: transparent;
+  display: inline-grid;
+  place-content: center;
+  cursor: pointer;
+  transition: all 0.2s ease-in-out;
+  position: relative;
+}
+
+.schedule-one-line input[type="checkbox"]:checked {
+  background-color: #8ac6c9;
+  border-color: #8ac6c9;
+}
+
+.schedule-one-line input[type="checkbox"]::after {
+  content: "";
+  width: 10px;
+  height: 5px;
+  border-left: 2px solid #1a1a1a;
+  border-bottom: 2px solid #1a1a1a;
+  transform: rotate(-45deg) translate(1px, -1px);
+  opacity: 0;
+  transition: opacity 0.1s ease-in-out;
+}
+
+.schedule-one-line input[type="checkbox"]:checked::after {
+  opacity: 1;
 }
 </style>

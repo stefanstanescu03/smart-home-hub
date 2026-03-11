@@ -286,7 +286,7 @@ func GetDeviceState(c *gin.Context) {
 	id := c.Param("id")
 
 	var device models.Device
-	initializers.DB.Find(&device, "visibility = true and id = ?", id)
+	initializers.DB.Find(&device, "id = ?", id)
 
 	state, ok := sockets.DeviceStates.Load(device.Ident)
 

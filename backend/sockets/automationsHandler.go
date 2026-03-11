@@ -51,6 +51,37 @@ func fetchCurrentAutomations() {
 }
 
 func showldTriggerAutomation(automation automationMetadata) bool {
+
+	// Check for schedule
+	start_time := automation.automation.ScheduleStart
+	end_time := automation.automation.ScheduleEnd
+
+	if len(start_time) != 0 && len(end_time) != 0 {
+
+		now := time.Now()
+		currentMinutes := now.Hour()*60 + now.Minute()
+
+		var startH, startM int
+		fmt.Sscanf(start_time, "%d:%d", &startH, &startM)
+		startMinutes := startH*60 + startM
+
+		var endH, endM int
+		fmt.Sscanf(end_time, "%d:%d", &endH, &endM)
+		endMinutes := endH*60 + endM
+
+		if startMinutes <= endMinutes {
+			if !(currentMinutes >= startMinutes && currentMinutes <= endMinutes) {
+				return false
+			}
+		} else {
+			if !(currentMinutes >= startMinutes || currentMinutes <= endMinutes) {
+				return false
+			}
+		}
+	}
+
+	//
+
 	conditionKey, op, conditionValue, ok := splitCondition(automation.automation.Condition)
 	if !ok {
 		utils.WriteToLogs("[AUTOMATIONS-HANDLER]", fmt.Sprintf("error parsing automation with id %d condition", automation.automation.ID))

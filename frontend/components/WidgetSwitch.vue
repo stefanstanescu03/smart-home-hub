@@ -31,6 +31,7 @@ export default {
     async getState() {
       try {
         const res = await axios.get(`/api/device/state/${this.deviceId}`);
+        console.log(res.data.state);
         if (res.data.state === "not registered" || res.data.state === "false") {
           this.state = false;
         } else {
