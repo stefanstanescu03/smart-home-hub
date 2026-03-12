@@ -83,6 +83,6 @@ SMTP_PORT=587
 
 ## TODO
 
-1. Routines
+1. Routines [check]
 2. Find a way to send commands to a multi state device
-3. Add data cleaning to forecaster
+3. Add data cleaning to forecaster [check]

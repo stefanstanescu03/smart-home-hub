@@ -4,7 +4,36 @@ import numpy as np
 from sklearn.ensemble import RandomForestRegressor
 
 
+class KalmanFilter:
+    def __init__(self, initial_state, initial_error, process_variance, measurement_variance):
+        self.x = initial_state
+        self.P = initial_error
+        self.Q = process_variance
+        self.R = measurement_variance
+
+    def update(self, measurement):
+        x_pred = self.x
+        P_pred = self.P + self.Q
+        K = P_pred / (P_pred + self.R)
+        self.x = x_pred + K * (measurement - x_pred)
+        self.P = (1 - K) * P_pred
+
+        return self.x
+
+
 def create_features(df, column, lag, steps):
+
+    df = df.interpolate()
+
+    z_scores = (df[column] - df[column].mean()) / df[column].std()
+
+    df.loc[z_scores.abs() > 3, column] = None
+    df[column] = df[column].interpolate()
+
+    initial_val = df[column].iloc[0] if not df[column].empty else 0
+    kf = KalmanFilter(initial_state=initial_val, initial_error=1,
+                      process_variance=0.01, measurement_variance=0.1)
+    df[column] = [kf.update(z) for z in df[column].values]
 
     X_cols = ['hour_sin', 'hour_cos', 'day_sin',
               'day_cos', 'month', 'is_weekend']

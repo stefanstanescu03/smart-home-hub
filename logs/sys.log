@@ -1,0 +1,6 @@
+2026-03-12T10:47:57+02:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-03-12T10:47:57+02:00 [ALERTS-HANDLER] Started alerts handler
+2026-03-12T10:47:57+02:00 [STREAMING] Streaming server started on port: 5003
+2026-03-12T10:47:57+02:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-03-12T10:47:58+02:00 [PIPELINES] Anomaly detection pipeline started
+2026-03-12T10:47:58+02:00 [CMD-CLIENT] Client connected to broker
