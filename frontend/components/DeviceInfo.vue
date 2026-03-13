@@ -69,7 +69,7 @@ export default {
         >
           <img src="../public/business.png" alt="" height="25" width="25" />
         </button>
-        <button class="delete-button" @click="$emit('delete')">
+        <button class="delete-btn" @click="$emit('delete')">
           <img src="../public/delete.png" alt="" height="20" width="20" />
         </button>
       </div>
@@ -93,6 +93,22 @@ td {
   text-decoration: none;
   background-color: transparent;
   cursor: pointer;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 
 .action-container {

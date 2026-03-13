@@ -233,10 +233,7 @@ export default {
           <td>{{ alert.Condition }}</td>
           <td>
             <div class="action-container">
-              <button
-                class="delete-button"
-                @click="handleDeleteAlert(alert.ID)"
-              >
+              <button class="delete-btn" @click="handleDeleteAlert(alert.ID)">
                 <img src="../public/delete.png" alt="" height="20" width="20" />
               </button>
               <button
@@ -283,8 +280,8 @@ export default {
               Notify
             </button>
 
-            <button class="model-delete" @click="handleDeleteModel(model.ID)">
-              <img src="../public/delete.png" alt="" />
+            <button class="delete-btn" @click="handleDeleteModel(model.ID)">
+              <img src="../public/delete.png" alt="" height="20" width="20" />
             </button>
           </div>
         </div>
@@ -698,5 +695,21 @@ select:focus {
 .model-delete img {
   width: 18px;
   height: 18px;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 </style>

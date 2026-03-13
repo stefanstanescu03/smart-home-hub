@@ -19,7 +19,7 @@ export default {
           <img src="../public/edit.png" alt="" height="25" width="25" />
         </button>
         <button
-          class="delete-button"
+          class="delete-btn"
           @click="$emit('delete')"
           v-if="type === 'private'"
         >
@@ -83,5 +83,21 @@ td {
 
 .view-button:hover {
   border: 1px solid #a6a6a6;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 </style>

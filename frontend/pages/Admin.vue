@@ -110,7 +110,7 @@ export default {
               <td>
                 <div class="action-container">
                   <button
-                    class="delete-button"
+                    class="delete-btn"
                     @click="this.handleDeleteAccount(account.ID)"
                   >
                     <img
@@ -159,7 +159,7 @@ export default {
               <td>
                 <div class="action-container">
                   <button
-                    class="delete-button"
+                    class="delete-btn"
                     @click="this.handleDeleteDevice(device.ID)"
                   >
                     <img
@@ -279,5 +279,21 @@ td {
 
 .action-button:hover {
   border: 1px solid #a6a6a6;
+}
+
+.delete-btn {
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  padding: 6px;
+  opacity: 0.5;
+  transition:
+    opacity 0.2s,
+    transform 0.2s;
+}
+
+.delete-btn:hover {
+  opacity: 1;
+  transform: scale(1.1);
 }
 </style>
