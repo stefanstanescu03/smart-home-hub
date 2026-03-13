@@ -28,20 +28,30 @@ func main() {
 	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID(clientID)
 	opts.SetAutoReconnect(true)
 
-	state := false
+	state1 := false
+	state2 := false
 
 	var messageHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Message) {
-		if string(msg.Payload()) == "ON" {
-			state = true
-		} else if string(msg.Payload()) == "OFF" {
-			state = false
+		if string(msg.Payload()) == "ON_RELAY1" {
+			state1 = true
+		} else if string(msg.Payload()) == "OFF_RELAY1" {
+			state1 = false
+		} else if string(msg.Payload()) == "ON_RELAY2" {
+			state2 = true
+		} else if string(msg.Payload()) == "OFF_RELAY2" {
+			state2 = false
 		}
 
-		topic := "stat/" + clientID
-		token := client.Publish(topic, 1, false, strconv.FormatBool(state))
+		topic := "stat/" + clientID + "/state1"
+		token := client.Publish(topic, 1, false, strconv.FormatBool(state1))
 		token.Wait()
 
-		fmt.Printf("Current state: %t\n", state)
+		topic = "stat/" + clientID + "/state2"
+		token = client.Publish(topic, 1, false, strconv.FormatBool(state2))
+		token.Wait()
+
+		fmt.Printf("Current state 1: %t\n", state1)
+		fmt.Printf("Current state 2: %t\n", state2)
 	}
 
 	opts.SetDefaultPublishHandler(messageHandler)

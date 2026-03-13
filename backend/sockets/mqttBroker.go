@@ -79,7 +79,7 @@ func (h *TelemetryHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) bo
 	}
 
 	if write {
-		if topic == fmt.Sprintf("telemetry/%s", cl.ID) || topic == fmt.Sprintf("stat/%s", cl.ID) {
+		if strings.HasPrefix(topic, fmt.Sprintf("telemetry/%s", cl.ID)) || strings.HasPrefix(topic, fmt.Sprintf("stat/%s", cl.ID)) {
 			return true
 		}
 
@@ -87,7 +87,7 @@ func (h *TelemetryHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) bo
 		return false
 	}
 
-	if topic == fmt.Sprintf("cmd/%s", cl.ID) {
+	if strings.HasPrefix(topic, fmt.Sprintf("cmd/%s", cl.ID)) {
 		return true
 	}
 

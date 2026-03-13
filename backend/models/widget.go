@@ -8,6 +8,7 @@ type Widget struct {
 	Payload     string
 	Payload2    string
 	Label       string
+	Channel     string
 	DeviceId    uint
 	Device      Device `gorm:"foreignKey:DeviceId"`
 	DashboardId uint

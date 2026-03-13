@@ -284,11 +284,21 @@ func GetPublicDevice(c *gin.Context) {
 func GetDeviceState(c *gin.Context) {
 
 	id := c.Param("id")
+	channel := c.Param("channel")
 
 	var device models.Device
 	initializers.DB.Find(&device, "id = ?", id)
 
-	state, ok := sockets.DeviceStates.Load(device.Ident)
+	if device.ID == 0 {
+		c.JSON(http.StatusBadRequest, gin.H{
+			"error": "Device not found",
+		})
+		return
+	}
+
+	identificator := sockets.DeviceKey{Ident: device.Ident, Channel: channel}
+
+	state, ok := sockets.DeviceStates.Load(identificator)
 
 	if !ok {
 		c.JSON(http.StatusOK, gin.H{

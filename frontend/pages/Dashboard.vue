@@ -18,6 +18,7 @@ export default {
         label: "",
         payload: "",
         payload2: "",
+        channel: "",
       },
       ws: null,
       menuOpen: false,
@@ -106,6 +107,7 @@ export default {
             label: this.new_widget.label,
             payload: this.new_widget.payload,
             payload2: this.new_widget.payload2,
+            channel: this.new_widget.channel,
           },
           {
             headers: { Authorization: `Bearer ${this.getToken()}` },
@@ -195,6 +197,7 @@ export default {
             :label="widget.Label"
             :payload="widget.Payload"
             :widgetID="widget.ID"
+            :channel="widget.Channel"
             @delete="handleDeleteWidget(widget.ID)"
           />
           <WidgetSwitch
@@ -205,6 +208,7 @@ export default {
             :payload="widget.Payload"
             :payload2="widget.Payload2"
             :widgetID="widget.ID"
+            :channel="widget.Channel"
             @delete="handleDeleteWidget(widget.ID)"
           />
         </div>
@@ -275,6 +279,17 @@ export default {
               cols="50"
               v-model="this.new_widget.payload2"
             />
+          </div>
+
+          <div
+            class="field"
+            v-if="
+              this.new_widget.widget_type == 'btn' ||
+              this.new_widget.widget_type == 'sw'
+            "
+          >
+            <label for="payload2">Channel</label>
+            <input type="text" id="label" v-model="this.new_widget.channel" />
           </div>
 
           <button @click="handleAddWidget" class="add-btn">

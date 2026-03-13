@@ -20,7 +20,7 @@ func RegisterDeviceRoutes(r *gin.Engine) {
 		deviceRoutes.GET("/public", controllers.GetPublicDevices)
 		deviceRoutes.GET("/public/:id", controllers.GetPublicDevice)
 		deviceRoutes.GET("/all", middleware.RequireAuth, controllers.GetAllDevices)
-		deviceRoutes.GET("/state/:id", controllers.GetDeviceState)
+		deviceRoutes.GET("/state/:id/:channel", controllers.GetDeviceState)
 		deviceRoutes.GET("/params/:id", middleware.RequireAuth, controllers.GetDeviceParams)
 		deviceRoutes.GET("/analysis/data/:id", middleware.RequireAuth, controllers.GetDeviceData)
 		deviceRoutes.GET("/analysis/forecast/:id", middleware.RequireAuth, controllers.GetDeviceForecast)

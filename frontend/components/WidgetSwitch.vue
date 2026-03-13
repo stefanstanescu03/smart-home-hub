@@ -1,7 +1,15 @@
 <script>
 import axios from "axios";
 export default {
-  props: ["deviceId", "deviceName", "label", "widgetID", "payload", "payload2"],
+  props: [
+    "deviceId",
+    "deviceName",
+    "label",
+    "widgetID",
+    "payload",
+    "payload2",
+    "channel",
+  ],
   data() {
     return {
       state: false,
@@ -30,7 +38,9 @@ export default {
     },
     async getState() {
       try {
-        const res = await axios.get(`/api/device/state/${this.deviceId}`);
+        const res = await axios.get(
+          `/api/device/state/${this.deviceId}/${this.channel}`,
+        );
         console.log(res.data.state);
         if (res.data.state === "not registered" || res.data.state === "false") {
           this.state = false;

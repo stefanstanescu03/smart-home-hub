@@ -11,6 +11,11 @@ import (
 	mqtt "github.com/eclipse/paho.mqtt.golang"
 )
 
+type DeviceKey struct {
+	Ident   string
+	Channel string
+}
+
 var cmd_client mqtt.Client
 var DeviceStates sync.Map
 
@@ -34,8 +39,19 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 	payload := string(msg.Payload())
 
 	if strings.HasPrefix(topic, "stat/") {
-		ident := strings.Split(topic, "/")[1]
-		DeviceStates.Store(ident, payload)
+
+		parts := strings.Split(topic, "/")
+		ident := parts[1]
+
+		var channel string
+
+		if len(parts) > 2 {
+			channel = parts[2]
+		} else {
+			channel = ""
+		}
+
+		DeviceStates.Store(DeviceKey{Ident: ident, Channel: channel}, payload)
 	}
 }
 
