@@ -1,2 +1,7 @@
-2026-03-13T21:20:21+02:00 [ALERT:46] Too cold : The temperature is too low
-2026-03-13T21:20:31+02:00 [ALERT:46] Too cold : The temperature is too low
+2026-03-16T22:08:30+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:09:25+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:10:55+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:16:05+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:20:05+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:21:45+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-16T22:23:15+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]

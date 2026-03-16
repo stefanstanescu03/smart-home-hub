@@ -173,9 +173,7 @@ func Fit(model *DistanceBasedDetector, train_set *Dataset) {
 
 	model.N = uint(len(distances))
 
-	for i := range distances {
-		model.M2_distance += (distances[i] - model.Mean_distance) * (distances[i] - model.Mean_distance)
-	}
+	model.M2_distance = model.Std_distance * model.Std_distance * float32(model.N-1)
 }
 
 func Predict(model *DistanceBasedDetector, window TimeseriesWindow) bool {
@@ -193,11 +191,13 @@ func Predict(model *DistanceBasedDetector, window TimeseriesWindow) bool {
 			model.Centroid[i] += model.Lr * (window.Window[i] - model.Centroid[i])
 		}
 
+		adaptedDistance := euclidean_distance(model.Centroid, window.Window)
+
 		model.N += 1
 
-		delta := distance - model.Mean_distance
+		delta := adaptedDistance - model.Mean_distance
 		model.Mean_distance += delta / float32(model.N)
-		model.M2_distance += delta * (distance - model.Mean_distance)
+		model.M2_distance += delta * (adaptedDistance - model.Mean_distance)
 
 		model.Std_distance = float32(math.Sqrt(float64(model.M2_distance) / (float64(model.N) - 1)))
 

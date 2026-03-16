@@ -10,7 +10,6 @@ import (
 )
 
 func main() {
-
 	ident := flag.String("id", "", "Device identifier (required)")
 	flag.Parse()
 
@@ -20,7 +19,6 @@ func main() {
 	}
 
 	broker := "tcp://0.0.0.0:5001"
-
 	clientID := *ident
 
 	opts := mqtt.NewClientOptions().AddBroker(broker).SetClientID(clientID)
@@ -37,10 +35,27 @@ func main() {
 	defer ticker.Stop()
 
 	r := rand.New(rand.NewSource(time.Now().UnixNano()))
+	num := 0
 
 	for range ticker.C {
+		// 1. Calculate base temperature with noise
+		// r.Float64()*2 - 1 gives a range of -1.0 to +1.0
+		noise := (r.Float64() * 2) - 1
+		temp := 20.0 + noise
+		if num <= 20 {
+			num += 1
+		}
+		// 2. Add Anomaly Logic (10% chance)
+		if r.Float64() < 0.10 && num > 20 {
+			// Randomly spike high or drop low
+			if r.Intn(2) == 0 {
+				temp += 15.0 // Heat spike
+			} else {
+				temp -= 15.0 // Sudden drop
+			}
+			fmt.Print("⚠️ ANOMALY DETECTED: ")
+		}
 
-		temp := 15 + r.Float64()*(30-15)
 		humidity := 40 + r.Intn(20)
 
 		payload := fmt.Sprintf("temperature[C]:%.2f,humidity[%%]:%d", temp, humidity)
