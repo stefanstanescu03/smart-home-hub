@@ -5,3 +5,7 @@
 2026-03-16T22:20:05+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
 2026-03-16T22:21:45+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
 2026-03-16T22:23:15+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-20T19:14:50+02:00 [ALERT:46] Anomaly detected : Unusual behaviour with parameter: temperature[C]
+2026-03-20T19:30:14+02:00 [ALERT:46] temperature too low : The temperature in bedroom is too low
+2026-03-20T21:08:57+02:00 [ALERT:46] temperature too low : The temperature in bedroom is too low
+2026-03-20T21:09:32+02:00 [ALERT:46] Temperature too low : The temperature in bedroom is under 20 degrees

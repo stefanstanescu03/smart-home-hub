@@ -220,7 +220,41 @@ export default {
         </button>
       </div>
 
-      <table class="alerts-container">
+      <div class="alerts-container">
+        <div v-for="alert in this.alerts" class="alert-card">
+          <img src="../public/bell.png" alt="" height="32" width="32" />
+          <div class="right-card">
+            <div class="right-alert-info">
+              <div class="card-title">
+                <h2 class="alert-subject">{{ alert.Subject }}</h2>
+                <h2 class="condition">{{ alert.Condition }}</h2>
+              </div>
+              <p class="alert-content">{{ alert.Content }}</p>
+            </div>
+            <div class="action-container">
+              <button class="delete-btn" @click="handleDeleteAlert(alert.ID)">
+                <img src="../public/delete.png" alt="" height="20" width="20" />
+              </button>
+              <button
+                class="notify-button-not-pressed"
+                @click="handleChangeNotify(alert.ID)"
+                v-if="alert.NotifyEmail == false"
+              >
+                Notify
+              </button>
+              <button
+                class="notify-button-pressed"
+                @click="handleChangeNotify(alert.ID)"
+                v-if="alert.NotifyEmail == true"
+              >
+                Notify
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- <table class="alerts-container">
         <tr v-if="this.alerts.length != 0">
           <th>Subject</th>
           <th>Content</th>
@@ -254,7 +288,7 @@ export default {
           </td>
         </tr>
         <h1 v-if="this.alerts.length == 0">No alerts added for this device</h1>
-      </table>
+      </table> -->
 
       <div class="models-container">
         <div v-for="model in models" :key="model.ID" class="model-card">
@@ -399,6 +433,12 @@ export default {
 @media (max-width: 900px) {
   .hamburger {
     display: block;
+  }
+  .condition {
+    display: none;
+  }
+  .alert-content {
+    display: none;
   }
 }
 
@@ -711,5 +751,69 @@ select:focus {
 .delete-btn:hover {
   opacity: 1;
   transform: scale(1.1);
+}
+
+.alerts-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0.75rem;
+  margin-top: 1rem;
+  max-width: 720px;
+}
+
+.alert-card {
+  display: flex;
+  align-items: center;
+
+  padding: 0.9rem 1.1rem;
+  border-radius: 0.75rem;
+
+  gap: 2rem;
+
+  background: #1c1c1c;
+  border: 1px solid #2a2a2a;
+  width: 100%;
+}
+
+.right-alert-info {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.alert-subject {
+  font-size: large;
+  font-weight: bolder;
+  margin: 0;
+}
+.alert-content {
+  font-size: medium;
+  margin: 0;
+  padding-bottom: 0.5rem;
+}
+
+.card-title {
+  display: flex;
+  flex-direction: row;
+  gap: 2rem;
+  align-items: center;
+  margin: 0;
+}
+
+.condition {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  color: #eeeeee;
+  background: #2a2a2a;
+  padding: 0.5rem;
+  border-radius: 0.4rem;
+}
+.right-card {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-between;
 }
 </style>
