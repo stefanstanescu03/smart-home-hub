@@ -8,6 +8,7 @@ export default {
       device: {},
       alerts: [],
       models: [],
+      metrics: [],
       new_alert: {
         subject: "",
         content: "",
@@ -36,6 +37,18 @@ export default {
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
         this.device = res.data.device;
+        try {
+          const res = await axios.get(`/api/device/params/${this.device.ID}`, {
+            headers: { Authorization: `Bearer ${this.getToken()}` },
+          });
+
+          let keys = res.data.params.split(",");
+          keys = keys.filter((key) => key != "timestamp" && key != "");
+          keys = keys.map((key) => key.replace(/\[.*?\]/g, ""));
+          this.metrics = keys;
+        } catch (err) {
+          console.log(err);
+        }
       } catch (err) {
         console.log(err);
       }
@@ -254,42 +267,6 @@ export default {
         </div>
       </div>
 
-      <!-- <table class="alerts-container">
-        <tr v-if="this.alerts.length != 0">
-          <th>Subject</th>
-          <th>Content</th>
-          <th>Condition</th>
-          <th>Action</th>
-        </tr>
-        <tr v-for="alert in this.alerts">
-          <td>{{ alert.Subject }}</td>
-          <td>{{ alert.Content }}</td>
-          <td>{{ alert.Condition }}</td>
-          <td>
-            <div class="action-container">
-              <button class="delete-btn" @click="handleDeleteAlert(alert.ID)">
-                <img src="../public/delete.png" alt="" height="20" width="20" />
-              </button>
-              <button
-                class="notify-button-not-pressed"
-                @click="handleChangeNotify(alert.ID)"
-                v-if="alert.NotifyEmail == false"
-              >
-                Notify
-              </button>
-              <button
-                class="notify-button-pressed"
-                @click="handleChangeNotify(alert.ID)"
-                v-if="alert.NotifyEmail == true"
-              >
-                Notify
-              </button>
-            </div>
-          </td>
-        </tr>
-        <h1 v-if="this.alerts.length == 0">No alerts added for this device</h1>
-      </table> -->
-
       <div class="models-container">
         <div v-for="model in models" :key="model.ID" class="model-card">
           <div class="model-main">
@@ -342,7 +319,12 @@ export default {
 
           <div class="field">
             <label for="key">Metric / Key Name</label>
-            <input type="text" id="key" v-model="new_alert.key" />
+            <select id="key" v-model="new_alert.key">
+              <option :value="metric" v-for="metric in metrics">
+                {{ metric }}
+              </option>
+            </select>
+            <!-- <input type="text" id="key" v-model="new_alert.key" /> -->
           </div>
 
           <div class="field">

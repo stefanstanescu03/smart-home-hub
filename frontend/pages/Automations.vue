@@ -9,6 +9,7 @@ export default {
       available_devices: [],
       automations: [],
       routines: [],
+      available_metrics: [],
       new_automation: {
         Name: "",
         Device1: "",
@@ -182,6 +183,27 @@ export default {
         console.log(err);
       }
     },
+    async fetchMetricsForDevice(id) {
+      try {
+        const res = await axios.get(`/api/device/params/${id}`, {
+          headers: { Authorization: `Bearer ${this.getToken()}` },
+        });
+
+        let keys = res.data.params.split(",");
+        keys = keys.filter((key) => key != "timestamp" && key != "");
+        keys = keys.map((key) => key.replace(/\[.*?\]/g, ""));
+        this.available_metrics = keys;
+      } catch (err) {
+        console.log(err);
+      }
+    },
+  },
+  watch: {
+    "new_automation.Device1": async function (newDevice) {
+      if (newDevice && newDevice.ID) {
+        await this.fetchMetricsForDevice(newDevice.ID);
+      }
+    },
   },
   async mounted() {
     await this.handleGetAvailableDevices();
@@ -310,7 +332,18 @@ export default {
 
           <div class="field">
             <label for="key">Metric / Key Name</label>
-            <input type="text" id="key" v-model="this.new_automation.Metric" />
+            <select id="key" v-model="this.new_automation.Metric">
+              <option v-if="available_metrics.length === 0" disabled>
+                Select a device first
+              </option>
+              <option
+                v-for="metric in available_metrics"
+                :key="metric"
+                :value="metric"
+              >
+                {{ metric }}
+              </option>
+            </select>
           </div>
 
           <div class="field">
