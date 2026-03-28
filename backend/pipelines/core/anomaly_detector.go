@@ -14,9 +14,7 @@ type DistanceBasedDetector struct {
 	Std_distance  float32
 	K             float32
 	Lr            float32
-	N             uint
 	Centroid      []float32
-	M2_distance   float32
 }
 
 type TimeseriesWindow struct {
@@ -30,51 +28,57 @@ type Dataset struct {
 }
 
 func Csv_to_dataset(filename string, window_size int, param string) Dataset {
-
 	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to open file %q: %v", filename, err)
 	}
 	defer file.Close()
 
 	scanner := bufio.NewScanner(file)
 
-	scanner.Scan()
-	line := scanner.Text()
-	parts := strings.Split(line, ",")
+	// Parse header
+	if !scanner.Scan() {
+		log.Fatal("CSV file is empty or missing header row")
+	}
+	headers := strings.Split(scanner.Text(), ",")
 
-	var index int
-
-	for i := range parts {
-		if parts[i] == param {
+	index := -1
+	for i, h := range headers {
+		if strings.TrimSpace(h) == param {
 			index = i
 			break
 		}
 	}
+	if index == -1 {
+		log.Fatalf("column %q not found in CSV header", param)
+	}
 
+	// Parse rows
 	var timeserie []float32
-
+	lineNum := 1
 	for scanner.Scan() {
-
-		line := scanner.Text()
-		parts := strings.Split(line, ",")
-
-		value, err := strconv.ParseFloat(parts[index], 32)
-		if err != nil {
-			log.Fatal(err)
+		lineNum++
+		parts := strings.Split(scanner.Text(), ",")
+		if index >= len(parts) {
+			log.Fatalf("line %d: expected at least %d columns, got %d", lineNum, index+1, len(parts))
 		}
-		final_value := float32(value)
-
-		timeserie = append(timeserie, final_value)
+		value, err := strconv.ParseFloat(strings.TrimSpace(parts[index]), 32)
+		if err != nil {
+			log.Fatalf("line %d: could not parse value %q as float: %v", lineNum, parts[index], err)
+		}
+		timeserie = append(timeserie, float32(value))
 	}
 
 	if err := scanner.Err(); err != nil {
-		log.Fatal(err)
+		log.Fatalf("error reading file: %v", err)
 	}
 
-	// Create data windows
-	var data []TimeseriesWindow
+	if len(timeserie) < window_size {
+		log.Fatalf("not enough data: need at least %d rows, got %d", window_size, len(timeserie))
+	}
 
+	// Build sliding windows
+	data := make([]TimeseriesWindow, 0, len(timeserie)-window_size+1)
 	for i := 0; i <= len(timeserie)-window_size; i++ {
 		window := make([]float32, window_size)
 		copy(window, timeserie[i:i+window_size])
@@ -88,7 +92,6 @@ func Csv_to_dataset(filename string, window_size int, param string) Dataset {
 		Data: data,
 		Size: len(data),
 	}
-
 }
 
 func mean_centroid(windows []TimeseriesWindow) []float32 {
@@ -142,7 +145,7 @@ func std(arr []float32) float32 {
 		diff := arr[i] - mean
 		sum += diff * diff
 	}
-	return float32(math.Sqrt(float64(sum / float32(len(arr)-1))))
+	return float32(math.Sqrt(float64(sum / float32(len(arr)))))
 }
 
 func NewAnomalyDetectionModel(k float32, lr float32, numFeatures int) *DistanceBasedDetector {
@@ -150,11 +153,9 @@ func NewAnomalyDetectionModel(k float32, lr float32, numFeatures int) *DistanceB
 	return &DistanceBasedDetector{
 		K:             k,
 		Lr:            lr,
-		N:             0,
 		Mean_distance: -1,
 		Std_distance:  -1,
 		Centroid:      make([]float32, numFeatures),
-		M2_distance:   0,
 	}
 }
 
@@ -170,13 +171,13 @@ func Fit(model *DistanceBasedDetector, train_set *Dataset) {
 
 	model.Mean_distance = mean(distances)
 	model.Std_distance = std(distances)
-
-	model.N = uint(len(distances))
-
-	model.M2_distance = model.Std_distance * model.Std_distance * float32(model.N-1)
 }
 
 func Predict(model *DistanceBasedDetector, window TimeseriesWindow) bool {
+
+	if model.Mean_distance < 0 || model.Std_distance < 0 {
+		log.Fatal("model must be fitted before calling Predict")
+	}
 
 	distance := euclidean_distance(model.Centroid, window.Window)
 	threshold := model.Mean_distance + model.K*model.Std_distance
@@ -190,16 +191,11 @@ func Predict(model *DistanceBasedDetector, window TimeseriesWindow) bool {
 		for i := range model.Centroid {
 			model.Centroid[i] += model.Lr * (window.Window[i] - model.Centroid[i])
 		}
-
-		adaptedDistance := euclidean_distance(model.Centroid, window.Window)
-
-		model.N += 1
-
-		delta := adaptedDistance - model.Mean_distance
-		model.Mean_distance += delta / float32(model.N)
-		model.M2_distance += delta * (adaptedDistance - model.Mean_distance)
-
-		model.Std_distance = float32(math.Sqrt(float64(model.M2_distance) / (float64(model.N) - 1)))
+		distance = euclidean_distance(model.Centroid, window.Window)
+		diff := distance - model.Mean_distance
+		variance := model.Std_distance * model.Std_distance
+		model.Mean_distance += model.Lr * diff
+		model.Std_distance = float32(math.Sqrt(float64(variance + model.Lr*(diff*diff-variance))))
 
 		return false
 	}

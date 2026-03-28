@@ -63,12 +63,12 @@ func save_model(filename string, model *core.DistanceBasedDetector) {
 
 	json_value, err := json.Marshal(model)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to serialize model to %q: %v", filename, err)
 	}
 
 	err = os.WriteFile(filename, json_value, 0644)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to write model file %q: %v", filename, err)
 	}
 
 }
@@ -77,17 +77,19 @@ func load_model(filename string) *core.DistanceBasedDetector {
 
 	json_value, err := os.ReadFile(filename)
 	if err != nil {
-		log.Fatal(err)
+		log.Fatalf("failed to read model file %q: %v", filename, err)
 	}
-	model := core.NewAnomalyDetectionModel(3, 1e-2, 10)
-	json.Unmarshal(json_value, model)
 
-	return model
+	var model core.DistanceBasedDetector
+	if err := json.Unmarshal(json_value, &model); err != nil {
+		log.Fatalf("failed to deserialize model from %q: %v", filename, err)
+	}
 
+	return &model
 }
 
-// Function to create the initial model and save it to the desired file
-// This should be called in controller
+// FitAndSave creates the initial model and saves it to the desired file.
+// This should be called from the controller.
 func FitAndSave(filename string, data_path string, param string) {
 
 	model := create_model(data_path, 10, param)
@@ -96,11 +98,8 @@ func FitAndSave(filename string, data_path string, param string) {
 
 }
 
-// See if you have anomalies
-// This calls predict function that also will adapt parameters
 func feed_data(model *ModelInfo) {
 
-	// Get the last window from csv file
 	window_size := len(model.model_parameters.Centroid)
 
 	device_id := model.model_metadata.DeviceId
@@ -113,9 +112,8 @@ func feed_data(model *ModelInfo) {
 	}
 
 	data_location := device.Csv_location
-
-	// Find what parameter are you interested in
 	param := model.model_metadata.Param
+
 	param_id := -1
 	first_line := utils.GetFirstLine(data_location)
 	keys := strings.Split(first_line, ",")
@@ -125,29 +123,35 @@ func feed_data(model *ModelInfo) {
 			break
 		}
 	}
+	if param_id == -1 {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("param %q not found in CSV header at %s", param, data_location))
+		return
+	}
+
 	lines, err := utils.GetLastLines(data_location, window_size)
 	if err != nil {
 		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Failed to get last values in: %s", data_location))
 		return
 	}
 
-	// Creating the actual window
 	var window core.TimeseriesWindow
 	window.NumFeatures = window_size
 
 	for i := range lines {
-		line := lines[i]
-		keys := strings.Split(line, ",")
-
-		value, err := strconv.ParseFloat(keys[param_id], 32)
-		if err != nil {
-			log.Fatal(err)
+		parts := strings.Split(lines[i], ",")
+		if param_id >= len(parts) {
+			utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("line %d in %s has too few columns", i+1, data_location))
+			return
 		}
-		final_value := float32(value)
 
-		window.Window = append(window.Window, float32(final_value))
+		value, err := strconv.ParseFloat(strings.TrimSpace(parts[param_id]), 32)
+		if err != nil {
+			utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Failed to parse value %q at line %d in %s: %v", parts[param_id], i+1, data_location, err))
+			return
+		}
+
+		window.Window = append(window.Window, float32(value))
 	}
-	//
 
 	if core.Predict(model.model_parameters, window) {
 		if !alertStates[model.model_metadata.ID] {
@@ -168,17 +172,16 @@ func fetchModels() {
 
 	modelsPool = nil
 
+	alertStates = make(map[uint]bool)
+
 	var models_metadata []models.AnomalyModel
 	initializers.DB.Find(&models_metadata)
 
-	for _, model := range models_metadata {
-
-		data_location := model.Location
+	for i := range models_metadata {
 		fetched_model_info := ModelInfo{
-			model_metadata:   &model,
-			model_parameters: load_model(data_location),
+			model_metadata:   &models_metadata[i],
+			model_parameters: load_model(models_metadata[i].Location),
 		}
-
 		modelsPool = append(modelsPool, &fetched_model_info)
 	}
 }
