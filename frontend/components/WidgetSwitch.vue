@@ -38,10 +38,11 @@ export default {
     },
     async getState() {
       try {
+        let channel_to_search =
+          this.channel === "" ? "unregistered" : this.channel;
         const res = await axios.get(
-          `/api/device/state/${this.deviceId}/${this.channel}`,
+          `/api/device/state/${this.deviceId}/${channel_to_search}`,
         );
-        console.log(res.data.state);
         if (res.data.state === "not registered" || res.data.state === "false") {
           this.state = false;
         } else {

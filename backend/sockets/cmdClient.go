@@ -48,7 +48,7 @@ var messagePubHandler mqtt.MessageHandler = func(client mqtt.Client, msg mqtt.Me
 		if len(parts) > 2 {
 			channel = parts[2]
 		} else {
-			channel = ""
+			channel = "unregistered"
 		}
 
 		DeviceStates.Store(DeviceKey{Ident: ident, Channel: channel}, payload)
