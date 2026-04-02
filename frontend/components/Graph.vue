@@ -1,6 +1,5 @@
 <script>
 import { Line } from "vue-chartjs";
-import axios from "axios";
 import {
   Chart as ChartJS,
   Title,
@@ -91,14 +90,19 @@ export default {
     // Change this
     async handleFetchValues(path) {
       try {
-        const res = await axios.get(
+        const res = await fetch(
           `/api/device/analysis/data/${this.id}?path=${path}&num=${this.num}&param=${this.param}`,
           {
+            method: "GET",
             headers: { Authorization: `Bearer ${this.getToken()}` },
           },
         );
 
-        this.values = res.data.values;
+        if (!res.ok) throw new Error("Failed to fetch values");
+
+        const data = await res.json();
+        this.values = data.values;
+
         if (path === "tail") {
           this.curr = "values";
         } else if (path === "hour") {
@@ -110,19 +114,24 @@ export default {
         console.log(err);
       }
     },
+
     async handleForecast(path) {
       try {
         this.is_loading = true;
 
-        const res = await axios.get(
+        const res = await fetch(
           `/api/device/analysis/forecast/${this.id}?path=${path}&lag=${this.lag}&steps=${this.steps}&param=${this.param}`,
           {
+            method: "GET",
             headers: { Authorization: `Bearer ${this.getToken()}` },
           },
         );
 
+        if (!res.ok) throw new Error("Forecast request failed");
+
+        const data = await res.json();
         this.is_loading = false;
-        const forecasted = res.data.values;
+        const forecasted = data.values;
 
         if (this.values.length > 1 && forecasted.length > 0) {
           const last_entry = this.values[this.values.length - 1];
@@ -155,6 +164,7 @@ export default {
           this.values = [...this.values, ...new_values];
         }
       } catch (err) {
+        this.is_loading = false;
         console.log(err);
       }
     },

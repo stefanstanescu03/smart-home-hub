@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 import Graph from "../components/Graph.vue";
 export default {
@@ -21,38 +20,53 @@ export default {
     },
     async fetchParams() {
       try {
-        if (this.getToken() != undefined) {
-          const res = await axios.get(
+        const token = this.getToken();
+        if (token) {
+          const res = await fetch(
             `/api/device/params/${this.$route.params.id}`,
             {
-              headers: { Authorization: `Bearer ${this.getToken()}` },
+              method: "GET",
+              headers: { Authorization: `Bearer ${token}` },
             },
           );
-          return res.data.params;
+
+          if (!res.ok) throw new Error("Failed to fetch parameters");
+
+          const data = await res.json();
+          return data.params;
         }
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleFetchDevice() {
       try {
-        if (this.getToken() != undefined) {
-          const response = await axios.get(
-            `/api/device/${this.$route.params.id}`,
-            {
-              headers: { Authorization: `Bearer ${this.getToken()}` },
-            },
-          );
-          this.device = response.data.device;
+        const token = this.getToken();
+        if (token) {
+          const response = await fetch(`/api/device/${this.$route.params.id}`, {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
+          });
+
+          if (!response.ok) throw new Error("Failed to fetch device");
+
+          const data = await response.json();
+          this.device = data.device;
+
+          // Extract filename from Csv_location
           const path = this.device.Csv_location;
           this.device.filename = path.split("/").pop().split("\\").pop();
 
+          // Fetch and process parameters
           const paramsStr = await this.fetchParams();
-          let paramsArr = paramsStr.split(",");
-          paramsArr = paramsArr.filter(
-            (param) => param != "" && param != "timestamp",
-          );
-          this.device.params = paramsArr;
+          if (paramsStr) {
+            let paramsArr = paramsStr.split(",");
+            paramsArr = paramsArr.filter(
+              (param) => param !== "" && param !== "timestamp",
+            );
+            this.device.params = paramsArr;
+          }
         }
       } catch (err) {
         console.log(err);

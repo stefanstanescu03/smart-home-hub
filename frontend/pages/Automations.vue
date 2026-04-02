@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 export default {
   components: { SideBar },
@@ -41,11 +40,17 @@ export default {
     },
     async handleFetchAutomations() {
       try {
-        const res = await axios.get("/api/automation/", {
+        const res = await fetch("/api/automation/", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!res.ok) throw new Error("Failed to fetch automations");
+
+        const data = await res.json();
+
         this.automations = await Promise.all(
-          res.data.automations.map(async (automation) => ({
+          data.automations.map(async (automation) => ({
             ...automation,
             device1Name: await this.handleGetDeviceName(automation.Device1Id),
             device2Name: await this.handleGetDeviceName(automation.Device2Id),
@@ -55,11 +60,16 @@ export default {
         console.log(err);
       }
     },
+
     async handleDeleteAutomation(automationId) {
       try {
-        await axios.delete(`/api/automation/delete/${automationId}`, {
+        const res = await fetch(`/api/automation/delete/${automationId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!res.ok) throw new Error("Failed to delete automation");
+
         this.automations = this.automations.filter(
           (automation) => automation.ID != automationId,
         );
@@ -85,32 +95,47 @@ export default {
     },
     async handleGetDeviceName(id) {
       try {
-        const res = await axios.get(`/api/device/${id}`, {
+        const res = await fetch(`/api/device/${id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        return res.data.device.Name;
+        if (!res.ok) return "default";
+
+        const data = await res.json();
+        return data.device.Name;
       } catch (err) {
         return "default";
       }
     },
+
     async handleGetAvailableDevices() {
       try {
-        const res = await axios.get("/api/device/", {
+        const res = await fetch("/api/device/", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+        if (!res.ok) throw new Error("Failed to fetch available devices");
 
-        this.available_devices = res.data.devices;
+        const data = await res.json();
+        this.available_devices = data.devices;
       } catch (err) {
         console.error(err);
       }
     },
+
     async handleFetchRoutines() {
       try {
-        const res = await axios.get("/api/routine/", {
+        const res = await fetch("/api/routine/", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+        if (!res.ok) throw new Error("Failed to fetch routines");
+
+        const data = await res.json();
+
+        // Using Promise.all to fetch device names concurrently
         this.routines = await Promise.all(
-          res.data.routines.map(async (routine) => ({
+          data.routines.map(async (routine) => ({
             ...routine,
             deviceName: await this.handleGetDeviceName(routine.DeviceId),
           })),
@@ -119,6 +144,7 @@ export default {
         console.log(err);
       }
     },
+
     async handleCreateAutomation() {
       try {
         let condition = "";
@@ -132,9 +158,13 @@ export default {
         const conditionString =
           this.new_automation.Metric + condition + this.new_automation.Target;
 
-        await axios.post(
-          "/api/automation/create",
-          {
+        const res = await fetch("/api/automation/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             Name: this.new_automation.Name,
             Device1Id: this.new_automation.Device1.ID,
             Device2Id: this.new_automation.Device2.ID,
@@ -142,21 +172,25 @@ export default {
             Condition: conditionString,
             ScheduleStart: this.new_automation.ScheduleStart,
             ScheduleEnd: this.new_automation.ScheduleEnd,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to create automation");
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleDeleteRoutine(routineId) {
       try {
-        await axios.delete(`/api/routine/delete/${routineId}`, {
+        const res = await fetch(`/api/routine/delete/${routineId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!res.ok) throw new Error("Failed to delete routine");
+
         this.routines = this.routines.filter(
           (routine) => routine.ID != routineId,
         );
@@ -164,32 +198,40 @@ export default {
         console.log(err);
       }
     },
+
     async handleCreateRoutine() {
       try {
-        await axios.post(
-          "/api/routine/create",
-          {
+        const res = await fetch("/api/routine/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             Name: this.new_routine.Name,
             DeviceId: this.new_routine.Device.ID,
             Payload: this.new_routine.Payload,
             StartTime: this.new_routine.StartTime,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to create routine");
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async fetchMetricsForDevice(id) {
       try {
-        const res = await axios.get(`/api/device/params/${id}`, {
+        const res = await fetch(`/api/device/params/${id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+        if (!res.ok) throw new Error("Failed to fetch device parameters");
 
-        let keys = res.data.params.split(",");
+        const data = await res.json();
+        let keys = data.params.split(",");
         keys = keys.filter((key) => key != "timestamp" && key != "");
         keys = keys.map((key) => key.replace(/\[.*?\]/g, ""));
         this.available_metrics = keys;

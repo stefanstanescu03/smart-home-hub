@@ -1,7 +1,6 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import DeviceInfo from "../components/DeviceInfo.vue";
-import axios from "axios";
 export default {
   data() {
     return {
@@ -13,8 +12,16 @@ export default {
   methods: {
     async getDiscoveredDevices() {
       try {
-        const response = await axios.get("/api/device/public");
-        this.devices = response.data.devices;
+        const response = await fetch("/api/device/public", {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          throw new Error(`Error: ${response.status} ${response.statusText}`);
+        }
+
+        const data = await response.json();
+        this.devices = data.devices;
       } catch (err) {
         console.log(err);
       }

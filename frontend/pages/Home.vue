@@ -1,7 +1,6 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import DeviceInfo from "../components/DeviceInfo.vue";
-import axios from "axios";
 export default {
   components: { SideBar, DeviceInfo },
   data() {
@@ -32,23 +31,35 @@ export default {
     },
     async fetchDevices() {
       try {
-        if (this.getToken() != undefined) {
-          const response = await axios.get("/api/device/user", {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
+        const token = this.getToken();
+        if (token) {
+          const response = await fetch("/api/device/user", {
+            method: "GET",
+            headers: { Authorization: `Bearer ${token}` },
           });
-          this.devices = response.data.devices;
+
+          if (!response.ok) throw new Error("Failed to fetch user devices");
+
+          const data = await response.json();
+          this.devices = data.devices;
         }
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleDelete(device) {
       const id = device.ID;
       try {
-        await axios.delete(`/api/device/delete/${device.ID}`, {
+        const response = await fetch(`/api/device/delete/${id}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.devices = this.devices.filter((device) => device.ID != id);
+
+        if (!response.ok) throw new Error("Failed to delete device");
+
+        // We filter the local array only after a successful 2xx response
+        this.devices = this.devices.filter((d) => d.ID != id);
       } catch (err) {
         console.log(err);
       }
@@ -80,36 +91,47 @@ export default {
       const id = this.selected_device.id;
       console.log(this.selected_device);
       try {
-        await axios.put(
-          `/api/device/update/${id}`,
-          {
+        const res = await fetch(`/api/device/update/${id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             name: this.selected_device.name,
             ident: this.selected_device.ident,
             visibility: this.selected_device.visibility === "public",
             cloud_api: this.selected_device.cloud_api,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to update device");
+
         this.handleCancelEdit();
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleAddDevice() {
       try {
-        await axios.post(
-          "/api/device/create",
-          {
+        const res = await fetch("/api/device/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             name: this.new_device.name,
             ident: this.new_device.ident,
             visibility: this.new_device.visibility === "public",
             cloud_api: this.new_device.cloud_api,
-          },
-          { headers: { Authorization: `Bearer ${this.getToken()}` } },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to create device");
+
         this.handleCancelCreate();
         this.$router.go(0);
       } catch (err) {

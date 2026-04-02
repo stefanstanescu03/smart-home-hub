@@ -1,6 +1,4 @@
 <script>
-import axios from "axios";
-
 export default {
   props: ["menuOpen"],
   data() {
@@ -23,21 +21,34 @@ export default {
       this.$router.push(path);
     },
     async isAdmin() {
-      if (this.getToken() == -1) {
+      const token = this.getToken();
+
+      if (token === -1 || !token) {
         this.admin = false;
+        return;
       }
+
       try {
-        const response = await axios.get("/api/user/info", {
-          headers: { Authorization: `Bearer ${this.getToken()}` },
+        const response = await fetch("/api/user/info", {
+          method: "GET",
+          headers: { Authorization: `Bearer ${token}` },
         });
-        const role = response.data.user.Role;
+
+        if (!response.ok) {
+          this.admin = false;
+          return;
+        }
+
+        const data = await response.json();
+        const role = data.user.Role;
+
         if (role !== "admin") {
           this.admin = false;
         } else {
           this.admin = true;
         }
       } catch (err) {
-        console.log(err);
+        console.log("Admin check failed:", err);
         this.admin = false;
       }
     },

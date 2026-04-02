@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 export default {
   props: [
     "deviceId",
@@ -23,27 +22,39 @@ export default {
     },
     async isActive() {
       try {
-        await axios
-          .get(`/api/device/ping/${this.deviceId}`)
-          .then((response) => {
-            if (response.data.status == true) {
-              this.active = true;
-            } else {
-              this.active = false;
-            }
-          });
+        const response = await fetch(`/api/device/ping/${this.deviceId}`, {
+          method: "GET",
+        });
+
+        if (!response.ok) {
+          this.active = false;
+          return;
+        }
+
+        const data = await response.json();
+        this.active = data.status === true;
       } catch (err) {
         this.active = false;
       }
     },
+
     async getState() {
       try {
-        let channel_to_search =
+        const channel_to_search =
           this.channel === "" ? "unregistered" : this.channel;
-        const res = await axios.get(
+
+        const res = await fetch(
           `/api/device/state/${this.deviceId}/${channel_to_search}`,
+          {
+            method: "GET",
+          },
         );
-        if (res.data.state === "not registered" || res.data.state === "false") {
+
+        if (!res.ok) throw new Error("Failed to fetch state");
+
+        const data = await res.json();
+
+        if (data.state === "not registered" || data.state === "false") {
           this.state = false;
         } else {
           this.state = true;
@@ -52,10 +63,13 @@ export default {
         console.log(err);
       }
     },
+
     async handleToggle() {
       if (this.active) {
         try {
           let payload_to_send = "";
+
+          // Toggle logic
           if (!this.state) {
             this.state = true;
             payload_to_send = this.payload;
@@ -64,15 +78,22 @@ export default {
             payload_to_send = this.payload2;
           }
 
-          await axios.post(
-            "/api/widget/cmd",
-            {
+          const response = await fetch("/api/widget/cmd", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${this.getToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
               Widget: this.widgetID,
               DeviceId: this.deviceId,
               Payload: payload_to_send,
-            },
-            { headers: { Authorization: `Bearer ${this.getToken()}` } },
-          );
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Toggle command failed: ${response.status}`);
+          }
         } catch (err) {
           console.log(err);
         }

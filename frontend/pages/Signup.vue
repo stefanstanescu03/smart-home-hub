@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 
 export default {
@@ -23,14 +22,27 @@ export default {
           this.failed = true;
         } else {
           try {
-            await axios.post("/api/user/signup", {
-              username: this.username,
-              email: this.email,
-              password: this.password,
+            const response = await fetch("/api/user/signup", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                username: this.username,
+                email: this.email,
+                password: this.password,
+              }),
             });
+
+            const data = await response.json();
+
+            if (!response.ok) {
+              throw new Error(data.error || "Signup failed");
+            }
+
             this.$router.push("/login");
           } catch (err) {
-            this.errorMessage = err.response.data.error;
+            this.errorMessage = err.message;
             this.failed = true;
           }
         }

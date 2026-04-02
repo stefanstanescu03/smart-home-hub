@@ -1,6 +1,5 @@
 <script>
 import SideBar from "../components/SideBar.vue";
-import axios from "axios";
 export default {
   components: { SideBar },
   data() {
@@ -33,16 +32,26 @@ export default {
     },
     async handleFetchDevice() {
       try {
-        const res = await axios.get(`/api/device/${this.$route.params.id}`, {
+        const res = await fetch(`/api/device/${this.$route.params.id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.device = res.data.device;
-        try {
-          const res = await axios.get(`/api/device/params/${this.device.ID}`, {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          });
+        if (!res.ok) throw new Error("Failed to fetch device");
+        const deviceData = await res.json();
+        this.device = deviceData.device;
 
-          let keys = res.data.params.split(",");
+        try {
+          const resParams = await fetch(
+            `/api/device/params/${this.device.ID}`,
+            {
+              method: "GET",
+              headers: { Authorization: `Bearer ${this.getToken()}` },
+            },
+          );
+          if (!resParams.ok) throw new Error("Failed to fetch params");
+          const paramsData = await resParams.json();
+
+          let keys = paramsData.params.split(",");
           keys = keys.filter((key) => key != "timestamp" && key != "");
           keys = keys.map((key) => key.replace(/\[.*?\]/g, ""));
           this.metrics = keys;
@@ -53,6 +62,7 @@ export default {
         console.log(err);
       }
     },
+
     async handleCreateAlert() {
       try {
         let condition = "";
@@ -66,113 +76,136 @@ export default {
         const conditionString =
           this.new_alert.key + condition + this.new_alert.value;
 
-        await axios.post(
-          "/api/alert/create",
-          {
+        const res = await fetch("/api/alert/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             subject: this.new_alert.subject,
             content: this.new_alert.content,
             condition: conditionString,
             DeviceId: this.device.ID,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to create alert");
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleFetchAlerts() {
       try {
-        const res = await axios.get(`/api/alert/${this.$route.params.id}`, {
+        const res = await fetch(`/api/alert/${this.$route.params.id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.alerts = res.data.alerts;
+        if (!res.ok) throw new Error("Failed to fetch alerts");
+        const data = await res.json();
+        this.alerts = data.alerts;
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleDeleteAlert(alertId) {
       try {
-        await axios.delete(`/api/alert/delete/${alertId}`, {
+        const res = await fetch(`/api/alert/delete/${alertId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+        if (!res.ok) throw new Error("Failed to delete alert");
         this.alerts = this.alerts.filter((alert) => alert.ID != alertId);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleChangeNotify(alertId) {
       try {
         const changeAlert = this.alerts.find((alert) => alert.ID === alertId);
-
         if (!changeAlert) return;
 
-        await axios.put(
-          `/api/alert/update/${alertId}`,
-          {
+        const res = await fetch(`/api/alert/update/${alertId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             subject: changeAlert.Subject,
             content: changeAlert.Content,
             condition: changeAlert.Condition,
             NotifyEmail: !changeAlert.NotifyEmail,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to update notification status");
         changeAlert.NotifyEmail = !changeAlert.NotifyEmail;
       } catch (err) {
         console.error(err);
       }
     },
+
     async handleCreateModel() {
       try {
-        console.log(this.device);
-
-        await axios.post(
-          "/api/model/anomaly/create",
-          {
+        const res = await fetch("/api/model/anomaly/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             param: this.new_model.param,
             DeviceId: this.device.ID,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to create model");
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleFetchModels() {
       try {
-        const res = await axios.get(
+        const res = await fetch(
           `/api/model/anomaly/device/${this.$route.params.id}`,
           {
+            method: "GET",
             headers: { Authorization: `Bearer ${this.getToken()}` },
           },
         );
-        this.models = res.data.models;
+        if (!res.ok) throw new Error("Failed to fetch models");
+        const data = await res.json();
+        this.models = data.models;
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleChangeNotifyAD(modelId) {
       try {
         const changeModel = this.models.find((model) => model.ID === modelId);
-
         if (!changeModel) return;
 
-        await axios.put(
-          `/api/model/anomaly/update/${modelId}`,
-          {
+        const res = await fetch(`/api/model/anomaly/update/${modelId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             NotifyEmail: !changeModel.NotifyEmail,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok)
+          throw new Error("Failed to update anomaly detection notify");
         changeModel.NotifyEmail = !changeModel.NotifyEmail;
       } catch (err) {
         console.error(err);
@@ -181,9 +214,11 @@ export default {
 
     async handleDeleteModel(modelId) {
       try {
-        await axios.delete(`/api/model/anomaly/${modelId}`, {
+        const res = await fetch(`/api/model/anomaly/${modelId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+        if (!res.ok) throw new Error("Failed to delete model");
         this.models = this.models.filter((model) => model.ID != modelId);
       } catch (err) {
         console.log(err);

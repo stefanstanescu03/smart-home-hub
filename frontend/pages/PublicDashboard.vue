@@ -2,7 +2,6 @@
 import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
 import Table from "../components/Table.vue";
-import axios from "axios";
 export default {
   components: { SideBar, Card, Table },
   data() {
@@ -19,41 +18,80 @@ export default {
   methods: {
     async handleFetchDashboard() {
       try {
-        const res = await axios.get(
-          `/api/dashboard/public/${this.$route.params.id}`
+        const res = await fetch(
+          `/api/dashboard/public/${this.$route.params.id}`,
+          {
+            method: "GET",
+          },
         );
-        this.dashboard = res.data.dashboard;
+        if (!res.ok) {
+          throw new Error(`Failed to fetch dashboard: ${res.status}`);
+        }
+
+        const data = await res.json();
+        this.dashboard = data.dashboard;
       } catch (err) {
         console.error(err);
       }
     },
+    async handleFetchDashboard() {
+      try {
+        const res = await fetch(
+          `/api/dashboard/public/${this.$route.params.id}`,
+          {
+            method: "GET",
+          },
+        );
+
+        if (!res.ok) throw new Error("Failed to fetch public dashboard");
+
+        const data = await res.json();
+        this.dashboard = data.dashboard;
+      } catch (err) {
+        console.error(err);
+      }
+    },
+
     async handleFetchWidgets() {
       try {
         await this.handleFetchDashboard();
 
         if (this.dashboard?.ID) {
-          const res = await axios.get(
-            `/api/widget/public/${this.dashboard.ID}`
-          );
+          const res = await fetch(`/api/widget/public/${this.dashboard.ID}`, {
+            method: "GET",
+          });
+
+          if (!res.ok) throw new Error("Failed to fetch public widgets");
+
+          const data = await res.json();
+
           const widgetsWithDeviceNames = await Promise.all(
-            res.data.widgets.map(async (widget) => ({
+            data.widgets.map(async (widget) => ({
               ...widget,
               dataStream: null,
               deviceName: await this.handleGetDeviceName(widget.DeviceId),
-            }))
+            })),
           );
+
           this.widgets = widgetsWithDeviceNames.filter(
-            (widget) => widget.deviceName !== "default"
+            (widget) => widget.deviceName !== "default",
           );
         }
       } catch (err) {
         console.error(err);
       }
     },
+
     async handleGetDeviceName(id) {
       try {
-        const res = await axios.get(`/api/device/public/${id}`);
-        return res.data.device.Name;
+        const res = await fetch(`/api/device/public/${id}`, {
+          method: "GET",
+        });
+
+        if (!res.ok) return "default";
+
+        const data = await res.json();
+        return data.device.Name;
       } catch (err) {
         return "default";
       }
@@ -74,7 +112,7 @@ export default {
 
         const deviceId = String(parts[parts.length - 1].split(":")[1]);
         const matchingWidgets = this.widgets.filter(
-          (widget) => String(widget.DeviceId) === deviceId
+          (widget) => String(widget.DeviceId) === deviceId,
         );
 
         if (!matchingWidgets.length) return;

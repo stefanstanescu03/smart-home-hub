@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 export default {
   props: ["deviceId", "deviceName", "label", "payload", "widgetID"],
   data() {
@@ -18,33 +17,47 @@ export default {
     },
     async isActive() {
       try {
-        await axios
-          .get(`/api/device/ping/${this.deviceId}`)
-          .then((response) => {
-            if (response.data.status == true) {
-              this.active = true;
-            } else {
-              this.active = false;
-            }
-          });
+        const response = await fetch(`/api/device/ping/${this.deviceId}`, {
+          method: "GET",
+        });
+
+        // fetch doesn't throw on 404/500, so we check response.ok
+        if (!response.ok) {
+          this.active = false;
+          return;
+        }
+
+        const data = await response.json();
+
+        // Set active based on the status boolean from the API
+        this.active = data.status === true;
       } catch (err) {
+        // Catches network errors or timeouts
         this.active = false;
       }
     },
+
     async handleClick() {
       if (this.active) {
         try {
-          await axios.post(
-            "/api/widget/cmd",
-            {
+          const response = await fetch("/api/widget/cmd", {
+            method: "POST",
+            headers: {
+              Authorization: `Bearer ${this.getToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
               Widget: this.widgetID,
               DeviceId: this.deviceId,
               Payload: this.payload,
-            },
-            { headers: { Authorization: `Bearer ${this.getToken()}` } },
-          );
+            }),
+          });
+
+          if (!response.ok) {
+            throw new Error(`Command failed with status: ${response.status}`);
+          }
         } catch (err) {
-          console.log(err);
+          console.log("Command error:", err);
         }
       }
     },

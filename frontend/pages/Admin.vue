@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 
 export default {
@@ -23,55 +22,78 @@ export default {
     },
     async getAccounts() {
       try {
-        const response = await axios.get("/api/user/all", {
+        const response = await fetch("/api/user/all", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.accounts = response.data.accounts;
+        if (!response.ok) throw new Error("Failed to fetch accounts");
+
+        const data = await response.json();
+        this.accounts = data.accounts;
       } catch (err) {
         console.log(err);
       }
     },
+
     async getDevices() {
       try {
-        const response = await axios.get("/api/device/all", {
+        const response = await fetch("/api/device/all", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.devices = response.data.devices;
+        if (!response.ok) throw new Error("Failed to fetch devices");
+
+        const data = await response.json();
+        this.devices = data.devices;
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleMakeAdmin(accountId) {
       try {
-        await axios.put(
-          `/api/user/toggle-role/${accountId}`,
-          {},
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
+        const response = await fetch(`/api/user/toggle-role/${accountId}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
           },
-        );
+          body: JSON.stringify({}), // PUT usually expects a body, even if empty
+        });
+
+        if (!response.ok) throw new Error("Failed to update role");
+
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleDeleteAccount(accountId) {
       try {
-        await axios.delete(`/api/user/delete/${accountId}`, {
+        const response = await fetch(`/api/user/delete/${accountId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!response.ok) throw new Error("Failed to delete account");
+
         this.$router.go(0);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleDeleteDevice(deviceId) {
       try {
-        await axios.delete(`/api/device/delete/${deviceId}`, {
+        const response = await fetch(`/api/device/delete/${deviceId}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!response.ok) throw new Error("Failed to delete device");
+
         this.devices = this.devices.filter((device) => device.ID != deviceId);
-        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;
       } catch (err) {
         console.log(err);
       }

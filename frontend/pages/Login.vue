@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 export default {
   components: { SideBar },
@@ -16,14 +15,27 @@ export default {
     async handleLogin() {
       if (this.password != "" && this.username != "") {
         try {
-          const response = await axios.post("/api/user/login", {
-            username: this.username,
-            password: this.password,
+          const response = await fetch("/api/user/login", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              username: this.username,
+              password: this.password,
+            }),
           });
-          this.handleAddCookie(response);
+
+          const data = await response.json();
+
+          if (!response.ok) {
+            throw new Error(data.error || "Login failed");
+          }
+
+          this.handleAddCookie(data);
           this.$router.push("/");
         } catch (err) {
-          this.errorMessage = err.response.data.error;
+          this.errorMessage = err.message;
           this.failed = true;
         }
       } else {
@@ -31,11 +43,18 @@ export default {
         this.failed = true;
       }
     },
-    handleAddCookie(response) {
-      const token = response.data.token;
+    handleAddCookie(data) {
+      const token = data.token;
+
+      if (!token) {
+        console.error("No token found in response data");
+        return;
+      }
+
       let d = new Date();
       d.setTime(d.getTime() + 1 * 24 * 60 * 60 * 1000);
       let expires = "expires=" + d.toUTCString();
+
       document.cookie = "Token=" + token + ";" + expires + ";path=/";
     },
   },

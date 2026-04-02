@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 export default {
   props: ["deviceName", "ident", "visibility", "should_appear", "id"],
   data() {
@@ -10,13 +9,20 @@ export default {
   methods: {
     async checkStatus() {
       try {
-        await axios.get(`/api/device/ping/${this.ident}`).then((response) => {
-          if (response.data.status == true) {
-            this.status = "connected";
-          } else {
-            this.status = "disconnected";
-          }
+        const response = await fetch(`/api/device/ping/${this.ident}`, {
+          method: "GET",
         });
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+
+        const data = await response.json();
+
+        if (data.status === true) {
+          this.status = "connected";
+        } else {
+          this.status = "disconnected";
+        }
       } catch (err) {
         this.status = "disconnected";
       }

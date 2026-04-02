@@ -2,7 +2,6 @@
 import SideBar from "../components/SideBar.vue";
 import Card from "../components/Card.vue";
 import Table from "../components/Table.vue";
-import axios from "axios";
 import WidgetButton from "../components/WidgetButton.vue";
 import WidgetSwitch from "../components/WidgetSwitch.vue";
 export default {
@@ -36,24 +35,37 @@ export default {
 
     async handleFetchDashboard() {
       try {
-        const res = await axios.get(`/api/dashboard/${this.$route.params.id}`, {
+        const res = await fetch(`/api/dashboard/${this.$route.params.id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.dashboard = res.data.dashboard;
+
+        if (!res.ok) throw new Error("Failed to fetch dashboard");
+
+        const data = await res.json();
+        this.dashboard = data.dashboard;
       } catch (err) {
         console.error(err);
       }
     },
+
     async handleFetchWidgets() {
       try {
+        // Ensure dashboard is fetched first
         await this.handleFetchDashboard();
 
         if (this.dashboard?.ID) {
-          const res = await axios.get(`/api/widget/${this.dashboard.ID}`, {
+          const res = await fetch(`/api/widget/${this.dashboard.ID}`, {
+            method: "GET",
             headers: { Authorization: `Bearer ${this.getToken()}` },
           });
+
+          if (!res.ok) throw new Error("Failed to fetch widgets");
+
+          const data = await res.json();
+
           const widgetsWithDeviceNames = await Promise.all(
-            res.data.widgets.map(async (widget) => ({
+            data.widgets.map(async (widget) => ({
               ...widget,
               dataStream: null,
               deviceName: await this.handleGetDeviceName(widget.DeviceId),
@@ -66,41 +78,63 @@ export default {
         console.error(err);
       }
     },
+
     async handleDeleteWidget(id) {
       try {
-        await axios.delete(`/api/widget/delete/${id}`, {
+        const res = await fetch(`/api/widget/delete/${id}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!res.ok) throw new Error("Failed to delete widget");
+
         this.widgets = this.widgets.filter((widget) => widget.ID != id);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleGetDeviceName(id) {
       try {
-        const res = await axios.get(`/api/device/${id}`, {
+        const res = await fetch(`/api/device/${id}`, {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        return res.data.device.Name;
+
+        if (!res.ok) return "default";
+
+        const data = await res.json();
+        return data.device.Name;
       } catch (err) {
         return "default";
       }
     },
+
     async handleGetAvailableDevices() {
       try {
-        const res = await axios.get("/api/device/", {
+        const res = await fetch("/api/device/", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.available_devices = res.data.devices;
+
+        if (!res.ok) throw new Error("Failed to fetch available devices");
+
+        const data = await res.json();
+        this.available_devices = data.devices;
       } catch (err) {
         console.error(err);
       }
     },
+
     async handleAddWidget() {
       try {
-        await axios.post(
-          "/api/widget/create",
-          {
+        const res = await fetch("/api/widget/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             widgettype: this.new_widget.widget_type,
             deviceId: this.new_widget.device.ID,
             dashboardId: this.dashboard.ID,
@@ -108,11 +142,11 @@ export default {
             payload: this.new_widget.payload,
             payload2: this.new_widget.payload2,
             channel: this.new_widget.channel,
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Widget creation failed");
+
         this.exitDialog();
         this.$router.go(0);
       } catch (err) {

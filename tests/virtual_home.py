@@ -7,12 +7,13 @@ BROKER = "localhost"
 PORT = 5001
 
 devices = [
-        {"ident": "AQ923", "pub": "telemetry/AQ923", "sub": None},
-        {"ident": "POWER002", "pub": "telemetry/POWER002", "sub": None},
-        {"ident": "PIR001", "pub": "telemetry/PIR001", "sub": None},
-        {"ident": "RELAY001", "pub": "stat/RELAY001", "sub": "cmd/RELAY001"},
-        {"ident": "RELAY002", "pub": "stat/RELAY002", "sub": "cmd/RELAY002"}
-    ]
+    {"ident": "AQ923", "pub": "telemetry/AQ923", "sub": None},
+    {"ident": "POWER002", "pub": "telemetry/POWER002", "sub": None},
+    {"ident": "PIR001", "pub": "telemetry/PIR001", "sub": None},
+    {"ident": "RELAY001", "pub": "stat/RELAY001", "sub": "cmd/RELAY001"},
+    {"ident": "RELAY002", "pub": "stat/RELAY002", "sub": "cmd/RELAY002"}
+]
+
 
 def on_connect(client, userdata, flags, rc, properties=None):
     if rc == 0:

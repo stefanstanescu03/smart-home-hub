@@ -1,7 +1,6 @@
 <script>
 import SideBar from "../components/SideBar.vue";
 import DashboardInfo from "../components/DashboardInfo.vue";
-import axios from "axios";
 export default {
   components: { SideBar, DashboardInfo },
   data() {
@@ -45,34 +44,50 @@ export default {
     },
     async handleGetDashboards() {
       try {
-        const res = await axios.get("/api/dashboard/", {
+        const res = await fetch("/api/dashboard/", {
+          method: "GET",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
-        this.dashboards = res.data.dashboards;
+
+        if (!res.ok) throw new Error("Failed to fetch dashboards");
+
+        const data = await res.json();
+        this.dashboards = data.dashboards;
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleGetPublicDashboards() {
       try {
-        const res = await axios.get("/api/dashboard/public");
-        this.public_dashboards = res.data.dashboards;
+        const res = await fetch("/api/dashboard/public", {
+          method: "GET",
+        });
+
+        if (!res.ok) throw new Error("Failed to fetch public dashboards");
+
+        const data = await res.json();
+        this.public_dashboards = data.dashboards;
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleCreateDashboard() {
       try {
-        await axios.post(
-          "api/dashboard/create",
-          {
+        const res = await fetch("api/dashboard/create", {
+          method: "POST",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             name: this.dashboard_name,
             visibility: this.dashboard_visibility === "public",
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Dashboard creation failed");
 
         this.handleCancelCreateDialog();
         this.$router.go(0);
@@ -80,30 +95,40 @@ export default {
         console.error("Dashboard creation failed:", err);
       }
     },
+
     async handleDeleteDashboard(dashboard) {
       const id = dashboard.ID;
       try {
-        await axios.delete(`/api/dashboard/delete/${id}`, {
+        const res = await fetch(`/api/dashboard/delete/${id}`, {
+          method: "DELETE",
           headers: { Authorization: `Bearer ${this.getToken()}` },
         });
+
+        if (!res.ok) throw new Error("Failed to delete dashboard");
+
         this.dashboards = this.dashboards.filter((d) => d.ID != id);
       } catch (err) {
         console.log(err);
       }
     },
+
     async handleUpdateDashboard() {
       const id = this.selected_dashboard.id;
       try {
-        await axios.put(
-          `/api/dashboard/update/${id}`,
-          {
+        const res = await fetch(`/api/dashboard/update/${id}`, {
+          method: "PUT",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
             name: this.selected_dashboard.name,
             visibility: this.selected_dashboard.visibility === "public",
-          },
-          {
-            headers: { Authorization: `Bearer ${this.getToken()}` },
-          },
-        );
+          }),
+        });
+
+        if (!res.ok) throw new Error("Failed to update dashboard");
+
         this.handleCancelCreateDialog();
         this.$router.go(0);
       } catch (err) {

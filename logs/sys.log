@@ -1,0 +1,117 @@
+2026-04-02T17:15:54+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-02T17:15:54+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-02T17:15:54+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-02T17:15:54+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-02T17:15:55+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-02T17:15:55+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-02T17:41:17+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-02T17:41:17+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-02T17:41:17+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-02T17:41:17+03:00 [STREAMING] Error starting streaming server: listen tcp :5003: bind: address already in use
+2026-04-02T17:41:17+03:00 [MQTT-BROKER] Error starting MQTT Broker
+2026-04-02T17:41:29+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-02T17:41:29+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-02T17:41:29+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-02T17:41:29+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-02T17:41:30+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-02T17:41:30+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-02T17:42:00+03:00 [STREAMING] New client connected
+2026-04-02T17:42:00+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:42:00+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:42:46+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:42:46+03:00 [STREAMING] Client disconnected
+2026-04-02T17:45:59+03:00 [PIPELINES] Refreshing models pool
+2026-04-02T17:45:59+03:00 [ALERTS-HANDLER] Alerts cache refreshed
+2026-04-02T17:46:24+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-02T17:46:24+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-02T17:46:24+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-02T17:46:24+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-02T17:46:24+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-02T17:46:31+03:00 [STREAMING] New client connected
+2026-04-02T17:46:31+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:46:31+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:46:31+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:46:31+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:31+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:39+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:46:39+03:00 [STREAMING] Client disconnected
+2026-04-02T17:46:39+03:00 [STREAMING] New client connected
+2026-04-02T17:46:39+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:46:39+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:46:39+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:46:39+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:39+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:44+03:00 [STREAMING] New client connected
+2026-04-02T17:46:44+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:46:44+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:46:44+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:46:44+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:44+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:52+03:00 [STREAMING] New client connected
+2026-04-02T17:46:52+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:46:52+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:46:52+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:46:52+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:46:52+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:47:25+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:47:25+03:00 [STREAMING] Client disconnected
+2026-04-02T17:47:25+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:47:25+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:47:25+03:00 [STREAMING] Client disconnected
+2026-04-02T17:47:25+03:00 [STREAMING] Client disconnected
+2026-04-02T17:47:27+03:00 [STREAMING] New client connected
+2026-04-02T17:47:27+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:47:27+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:47:27+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:47:27+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:47:27+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:47:38+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:47:38+03:00 [STREAMING] Client disconnected
+2026-04-02T17:47:38+03:00 [STREAMING] New client connected
+2026-04-02T17:47:38+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:47:38+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:47:38+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:47:38+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:47:38+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:48:42+03:00 [STREAMING] New client connected
+2026-04-02T17:48:42+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:48:42+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:48:42+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:48:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:48:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:50:04+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:50:04+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:50:04+03:00 [STREAMING] Client disconnected
+2026-04-02T17:50:04+03:00 [STREAMING] Client disconnected
+2026-04-02T17:50:22+03:00 [STREAMING] New client connected
+2026-04-02T17:50:22+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:50:22+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:50:22+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:50:22+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:50:22+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:51:12+03:00 [STREAMING] New client connected
+2026-04-02T17:51:12+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:51:12+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:51:12+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:51:12+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:51:12+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:51:28+03:00 [STREAMING] Error reading message: websocket: close 1006 (abnormal closure): unexpected EOF
+2026-04-02T17:51:28+03:00 [STREAMING] Client disconnected
+2026-04-02T17:51:28+03:00 [STREAMING] Error reading message: websocket: close 1006 (abnormal closure): unexpected EOF
+2026-04-02T17:51:28+03:00 [STREAMING] Client disconnected
+2026-04-02T17:51:42+03:00 [STREAMING] New client connected
+2026-04-02T17:51:42+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:51:42+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:51:42+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:51:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:51:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:52:05+03:00 [STREAMING] New client connected
+2026-04-02T17:52:05+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-02T17:52:05+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-02T17:52:05+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-02T17:52:05+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:52:05+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-02T17:52:22+03:00 [STREAMING] Error reading message: websocket: close 1006 (abnormal closure): unexpected EOF
+2026-04-02T17:52:22+03:00 [STREAMING] Client disconnected
+2026-04-02T17:55:07+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-02T17:55:07+03:00 [STREAMING] Client disconnected

@@ -1,5 +1,4 @@
 <script>
-import axios from "axios";
 import SideBar from "../components/SideBar.vue";
 
 export default {
@@ -26,11 +25,21 @@ export default {
     },
     async getAccount() {
       try {
-        const response = await axios.get("/api/user/info", {
-          headers: { Authorization: `Bearer ${this.getToken()}` },
+        const response = await fetch("/api/user/info", {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${this.getToken()}`,
+            "Content-Type": "application/json",
+          },
         });
-        this.username = response.data.user.Username;
-        this.email = response.data.user.Email;
+
+        if (!response.ok) {
+          throw new Error(`HTTP error! status: ${response.status}`);
+        }
+
+        const data = await response.json();
+        this.username = data.user.Username;
+        this.email = data.user.Email;
       } catch (err) {
         console.log(err);
       }
@@ -38,21 +47,29 @@ export default {
     async handleUpdate() {
       if (this.username != "" && this.email != "" && this.password != "") {
         try {
-          await axios.put(
-            "api/user/update",
-            {
+          const response = await fetch("api/user/update", {
+            method: "PUT",
+            headers: {
+              Authorization: `Bearer ${this.getToken()}`,
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
               username: this.username,
               email: this.email,
               password: this.password,
-            },
-            { headers: { Authorization: `Bearer ${this.getToken()}` } },
-          );
+            }),
+          });
+
+          const data = await response.json();
+          if (!response.ok) {
+            throw new Error(data.error || "Update failed");
+          }
           this.changed = true;
           this.failed = false;
         } catch (err) {
           this.changed = false;
           this.failed = true;
-          this.errorMessage = err.response.data.error;
+          this.errorMessage = err.message;
         }
       } else {
         this.changed = false;
