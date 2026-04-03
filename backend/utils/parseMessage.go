@@ -1,6 +1,7 @@
 package utils
 
 import (
+	"encoding/json"
 	"fmt"
 	"os"
 	"strconv"
@@ -8,30 +9,35 @@ import (
 	"time"
 )
 
+type SenMLRecord struct {
+	Name  string  `json:"n"`
+	Unit  string  `json:"u"`
+	Value float64 `json:"v"`
+}
+
 func ParseMessage(msg string, filename string) {
 
-	// First we remove new line character from our message
-	// We split it in multiple parts, separated by ,
-	msg = strings.TrimSuffix(msg, "\n")
-	parts := strings.Split(msg, ",")
-
-	// We form the csv first row and values that needs to be added to the file
-	csv_types := "timestamp,"
-	csv_values := ""
-
-	curr_time := time.Now().Unix()
-	csv_values = csv_values + strconv.FormatInt(curr_time, 10) + ","
-
-	for _, part := range parts {
-		splits := strings.Split(part, ":")
-		csv_types = csv_types + splits[0] + ","
-		csv_values = csv_values + splits[1] + ","
+	var records []SenMLRecord
+	err := json.Unmarshal([]byte(msg), &records)
+	if err != nil {
+		fmt.Println("Error: ", err)
 	}
 
-	csv_types += "\n"
-	csv_values += "\n"
+	var csvTypes strings.Builder
+	var csvData strings.Builder
 
-	//
+	currTime := time.Now().Unix()
+	csvTypes.WriteString("timestamp,")
+	csvData.WriteString(strconv.FormatInt(currTime, 10) + ",")
+
+	for _, record := range records {
+		header := fmt.Sprintf("%s[%s]", record.Name, record.Unit)
+		csvTypes.WriteString(header + ",")
+		csvData.WriteString(strconv.FormatFloat(record.Value, 'f', 2, 64) + ",")
+	}
+
+	typesStr := strings.TrimSuffix(csvTypes.String(), ",") + "\n"
+	valuesStr := strings.TrimSuffix(csvData.String(), ",") + "\n"
 
 	f, err := os.OpenFile(filename, os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 
@@ -43,13 +49,13 @@ func ParseMessage(msg string, filename string) {
 	info, _ := os.Stat(filename)
 
 	if info.Size() == 0 {
-		if _, err := f.Write([]byte(csv_types)); err != nil {
+		if _, err := f.Write([]byte(typesStr)); err != nil {
 			fmt.Println("Error: ", err)
 			return
 		}
 	}
 
-	if _, err := f.Write([]byte(csv_values)); err != nil {
+	if _, err := f.Write([]byte(valuesStr)); err != nil {
 		fmt.Println("Error: ", err)
 		return
 	}

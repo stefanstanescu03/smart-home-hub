@@ -115,3 +115,263 @@
 2026-04-02T17:52:22+03:00 [STREAMING] Client disconnected
 2026-04-02T17:55:07+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
 2026-04-02T17:55:07+03:00 [STREAMING] Client disconnected
+2026-04-03T12:20:49+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:20:49+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:20:49+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:20:49+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T12:20:50+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T12:20:50+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T12:21:23+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:21:23+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:21:23+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:21:23+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:21:23+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:48:43+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:48:43+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:48:43+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:48:43+03:00 [STREAMING] Error starting streaming server: listen tcp :5003: bind: address already in use
+2026-04-03T12:48:43+03:00 [MQTT-BROKER] Error starting MQTT Broker
+2026-04-03T12:48:53+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:48:53+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:48:53+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:48:53+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T12:48:54+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T12:48:54+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T12:49:02+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:49:02+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:49:02+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:49:02+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:49:02+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:49:31+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T12:49:55+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:49:55+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:49:55+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:49:55+03:00 [MQTT-BROKER] Error starting MQTT Broker
+2026-04-03T12:50:08+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:50:08+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:50:08+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:50:08+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T12:50:09+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T12:50:09+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T12:50:12+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:50:12+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:50:12+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:50:12+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:50:12+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T12:51:12+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T12:51:20+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T12:51:35+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:51:35+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:51:35+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:51:35+03:00 [STREAMING] Error starting streaming server: listen tcp :5003: bind: address already in use
+2026-04-03T12:51:35+03:00 [MQTT-BROKER] Error starting MQTT Broker
+2026-04-03T12:56:03+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:56:03+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:56:03+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:56:03+03:00 [STREAMING] Error starting streaming server: listen tcp :5003: bind: address already in use
+2026-04-03T12:56:03+03:00 [MQTT-BROKER] Error starting MQTT Broker
+2026-04-03T12:56:15+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:56:15+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:56:15+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:56:15+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T12:56:16+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T12:56:16+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T12:56:22+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:56:22+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:56:22+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:56:22+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:56:22+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:57:23+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T12:57:23+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T12:57:23+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T12:57:23+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T12:57:23+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T12:57:33+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T12:57:33+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T12:57:33+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T12:57:33+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T12:57:33+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T12:57:39+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T12:57:39+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T12:57:39+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T12:57:39+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T12:57:39+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T12:57:44+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T12:57:44+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T12:57:44+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T12:57:44+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T12:57:45+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T12:57:45+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:07:57+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:07:57+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:07:57+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:07:57+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:07:58+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:07:58+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:08:03+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:08:03+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:08:03+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:08:03+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:08:03+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:08:35+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T13:08:35+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T13:08:35+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T13:08:35+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T13:08:35+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T13:09:14+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:09:14+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:09:14+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:09:14+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:09:15+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:09:15+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:09:30+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:09:30+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:09:30+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:09:30+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:09:30+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:09:36+03:00 [STREAMING] New client connected
+2026-04-03T13:09:36+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:09:36+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:09:36+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:09:36+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:09:36+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:10:13+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-03T13:10:13+03:00 [STREAMING] Client disconnected
+2026-04-03T13:10:14+03:00 [STREAMING] New client connected
+2026-04-03T13:10:14+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:10:14+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:10:14+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:10:14+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:10:14+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:10:55+03:00 [STREAMING] New client connected
+2026-04-03T13:10:55+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:10:55+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:10:55+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:10:55+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:10:55+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:13:19+03:00 [STREAMING] New client connected
+2026-04-03T13:13:19+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:13:19+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:13:19+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:13:19+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:13:19+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:21+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:20:21+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:20:21+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:20:21+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:20:22+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:20:22+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:20:25+03:00 [STREAMING] New client connected
+2026-04-03T13:20:25+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:20:25+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:20:25+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:20:25+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:25+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:30+03:00 [STREAMING] New client connected
+2026-04-03T13:20:30+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:20:30+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:20:30+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:20:30+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:30+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:35+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:20:35+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:20:35+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:20:35+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:20:35+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:20:41+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-03T13:20:41+03:00 [STREAMING] Client disconnected
+2026-04-03T13:20:41+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-03T13:20:41+03:00 [STREAMING] Client disconnected
+2026-04-03T13:20:42+03:00 [STREAMING] New client connected
+2026-04-03T13:20:42+03:00 [STREAMING] Client subscribed to device: 56
+2026-04-03T13:20:42+03:00 [STREAMING] Client subscribed to device: 57
+2026-04-03T13:20:42+03:00 [STREAMING] Client subscribed to device: 58
+2026-04-03T13:20:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:20:42+03:00 [STREAMING] Client subscribed to device: 59
+2026-04-03T13:27:28+03:00 [STREAMING] Error reading message: websocket: close 1001 (going away)
+2026-04-03T13:27:28+03:00 [STREAMING] Client disconnected
+2026-04-03T13:30:53+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:30:53+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:30:53+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:30:53+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:30:54+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:30:54+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:30:57+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:30:57+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:30:57+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:30:57+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:30:57+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:31:41+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:31:41+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:31:41+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:31:41+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:31:42+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:31:42+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:31:45+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:31:45+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:31:45+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:31:45+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:31:45+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:35:16+03:00 [AUTOMATIONS-HANDLER] Started automations handler
+2026-04-03T13:35:16+03:00 [STREAMING] Streaming server started on port: 5003
+2026-04-03T13:35:16+03:00 [ALERTS-HANDLER] Started alerts handler
+2026-04-03T13:35:16+03:00 [MQTT-BROKER] MQTT Broker started on port: 5001
+2026-04-03T13:35:17+03:00 [PIPELINES] Anomaly detection pipeline started
+2026-04-03T13:35:17+03:00 [CMD-CLIENT] Client connected to broker
+2026-04-03T13:35:18+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:35:18+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:35:18+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:35:18+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:35:18+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:36:45+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T13:36:45+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T13:36:45+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T13:36:45+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T13:36:45+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T13:36:46+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:36:46+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:36:46+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:36:46+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:36:46+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:39:18+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T13:39:18+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T13:39:18+03:00 [MQTT-BROKER] Device disconnected: POWER002
+2026-04-03T13:39:18+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T13:39:18+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T13:39:19+03:00 [MQTT-BROKER] New device connected: RELAY001
+2026-04-03T13:39:19+03:00 [MQTT-BROKER] New device connected: AQ923
+2026-04-03T13:39:19+03:00 [MQTT-BROKER] New device connected: PIR001
+2026-04-03T13:39:19+03:00 [MQTT-BROKER] New device connected: POWER002
+2026-04-03T13:39:19+03:00 [MQTT-BROKER] New device connected: RELAY002
+2026-04-03T13:39:58+03:00 [MQTT-BROKER] Device disconnected: PIR001
+2026-04-03T13:39:58+03:00 [MQTT-BROKER] Device disconnected: AQ923
+2026-04-03T13:39:58+03:00 [MQTT-BROKER] Device disconnected: RELAY002
+2026-04-03T13:39:58+03:00 [MQTT-BROKER] Device disconnected: RELAY001
+2026-04-03T13:39:58+03:00 [MQTT-BROKER] Device disconnected: POWER002

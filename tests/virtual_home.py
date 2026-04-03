@@ -2,6 +2,7 @@ import paho.mqtt.client as mqtt
 import threading
 import time
 import random
+import json
 
 BROKER = "localhost"
 PORT = 5001
@@ -64,18 +65,29 @@ def create_device(ident, topic_pub=None, topic_sub=None, interval=5):
                     temp = random.uniform(15.0, 25.0)
                     humidity = random.randint(40, 60)
                     co2 = random.randint(400, 1000)
-                    payload = f"temperature[C]:{temp:.2f},humidity[%RH]:{humidity},CO2[ppm]:{co2}"
+                    data = [
+                        {"n": "temperature", "u": "Cel", "v": temp},
+                        {"n": "humidity",    "u": "%RH", "v": humidity},
+                        {"n": "co2",         "u": "ppm", "v": co2}
+                    ]
+                    payload = json.dumps(data)
                     client.publish(topic_pub, payload)
                 if ident == "POWER002":
                     current_w = random.uniform(
                         150.0, 160.0) if random.random() > 0.2 else 5.0
                     voltage = random.uniform(228.0, 232.0)
                     amps = current_w / voltage
-                    payload = f"power[W]:{current_w:.2f},voltage[V]:{voltage:.1f},current[A]:{amps:.2f}"
+                    data = [
+                        {"n": "power", "u": "W", "v": current_w},
+                        {"n": "voltage", "u": "V", "v": voltage},
+                        {"n": "current", "u": "A", "v": amps}
+                    ]
+                    payload = json.dumps(data)
                     client.publish(topic_pub, payload)
                 if ident == "PIR001":
-                    is_somebody = random.choice(["quiet", "motion"])
-                    payload = f"status:{is_somebody}"
+                    is_somebody = random.choice([0, 1])
+                    data = [{"n": "status", "v": is_somebody}]
+                    payload = json.dumps(data)
                     client.publish(topic_pub, payload)
 
             time.sleep(interval)
