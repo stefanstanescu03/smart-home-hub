@@ -23,12 +23,17 @@ class KalmanFilter:
 
 def create_features(df, column, lag, steps):
 
+    df = df.copy()
     df = df.interpolate()
 
-    z_scores = (df[column] - df[column].mean()) / df[column].std()
+    median = df[column].median()
+    abs_deviation = (df[column] - median).abs()
+    mad = abs_deviation.median()
 
-    df.loc[z_scores.abs() > 3, column] = None
-    df[column] = df[column].interpolate()
+    effective_dispersion = max(mad, 0.01)
+    modified_z = 0.6745 * (df[column] - median) / effective_dispersion
+    df.loc[modified_z.abs() > 3.5, column] = None
+    df[column] = df[column].interpolate().ffill().bfill()
 
     initial_val = df[column].iloc[0] if not df[column].empty else 0
     kf = KalmanFilter(initial_state=initial_val, initial_error=1,
@@ -150,6 +155,7 @@ def predict(df, lag, steps, param):
 def predict_next_values(filename, lag, steps, param):
 
     df = pd.read_csv(filename)
+
     df['timestamp'] = pd.to_datetime(df['timestamp'], unit='s')
 
     return predict(df, lag, steps, param)
