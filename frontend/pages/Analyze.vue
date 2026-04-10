@@ -119,6 +119,7 @@ export default {
 .info-container {
   padding: 1.5rem;
   width: 100%;
+  margin-left: 15%;
 }
 
 .title-container {
@@ -141,6 +142,10 @@ export default {
 @media (max-width: 900px) {
   .hamburger {
     display: block;
+  }
+  .info-container {
+    margin-left: 0;
+    padding: 1rem;
   }
 }
 

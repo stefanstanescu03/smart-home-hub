@@ -353,9 +353,19 @@ export default {
   gap: 1rem;
 }
 
+.info-container {
+  padding: 1.5rem;
+  width: 100%;
+  margin-left: 15%;
+}
+
 @media (max-width: 900px) {
   .hamburger {
     display: block;
+  }
+  .info-container {
+    margin-left: 0;
+    padding: 1rem;
   }
 }
 
@@ -364,11 +374,6 @@ export default {
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-}
-
-.info-container {
-  padding: 1rem;
-  width: 100%;
 }
 .page-container {
   display: flex;

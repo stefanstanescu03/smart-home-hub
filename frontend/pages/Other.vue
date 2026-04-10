@@ -84,6 +84,12 @@ export default {
   display: block;
 }
 
+.info-container {
+  padding: 1.5rem;
+  width: 100%;
+  margin-left: 15%;
+}
+
 @media (max-width: 900px) {
   .hamburger {
     display: block;
@@ -92,6 +98,10 @@ export default {
   .ident {
     display: none;
   }
+  .info-container {
+    margin-left: 0;
+    padding: 1rem;
+  }
 }
 
 .overlay {
@@ -99,11 +109,6 @@ export default {
   inset: 0;
   background: rgba(0, 0, 0, 0.5);
   z-index: 1000;
-}
-
-.info-container {
-  padding: 1rem;
-  width: 100%;
 }
 
 .page-container {

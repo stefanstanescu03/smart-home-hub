@@ -426,6 +426,7 @@ export default {
 .info-container {
   padding: 1.5rem;
   width: 100%;
+  margin-left: 15%;
 }
 
 .title-container {
@@ -456,6 +457,10 @@ export default {
   }
   .alert-content {
     display: none;
+  }
+  .info-container {
+    margin-left: 0;
+    padding: 1rem;
   }
 }
 

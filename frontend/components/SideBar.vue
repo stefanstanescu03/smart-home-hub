@@ -124,6 +124,14 @@ nav {
   min-width: 220px;
   background-color: #1a1a1a;
   height: 100%;
+
+  position: fixed;
+  top: 0;
+  left: 0;
+  bottom: 0;
+  height: 100vh;
+  z-index: 100;
+  overflow-y: auto;
 }
 
 button {

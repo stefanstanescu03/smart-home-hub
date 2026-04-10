@@ -153,8 +153,9 @@ h1 {
 }
 
 .info-container {
-  padding: 1rem;
+  padding: 1.5rem;
   width: 100%;
+  margin-left: 15%;
 }
 .signup-form {
   margin-top: 2rem;
@@ -233,6 +234,10 @@ span {
     margin-right: auto;
     width: 100%;
     max-width: 320px;
+  }
+  .info-container {
+    margin-left: 0;
+    padding: 1rem;
   }
 }
 </style>
