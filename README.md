@@ -45,17 +45,6 @@ Mecanismul este foarte asemanator cu cel al alertelor doar ca de data aceasta in
 
 Pentru aceasta am folosit o metoda de tip z-score adaptata pentru date care vin continuu. Deoarece lucrez cu ferestre de date algoritmul este mai degraba o cluster-izare doar ca intr-un singur cluster iar datele cele mai indepartate se considera a fi anomali. In plus centroidul se poate adapta la noile date (datele noi care nu sunt anomali modifica putin centroidul pentru a se adapta schimbarilor lente in timp). Algoritmul este integral implementat in go. Parametrii modelelor sunt retinuti in fisiere json iar metadatele sunt retinute in baza de date. Dupa ce am creat un model il antrenam pe datele deja existente, dupa care el functioneaza printr-un mecanism similar celui de alerte: cand detectam o anomalie trimitem un emai (daca este permis) si scrie alerta in alerts.log.
 
-## !Limitari
-
-1. In faza de antrenare datele se consifera a fi fara anomali
-2. Este mai degraba orientat catre detectia de spike-uri sau schimbari bruste ale datelor.
-3. Nu poate detecta sezonalitatea
-4. Nu este eficient pe date cu trend
-
-## Posibila imbunatatire
-
-Crearea unui model pentru seria de timp si detectarea valorilor care se abat mult prea mult de la predictii. Aici ar trebui implementat din nou in python.
-
 # Predictia datelor
 
 Se face cu ajutorul algoritmului Random forest. Pentru antrenare se creaza urmatoarele trasaturi din date: ora, ziua saptamanii, luna, daca este weekend, un numar de valori din trecut si un numar de valori din viitor (care constituie si vectorul pe care trebuie sa-l prezicem). Deoarece modelul poate considera ora 23 si 0 ca fiind indepartate, cand de fapt ele sunt doar la o ora distanta, se pot aplica functiile sinus si cosinus pe acestea (cu o frecventa de 1/24) pentru a compensa acest fapt. Acelasi lucru si pentru zile deoarece dupa 7 (duminica) vine 1 (luni) si am avea aceeasi problema. Putem face predictii pe datele viitoare, pe ore si pe zile.
@@ -68,21 +57,27 @@ PORT=5000
 TELEMETRY_PORT=5001
 STREAMING_PORT=5003
 HOST=
+
 DB_USER=
 DB_PASSWORD=
 DB_NAME=
 DB_HOST=
 DB_PORT=
+
 SECRET=
-LOGS=/home/stefan/Documents/Projects/licenta/logs
-SMTP_EMAIL=st.stefan24@gmail.com
+
+LOGS=
+DATA_LOCATION=
+ANOMALY_MODELS_LOCATION=
+
+SMTP_EMAIL=
 EMAIL_PASSWORD=
 SMTP=smtp.gmail.com
 SMTP_PORT=587
+
+MQTT_CERT_FILE=
+MQTT_KEY_FILE=
+MQTT_CA_FILE=
+
+
 ```
-
-## TODO
-
-1. Routines [check]
-2. Find a way to send commands to a multi state device
-3. Add data cleaning to forecaster [check]

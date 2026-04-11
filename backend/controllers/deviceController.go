@@ -20,9 +20,8 @@ func AddDevice(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var body struct {
-		Name  string
-		Ident string
-		// Csv_location string
+		Name       string
+		Ident      string
 		Visibility bool
 		Cloud_api  string
 	}
@@ -68,14 +67,14 @@ func UpdateDevice(c *gin.Context) {
 		Cloud_api  string
 	}
 
-	fmt.Println(body.Cloud_api)
-
 	if c.Bind(&body) != nil {
 		c.JSON(http.StatusBadRequest, gin.H{
 			"error": "Failed to read body",
 		})
 		return
 	}
+
+	fmt.Println(body)
 
 	var device models.Device
 	initializers.DB.First(&device, "id = ? and user_id = ?", id, currUser.(models.User).ID)
@@ -92,7 +91,7 @@ func UpdateDevice(c *gin.Context) {
 	device.Visibility = body.Visibility
 	device.Cloud_api = body.Cloud_api
 
-	initializers.DB.Updates(&device)
+	initializers.DB.Save(&device)
 
 	c.JSON(http.StatusOK, gin.H{
 		"device": device,

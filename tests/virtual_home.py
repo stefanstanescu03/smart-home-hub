@@ -3,9 +3,11 @@ import threading
 import time
 import random
 import json
+import ssl
 
-BROKER = "localhost"
+BROKER = "192.168.1.183"
 PORT = 5001
+CA_FILE = "../certs/ca.crt"
 
 devices = [
     {"ident": "AQ923", "pub": "telemetry/AQ923", "sub": None},
@@ -54,6 +56,11 @@ def create_device(ident, topic_pub=None, topic_sub=None, interval=5):
     )
     client.on_connect = on_connect
     client.on_message = on_message
+
+    client.tls_set(
+        ca_certs=CA_FILE,
+        tls_version=ssl.PROTOCOL_TLS_CLIENT
+    )
 
     client.connect(BROKER, PORT, 60)
     client.loop_start()

@@ -25,8 +25,6 @@ func SendToCloud(msg string, cloud_api string) error {
 		url = strings.ReplaceAll(url, placeholder, valStr)
 	}
 
-	fmt.Println(url)
-
 	resp, err := httpClient.Get(url)
 	if err != nil {
 		return fmt.Errorf("http request failed: %w", err)

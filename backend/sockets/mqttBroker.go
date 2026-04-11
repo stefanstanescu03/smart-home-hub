@@ -4,6 +4,7 @@ import (
 	"backend/initializers"
 	"backend/models"
 	"backend/utils"
+	"crypto/tls"
 	"fmt"
 	"log"
 	"os"
@@ -114,12 +115,21 @@ func StartMQTTBroker() {
 		log.Fatal(err)
 	}
 
-	// _ = server.AddHook(new(auth.AllowHook), nil)
-
 	port := os.Getenv("TELEMETRY_PORT")
 	host := os.Getenv("HOST")
 
-	tcp := listeners.NewTCP(listeners.Config{ID: "t1", Address: host + ":" + port})
+	cert_file := os.Getenv("MQTT_CERT_FILE")
+	key_file := os.Getenv("MQTT_KEY_FILE")
+
+	cert, err := tls.LoadX509KeyPair(cert_file, key_file)
+	if err != nil {
+		log.Fatal("load cert:", err)
+	}
+	tlsConfig := &tls.Config{
+		Certificates: []tls.Certificate{cert},
+	}
+
+	tcp := listeners.NewTCP(listeners.Config{ID: "tls", Address: host + ":" + port, TLSConfig: tlsConfig})
 	err = server.AddListener(tcp)
 	if err != nil {
 		utils.WriteToLogs("[MQTT-BROKER]", "Error starting MQTT Broker")
