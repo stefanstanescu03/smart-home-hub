@@ -143,7 +143,8 @@ func showldTriggerAutomation(automation automationMetadata) bool {
 		value := kv[1]
 
 		if key == conditionKey {
-			valueFloat, err := strconv.ParseFloat(value, 64)
+			cleanValue := strings.TrimSpace(value)
+			valueFloat, err := strconv.ParseFloat(cleanValue, 64)
 			if err != nil {
 				utils.WriteToLogs("[AUTOMATIONS-HANDLER]", fmt.Sprintf("error checking automation with id %d: %s", automation.automation.ID, err))
 				return false

@@ -107,7 +107,8 @@ func shouldTrigger(alertMetadata alertHandlerMetadata) bool {
 		value := kv[1]
 
 		if key == conditionKey {
-			valueFloat, err := strconv.ParseFloat(value, 64)
+			cleanValue := strings.TrimSpace(value)
+			valueFloat, err := strconv.ParseFloat(cleanValue, 64)
 			if err != nil {
 				utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("error checking alert with id %d: %s", alertMetadata.alert.ID, err))
 				return false

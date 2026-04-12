@@ -63,10 +63,12 @@ func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.P
 		utils.ParseMessage(msg, metadata.(ConnectionMetadata).Csv_location)
 
 		if len(metadata.(ConnectionMetadata).Cloud_api) != 0 {
-			err := utils.SendToCloud(msg, metadata.(ConnectionMetadata).Cloud_api)
-			if err != nil {
-				utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Error sending %s data to cloud: %s", cl.ID, err))
-			}
+			Bridge.PushData(metadata.(ConnectionMetadata).Cloud_api, 0, msg)
+
+			// err := utils.SendToCloud(msg, metadata.(ConnectionMetadata).Cloud_api)
+			// if err != nil {
+			// 	utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Error sending %s data to cloud: %s", cl.ID, err))
+			// }
 		}
 
 	}
