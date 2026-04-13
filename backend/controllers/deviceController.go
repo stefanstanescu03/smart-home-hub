@@ -86,6 +86,12 @@ func UpdateDevice(c *gin.Context) {
 		return
 	}
 
+	if len(body.Cloud_api) == 0 {
+		sockets.Bridge.DeleteClient(device.Cloud_api)
+	}
+
+	sockets.ChangeCloudAPI(body.Ident, body.Cloud_api)
+
 	device.Name = body.Name
 	device.Ident = body.Ident
 	device.Visibility = body.Visibility

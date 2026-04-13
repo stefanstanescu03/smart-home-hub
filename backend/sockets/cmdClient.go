@@ -2,10 +2,7 @@ package sockets
 
 import (
 	"backend/utils"
-	"crypto/tls"
-	"crypto/x509"
 	"fmt"
-	"log"
 	"os"
 	"strings"
 	"sync"
@@ -62,22 +59,10 @@ func StartCmdClient() {
 
 	port := os.Getenv("TELEMETRY_PORT")
 	host := os.Getenv("HOST")
-	ca_file := os.Getenv("MQTT_CA_FILE")
 
-	caCert, err := os.ReadFile(ca_file)
-	if err != nil {
-		log.Fatal("read CA cert:", err)
-	}
-	caPool := x509.NewCertPool()
-	caPool.AppendCertsFromPEM(caCert)
+	broker_addr := "tcp://" + host + ":" + port
 
-	broker_addr := "tls://" + host + ":" + port
-
-	tls_conf := &tls.Config{
-		RootCAs: caPool,
-	}
-
-	opts := mqtt.NewClientOptions().AddBroker(broker_addr).SetClientID("SYSTEM_CMD_CLIENT").SetTLSConfig(tls_conf)
+	opts := mqtt.NewClientOptions().AddBroker(broker_addr).SetClientID("SYSTEM_CMD_CLIENT")
 	opts.SetAutoReconnect(true)
 	opts.SetConnectRetry(true)
 	opts.SetConnectTimeout(5 * time.Second)

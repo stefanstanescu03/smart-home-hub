@@ -4,7 +4,6 @@ import (
 	"backend/utils"
 	"encoding/json"
 	"fmt"
-	"log"
 	"sync"
 	"time"
 
@@ -45,6 +44,17 @@ func (b *BlynkBridge) GetClient(token string) mqtt.Client {
 	return client
 }
 
+func (b *BlynkBridge) DeleteClient(token string) {
+	if val, ok := b.clients.Load(token); ok {
+		client := val.(mqtt.Client)
+		client.Disconnect(250)
+		b.clients.Delete(token)
+		utils.WriteToLogs("[BLYNK]", fmt.Sprintf("Connection closed for token: %s", token))
+	} else {
+		utils.WriteToLogs("[BLYNK]", fmt.Sprintf("Failed to close connection for token: %s", token))
+	}
+}
+
 func (b *BlynkBridge) PushData(token string, pin int, value string) {
 	client := b.GetClient(token)
 	if client == nil {
@@ -53,7 +63,7 @@ func (b *BlynkBridge) PushData(token string, pin int, value string) {
 	var measurements []utils.SenMLRecord
 	err := json.Unmarshal([]byte(value), &measurements)
 	if err != nil {
-		log.Printf("[BLYNK] Error parsing SenML: %v", err)
+		utils.WriteToLogs("[BLYNK]", fmt.Sprintf("Error parsing SenML: %v", err))
 		return
 	}
 
