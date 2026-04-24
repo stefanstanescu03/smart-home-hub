@@ -37,7 +37,7 @@ def create_features(df, column, lag, steps):
 
     initial_val = df[column].iloc[0] if not df[column].empty else 0
     kf = KalmanFilter(initial_state=initial_val, initial_error=1,
-                      process_variance=0.01, measurement_variance=0.1)
+                      process_variance=0.1, measurement_variance=0.01)
     df[column] = [kf.update(z) for z in df[column].values]
 
     X_cols = ['hour_sin', 'hour_cos', 'day_sin',

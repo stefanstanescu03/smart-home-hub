@@ -50,6 +50,11 @@ func (h *TelemetryHook) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet
 	if cl.ID != "SYSTEM_CMD_CLIENT" {
 		ident := string(cl.ID)
 
+		if _, exists := ConnectionPool.Load(cl.ID); exists {
+			utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Session takeover for: %s. Cleaning up old state.", ident))
+			ConnectionPool.Delete(cl.ID)
+		}
+
 		var device models.Device
 		initializers.DB.First(&device, "ident = ?", ident)
 		if device.ID == 0 {
@@ -74,11 +79,6 @@ func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.P
 
 		if len(metadata.(ConnectionMetadata).Cloud_api) != 0 {
 			Bridge.PushData(metadata.(ConnectionMetadata).Cloud_api, 0, msg)
-
-			// err := utils.SendToCloud(msg, metadata.(ConnectionMetadata).Cloud_api)
-			// if err != nil {
-			// 	utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Error sending %s data to cloud: %s", cl.ID, err))
-			// }
 		}
 
 	}

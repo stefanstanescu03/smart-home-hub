@@ -152,6 +152,7 @@ export default {
 
     async handleCreateModel() {
       try {
+        console.log(this.new_model);
         const res = await fetch("/api/model/anomaly/create", {
           method: "POST",
           headers: {
@@ -359,7 +360,6 @@ export default {
                 {{ metric }}
               </option>
             </select>
-            <!-- <input type="text" id="key" v-model="new_alert.key" /> -->
           </div>
 
           <div class="field">
@@ -391,9 +391,18 @@ export default {
         </div>
 
         <div class="dialog-form">
-          <div class="field">
+          <!-- <div class="field">
             <label for="key">Key name</label>
             <input type="text" id="key" v-model="new_model.param" />
+          </div> -->
+
+          <div class="field">
+            <label for="key">Metric / Key Name</label>
+            <select id="key" v-model="new_model.param">
+              <option :value="metric" v-for="metric in metrics">
+                {{ metric }}
+              </option>
+            </select>
           </div>
 
           <div class="info-box">

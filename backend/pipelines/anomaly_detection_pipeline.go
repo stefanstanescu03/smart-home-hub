@@ -3,20 +3,29 @@ package pipelines
 import (
 	"backend/initializers"
 	"backend/models"
-	"backend/pipelines/core"
 	"backend/utils"
-	"encoding/json"
+	"encoding/csv"
+	"encoding/gob"
 	"fmt"
-	"log"
+	"io"
+	"math"
 	"os"
 	"strconv"
 	"strings"
 	"time"
+
+	"github.com/e-XpertSolutions/go-iforest/v2/iforest"
 )
 
+type PersistentModel struct {
+	F    *iforest.Forest
+	Mean float64
+	Std  float64
+}
+
 type ModelInfo struct {
-	model_metadata   *models.AnomalyModel
-	model_parameters *core.DistanceBasedDetector
+	model_metadata *models.AnomalyModel
+	model          *PersistentModel
 }
 
 var modelsPool []*ModelInfo
@@ -50,42 +59,170 @@ func NotifyAnomalyPipeline() {
 	}
 }
 
-func create_model(data_path string, window_size int, param string) *core.DistanceBasedDetector {
-
-	model := core.NewAnomalyDetectionModel(3, 1e-2, window_size)
-	dataset := core.Csv_to_dataset(data_path, window_size, param)
-	core.Fit(model, &dataset)
-
-	return model
+func eliminate_units(str string) string {
+	if i := strings.Index(str, "["); i != -1 {
+		return str[:i]
+	} else {
+		return str
+	}
 }
 
-func save_model(filename string, model *core.DistanceBasedDetector) {
+func loadData(filename string, n int, w int, param string) ([][]float64, error) {
 
-	json_value, err := json.Marshal(model)
+	file, err := os.Open(filename)
 	if err != nil {
-		log.Fatalf("failed to serialize model to %q: %v", filename, err)
+		return nil, err
+	}
+	defer file.Close()
+
+	reader := csv.NewReader(file)
+
+	var index int
+	first_line, _ := reader.Read()
+	for i := range first_line {
+		if eliminate_units(first_line[i]) == param {
+			index = i
+			break
+		}
 	}
 
-	err = os.WriteFile(filename, json_value, 0644)
-	if err != nil {
-		log.Fatalf("failed to write model file %q: %v", filename, err)
+	var allData []float64
+	count := 0
+
+	for count < n {
+
+		record, err := reader.Read()
+		if err == io.EOF {
+			break
+		}
+
+		if err != nil {
+			return nil, err
+		}
+
+		float_record, _ := strconv.ParseFloat(record[index], 64)
+		allData = append(allData, float_record)
+		count++
 	}
+
+	if len(allData) < w {
+		return nil, fmt.Errorf("not enough data to create a window of size %d", w)
+	}
+
+	var windows [][]float64
+	for i := 0; i <= len(allData)-w; i++ {
+		var window []float64
+		for j := 0; j < w; j++ {
+			window = append(window, allData[i+j])
+		}
+		windows = append(windows, window)
+	}
+
+	return windows, nil
 
 }
 
-func load_model(filename string) *core.DistanceBasedDetector {
+func CalculateZScoreStats(data [][]float64) (float64, float64) {
+	var sum, count float64
+	for _, row := range data {
+		for _, val := range row {
+			sum += val
+			count++
+		}
+	}
+	mean := sum / count
 
-	json_value, err := os.ReadFile(filename)
+	var sqDiffSum float64
+	for _, row := range data {
+		for _, val := range row {
+			sqDiffSum += math.Pow(val-mean, 2)
+		}
+	}
+	stdDev := math.Sqrt(sqDiffSum / count)
+
+	if stdDev == 0 {
+		stdDev = 1
+	}
+
+	return mean, stdDev
+}
+
+func ApplyZScore(data [][]float64, mean, stdDev float64) {
+	for i := range data {
+		for j := range data[i] {
+			data[i][j] = (data[i][j] - mean) / stdDev
+		}
+	}
+}
+
+func create_model(data_path string, window_size int, param string) *PersistentModel {
+
+	trainData, err := loadData(data_path, 500, window_size, param)
 	if err != nil {
-		log.Fatalf("failed to read model file %q: %v", filename, err)
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("Failed to load data from %s: %v", data_path, err))
 	}
 
-	var model core.DistanceBasedDetector
-	if err := json.Unmarshal(json_value, &model); err != nil {
-		log.Fatalf("failed to deserialize model from %q: %v", filename, err)
+	if len(trainData) == 0 {
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("Empty train data in %s", data_path))
 	}
+
+	var model PersistentModel
+
+	model.Mean, model.Std = CalculateZScoreStats(trainData)
+
+	ApplyZScore(trainData, model.Mean, model.Std)
+
+	f := iforest.NewForest(100, 256, 0.01)
+	f.Train(trainData)
+	f.Test(trainData)
+
+	model.F = f
 
 	return &model
+}
+
+func save_model(filename string, model *PersistentModel) error {
+
+	gob.Register(PersistentModel{})
+	gob.Register(iforest.Forest{})
+
+	if model == nil {
+		return fmt.Errorf("cannot save a nil model")
+	}
+
+	file, err := os.Create(filename)
+	if err != nil {
+		return fmt.Errorf("failed to create file: %w", err)
+	}
+	defer file.Close()
+
+	encoder := gob.NewEncoder(file)
+	err = encoder.Encode(model)
+	if err != nil {
+		return fmt.Errorf("gob encode error: %w", err)
+	}
+
+	return nil
+
+}
+
+func load_model(filename string) *PersistentModel {
+
+	file, err := os.Open(filename)
+	if err != nil {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("File error: %v", err))
+		return nil
+	}
+	defer file.Close()
+
+	var loaded PersistentModel
+	decoder := gob.NewDecoder(file)
+	err = decoder.Decode(&loaded)
+	if err != nil {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Decode error: %v", err))
+		return nil
+	}
+	return &loaded
 }
 
 // FitAndSave creates the initial model and saves it to the desired file.
@@ -100,7 +237,12 @@ func FitAndSave(filename string, data_path string, param string) {
 
 func feed_data(model *ModelInfo) {
 
-	window_size := len(model.model_parameters.Centroid)
+	if model.model == nil || model.model.F == nil {
+		utils.WriteToLogs("[PIPELINES]", "Model or Forest is nil, skipping prediction")
+		return
+	}
+
+	window_size := 10
 
 	device_id := model.model_metadata.DeviceId
 	var device models.Device
@@ -118,7 +260,7 @@ func feed_data(model *ModelInfo) {
 	first_line := utils.GetFirstLine(data_location)
 	keys := strings.Split(first_line, ",")
 	for i := range keys {
-		if keys[i] == param {
+		if eliminate_units(keys[i]) == param {
 			param_id = i
 			break
 		}
@@ -134,8 +276,7 @@ func feed_data(model *ModelInfo) {
 		return
 	}
 
-	var window core.TimeseriesWindow
-	window.NumFeatures = window_size
+	var window []float64
 
 	for i := range lines {
 		parts := strings.Split(lines[i], ",")
@@ -144,16 +285,22 @@ func feed_data(model *ModelInfo) {
 			return
 		}
 
-		value, err := strconv.ParseFloat(strings.TrimSpace(parts[param_id]), 32)
+		value, err := strconv.ParseFloat(strings.TrimSpace(parts[param_id]), 64)
 		if err != nil {
 			utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Failed to parse value %q at line %d in %s: %v", parts[param_id], i+1, data_location, err))
 			return
 		}
 
-		window.Window = append(window.Window, float32(value))
+		window = append(window, (float64(value)-model.model.Mean)/model.model.Std)
 	}
 
-	if core.Predict(model.model_parameters, window) {
+	labels, _, err := model.model.F.Predict([][]float64{window})
+	if err != nil {
+		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Prediction error: %v", err))
+		return
+	}
+
+	if labels[0] == 1 {
 		if !alertStates[model.model_metadata.ID] {
 			utils.WriteAlert(model.model_metadata.DeviceId, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", param))
 			if model.model_metadata.NotifyEmail {
@@ -163,7 +310,6 @@ func feed_data(model *ModelInfo) {
 		}
 	} else {
 		alertStates[model.model_metadata.ID] = false
-		save_model(model.model_metadata.Location, model.model_parameters)
 	}
 
 }
@@ -179,8 +325,8 @@ func fetchModels() {
 
 	for i := range models_metadata {
 		fetched_model_info := ModelInfo{
-			model_metadata:   &models_metadata[i],
-			model_parameters: load_model(models_metadata[i].Location),
+			model_metadata: &models_metadata[i],
+			model:          load_model(models_metadata[i].Location),
 		}
 		modelsPool = append(modelsPool, &fetched_model_info)
 	}

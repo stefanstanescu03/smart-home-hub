@@ -36,7 +36,7 @@ func AddAnomalyModel(c *gin.Context) {
 		return
 	}
 
-	location := os.Getenv("ANOMALY_MODELS_LOCATION") + "/" + fmt.Sprint(body.DeviceId) + body.Param + ".json"
+	location := os.Getenv("ANOMALY_MODELS_LOCATION") + "/" + fmt.Sprint(body.DeviceId) + body.Param + ".gob"
 
 	model := models.AnomalyModel{
 		Location:    location,
