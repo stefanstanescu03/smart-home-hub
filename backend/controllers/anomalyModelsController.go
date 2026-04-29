@@ -4,6 +4,7 @@ import (
 	"backend/initializers"
 	"backend/models"
 	"backend/pipelines"
+	"backend/utils"
 	"fmt"
 	"net/http"
 	"os"
@@ -16,8 +17,9 @@ func AddAnomalyModel(c *gin.Context) {
 	currUser, _ := c.Get("user")
 
 	var body struct {
-		Param    string
-		DeviceId uint
+		Param      string
+		Data_count int
+		DeviceId   uint
 	}
 
 	if c.Bind(&body) != nil {
@@ -53,7 +55,7 @@ func AddAnomalyModel(c *gin.Context) {
 		return
 	}
 
-	pipelines.FitAndSave(location, device.Csv_location, body.Param)
+	pipelines.FitAndSave(location, device.Csv_location, body.Param, body.Data_count)
 
 	pipelines.NotifyAnomalyPipeline()
 
@@ -136,6 +138,14 @@ func DeleteAnomalyModel(c *gin.Context) {
 
 	currUser, _ := c.Get("user")
 	id := c.Param("id")
+
+	var model models.AnomalyModel
+	initializers.DB.First(&model, "id = ?", id)
+
+	err := os.Remove(model.Location)
+	if err != nil {
+		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("Failed to delete an anomaly model gob file: %v", err))
+	}
 
 	initializers.DB.Unscoped().Delete(&models.AnomalyModel{}, "id = ? and user_id = ?", id, currUser.(models.User).ID)
 

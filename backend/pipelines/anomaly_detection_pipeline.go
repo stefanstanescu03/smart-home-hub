@@ -7,8 +7,6 @@ import (
 	"encoding/csv"
 	"encoding/gob"
 	"fmt"
-	"io"
-	"math"
 	"os"
 	"strconv"
 	"strings"
@@ -17,15 +15,9 @@ import (
 	"github.com/e-XpertSolutions/go-iforest/v2/iforest"
 )
 
-type PersistentModel struct {
-	F    *iforest.Forest
-	Mean float64
-	Std  float64
-}
-
 type ModelInfo struct {
 	model_metadata *models.AnomalyModel
-	model          *PersistentModel
+	model          *iforest.Forest
 }
 
 var modelsPool []*ModelInfo
@@ -87,23 +79,24 @@ func loadData(filename string, n int, w int, param string) ([][]float64, error) 
 	}
 
 	var allData []float64
-	count := 0
 
-	for count < n {
-
-		record, err := reader.Read()
-		if err == io.EOF {
-			break
-		}
-
-		if err != nil {
-			return nil, err
-		}
-
-		float_record, _ := strconv.ParseFloat(record[index], 64)
-		allData = append(allData, float_record)
-		count++
+	records, err := utils.GetLastLines(filename, n)
+	if err != nil {
+		return nil, err
 	}
+
+	for i := range records {
+		record := records[i]
+		parts := strings.Split(record, ",")
+
+		float_record, err := strconv.ParseFloat(parts[index], 64)
+		if err != nil {
+			continue
+		}
+		allData = append(allData, float_record)
+	}
+
+	fmt.Println(allData)
 
 	if len(allData) < w {
 		return nil, fmt.Errorf("not enough data to create a window of size %d", w)
@@ -122,42 +115,9 @@ func loadData(filename string, n int, w int, param string) ([][]float64, error) 
 
 }
 
-func CalculateZScoreStats(data [][]float64) (float64, float64) {
-	var sum, count float64
-	for _, row := range data {
-		for _, val := range row {
-			sum += val
-			count++
-		}
-	}
-	mean := sum / count
+func create_model(data_path string, window_size int, param string, data_count int) *iforest.Forest {
 
-	var sqDiffSum float64
-	for _, row := range data {
-		for _, val := range row {
-			sqDiffSum += math.Pow(val-mean, 2)
-		}
-	}
-	stdDev := math.Sqrt(sqDiffSum / count)
-
-	if stdDev == 0 {
-		stdDev = 1
-	}
-
-	return mean, stdDev
-}
-
-func ApplyZScore(data [][]float64, mean, stdDev float64) {
-	for i := range data {
-		for j := range data[i] {
-			data[i][j] = (data[i][j] - mean) / stdDev
-		}
-	}
-}
-
-func create_model(data_path string, window_size int, param string) *PersistentModel {
-
-	trainData, err := loadData(data_path, 500, window_size, param)
+	trainData, err := loadData(data_path, data_count, window_size, param)
 	if err != nil {
 		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("Failed to load data from %s: %v", data_path, err))
 	}
@@ -166,24 +126,15 @@ func create_model(data_path string, window_size int, param string) *PersistentMo
 		utils.WriteToLogs("ALERTS-HANDLER", fmt.Sprintf("Empty train data in %s", data_path))
 	}
 
-	var model PersistentModel
+	model := iforest.NewForest(100, 256, 0.01)
+	model.Train(trainData)
+	model.Test(trainData)
 
-	model.Mean, model.Std = CalculateZScoreStats(trainData)
-
-	ApplyZScore(trainData, model.Mean, model.Std)
-
-	f := iforest.NewForest(100, 256, 0.01)
-	f.Train(trainData)
-	f.Test(trainData)
-
-	model.F = f
-
-	return &model
+	return model
 }
 
-func save_model(filename string, model *PersistentModel) error {
+func save_model(filename string, model *iforest.Forest) error {
 
-	gob.Register(PersistentModel{})
 	gob.Register(iforest.Forest{})
 
 	if model == nil {
@@ -206,7 +157,7 @@ func save_model(filename string, model *PersistentModel) error {
 
 }
 
-func load_model(filename string) *PersistentModel {
+func load_model(filename string) *iforest.Forest {
 
 	file, err := os.Open(filename)
 	if err != nil {
@@ -215,7 +166,7 @@ func load_model(filename string) *PersistentModel {
 	}
 	defer file.Close()
 
-	var loaded PersistentModel
+	var loaded iforest.Forest
 	decoder := gob.NewDecoder(file)
 	err = decoder.Decode(&loaded)
 	if err != nil {
@@ -227,9 +178,9 @@ func load_model(filename string) *PersistentModel {
 
 // FitAndSave creates the initial model and saves it to the desired file.
 // This should be called from the controller.
-func FitAndSave(filename string, data_path string, param string) {
+func FitAndSave(filename string, data_path string, param string, data_count int) {
 
-	model := create_model(data_path, 10, param)
+	model := create_model(data_path, 10, param, data_count)
 	save_model(filename, model)
 	utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("New model created at: %s", filename))
 
@@ -237,7 +188,7 @@ func FitAndSave(filename string, data_path string, param string) {
 
 func feed_data(model *ModelInfo) {
 
-	if model.model == nil || model.model.F == nil {
+	if model.model == nil {
 		utils.WriteToLogs("[PIPELINES]", "Model or Forest is nil, skipping prediction")
 		return
 	}
@@ -291,18 +242,18 @@ func feed_data(model *ModelInfo) {
 			return
 		}
 
-		window = append(window, (float64(value)-model.model.Mean)/model.model.Std)
+		window = append(window, float64(value))
 	}
 
-	labels, _, err := model.model.F.Predict([][]float64{window})
+	labels, _, err := model.model.Predict([][]float64{window})
 	if err != nil {
 		utils.WriteToLogs("[PIPELINES]", fmt.Sprintf("Prediction error: %v", err))
 		return
 	}
 
 	if labels[0] == 1 {
+		utils.WriteAlert(model.model_metadata.DeviceId, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", param))
 		if !alertStates[model.model_metadata.ID] {
-			utils.WriteAlert(model.model_metadata.DeviceId, "Anomaly detected", fmt.Sprintf("Unusual behaviour with parameter: %s", param))
 			if model.model_metadata.NotifyEmail {
 				handleSendEmail(*model.model_metadata)
 			}

@@ -17,6 +17,7 @@ export default {
       },
       new_model: {
         param: "",
+        data_count: 0,
       },
       menuOpen: false,
     };
@@ -161,6 +162,7 @@ export default {
           },
           body: JSON.stringify({
             param: this.new_model.param,
+            data_count: this.new_model.data_count,
             DeviceId: this.device.ID,
           }),
         });
@@ -391,11 +393,6 @@ export default {
         </div>
 
         <div class="dialog-form">
-          <!-- <div class="field">
-            <label for="key">Key name</label>
-            <input type="text" id="key" v-model="new_model.param" />
-          </div> -->
-
           <div class="field">
             <label for="key">Metric / Key Name</label>
             <select id="key" v-model="new_model.param">
@@ -403,6 +400,11 @@ export default {
                 {{ metric }}
               </option>
             </select>
+          </div>
+
+          <div class="field">
+            <label for="content">Training data size</label>
+            <input type="number" id="content" v-model="new_model.data_count" />
           </div>
 
           <div class="info-box">
