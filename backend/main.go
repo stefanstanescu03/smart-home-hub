@@ -10,6 +10,7 @@ import (
 	"io"
 	"io/fs"
 	"net/http"
+	"os"
 	"strings"
 	"time"
 
@@ -89,5 +90,10 @@ func main() {
 		serveIndex(c, dist)
 	})
 
-	r.Run()
+	port := os.Getenv("PORT")
+	host := os.Getenv("HOST")
+
+	address := host + ":" + port
+
+	r.Run(address)
 }

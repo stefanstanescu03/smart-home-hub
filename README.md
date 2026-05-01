@@ -49,6 +49,14 @@ Pentru aceasta am folosit o metoda de tip z-score adaptata pentru date care vin 
 
 Se face cu ajutorul algoritmului Random forest. Pentru antrenare se creaza urmatoarele trasaturi din date: ora, ziua saptamanii, luna, daca este weekend, un numar de valori din trecut si un numar de valori din viitor (care constituie si vectorul pe care trebuie sa-l prezicem). Deoarece modelul poate considera ora 23 si 0 ca fiind indepartate, cand de fapt ele sunt doar la o ora distanta, se pot aplica functiile sinus si cosinus pe acestea (cu o frecventa de 1/24) pentru a compensa acest fapt. Acelasi lucru si pentru zile deoarece dupa 7 (duminica) vine 1 (luni) si am avea aceeasi problema. Putem face predictii pe datele viitoare, pe ore si pe zile.
 
+# Test latenta
+
+20 utilizatori concurenti
+100 de comenzi
+Rata de succes: 100%
+Latenta medie: 60ms
+Deviatie standard: 65ms
+
 # Ce ar trebui sa contine .env
 
 ```sh

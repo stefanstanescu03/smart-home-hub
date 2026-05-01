@@ -22,13 +22,14 @@ type TelemetryHook struct {
 type ConnectionMetadata struct {
 	Csv_location string
 	Cloud_api    string
+	ClientPtr    *mqtt.Client
 }
 
 var ConnectionPool sync.Map
 
 func ChangeCloudAPI(ident string, cloud_api string) {
 	if val, ok := ConnectionPool.Load(ident); ok {
-		metadata := val.(ConnectionMetadata)
+		metadata := val.(*ConnectionMetadata)
 		metadata.Cloud_api = cloud_api
 		ConnectionPool.Store(ident, ConnectionMetadata{Csv_location: metadata.Csv_location, Cloud_api: metadata.Cloud_api})
 		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Updated Cloud API for: %s", ident))
@@ -62,7 +63,7 @@ func (h *TelemetryHook) OnConnectAuthenticate(cl *mqtt.Client, pk packets.Packet
 			return false
 		}
 
-		ConnectionPool.Store(cl.ID, ConnectionMetadata{Csv_location: device.Csv_location, Cloud_api: device.Cloud_api})
+		ConnectionPool.Store(cl.ID, &ConnectionMetadata{Csv_location: device.Csv_location, Cloud_api: device.Cloud_api, ClientPtr: cl})
 
 		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("New device connected: %s", ident))
 	}
@@ -73,13 +74,22 @@ func (h *TelemetryHook) OnPublish(cl *mqtt.Client, pk packets.Packet) (packets.P
 
 	topic := pk.TopicName
 
-	if metadata, ok := ConnectionPool.Load(cl.ID); ok && strings.HasPrefix(topic, "telemetry/") {
+	if val, ok := ConnectionPool.Load(cl.ID); ok && strings.HasPrefix(topic, "telemetry/") {
+		metadata := val.(*ConnectionMetadata)
 		msg := string(pk.Payload)
-		utils.ParseMessage(msg, metadata.(ConnectionMetadata).Csv_location)
 
-		if len(metadata.(ConnectionMetadata).Cloud_api) != 0 {
-			Bridge.PushData(metadata.(ConnectionMetadata).Cloud_api, 0, msg)
-		}
+		go func(m *ConnectionMetadata, payload string) {
+			utils.ParseMessage(payload, m.Csv_location)
+			if m.Cloud_api != "" {
+				Bridge.PushData(m.Cloud_api, 0, payload)
+			}
+		}(metadata, msg)
+
+		// utils.ParseMessage(msg, metadata.Csv_location)
+
+		// if len(metadata.Cloud_api) != 0 {
+		// 	Bridge.PushData(metadata.Cloud_api, 0, msg)
+		// }
 
 	}
 	return pk, nil
@@ -111,8 +121,16 @@ func (h *TelemetryHook) OnACLCheck(cl *mqtt.Client, topic string, write bool) bo
 
 func (h *TelemetryHook) OnDisconnect(cl *mqtt.Client, err error, reason bool) {
 
-	ConnectionPool.Delete(cl.ID)
-	utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Device disconnected: %s", cl.ID))
+	if val, ok := ConnectionPool.Load(cl.ID); ok {
+
+		meta := val.(*ConnectionMetadata)
+		if meta.ClientPtr == cl {
+			ConnectionPool.Delete(cl.ID)
+			utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Device disconnected: %s", cl.ID))
+		} else {
+			utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Ignoring stale disconnect for: %s", cl.ID))
+		}
+	}
 }
 
 func StartMQTTBroker() {
