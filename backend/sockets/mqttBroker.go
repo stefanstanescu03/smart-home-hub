@@ -31,7 +31,10 @@ func ChangeCloudAPI(ident string, cloud_api string) {
 	if val, ok := ConnectionPool.Load(ident); ok {
 		metadata := val.(*ConnectionMetadata)
 		metadata.Cloud_api = cloud_api
-		ConnectionPool.Store(ident, ConnectionMetadata{Csv_location: metadata.Csv_location, Cloud_api: metadata.Cloud_api})
+		ConnectionPool.Store(ident, &ConnectionMetadata{
+			Csv_location: metadata.Csv_location,
+			Cloud_api:    cloud_api,
+			ClientPtr:    metadata.ClientPtr})
 		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Updated Cloud API for: %s", ident))
 	} else {
 		utils.WriteToLogs("[MQTT-BROKER]", fmt.Sprintf("Update failed: %s not found in pool", ident))
